@@ -18,7 +18,7 @@ public class TestSetForm {
 
     public static void main(String[] args) {
         DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
-        JFrame frame = new JFrame("TestSetForm");
+        JFrame frame = new JFrame("OpenDNP3 testset");
         TestSetForm form = new TestSetForm(mgr);
         frame.setContentPane(form.panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
