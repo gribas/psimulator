@@ -31,9 +31,15 @@ public class LogTable extends JTable implements LogSubscriber {
     }
 
     @Override
-    public void onLogEntry(LogEntry entry)
+    public void onLogEntry(final LogEntry entry)
     {
-        String[] row = new String[]{entry.getTimestamp().toString(), entry.getLogLevel().toString(), entry.getMessage()};
-        model.addRow(row);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String[] row = new String[]{entry.getTimestamp().toString(), entry.getLogLevel().toString(), entry.getMessage()};
+                model.addRow(row);
+            }
+        });
+
     }
 }

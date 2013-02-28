@@ -5,6 +5,7 @@ import javax.swing.*;
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
 import com.automatak.dnp3.mock.PrintingDataObserver;
+import com.automatak.dnp3.mock.PrintingLogSubscriber;
 import com.automatak.dnp3.tools.controls.LogTable;
 
 /**
@@ -25,17 +26,16 @@ public class TestSetForm {
         frame.pack();
         frame.setVisible(true);
 
-        Channel client = mgr.addTCPClient("client", LogLevel.INTERPRET, 5000, "127.0.0.1", 20000);
+        Channel client = mgr.addTCPClient("client", LogLevel.DEBUG, 5000, "127.0.0.1", 20001);
         Master master = client.addMaster("master", LogLevel.INTERPRET, PrintingDataObserver.getInstance(), new MasterStackConfig());
     }
 
     public TestSetForm(DNP3Manager manager)
     {
         this.manager = manager;
-        this.manager.addLogSubscriber(logTable);
+        //this.manager.addLogSubscriber(logTable);
+        this.manager.addLogSubscriber(PrintingLogSubscriber.getInstance());
     }
-
-
 
     private JPanel panel1;
     private JTree commsTree;
