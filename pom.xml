@@ -12,7 +12,8 @@
     <description>A UI testset for opendnp3</description>
 
     <modules>
-        
+       <module>dnp3testset</module>
+        <module>dnp3controls</module>
     </modules>
 
     <properties>
