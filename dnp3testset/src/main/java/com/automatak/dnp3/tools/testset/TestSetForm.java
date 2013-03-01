@@ -5,23 +5,19 @@ import javax.swing.*;
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
 import com.automatak.dnp3.mock.PrintingDataObserver;
-import com.automatak.dnp3.mock.PrintingLogSubscriber;
+import com.automatak.dnp3.tools.controls.CommsTree;
 import com.automatak.dnp3.tools.controls.LogTable;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Adam
- * Date: 2/28/13
- * Time: 3:33 PM
- * To change this template use File | Settings | File Templates.
- */
+import java.awt.*;
+
 public class TestSetForm {
 
     public static void main(String[] args) {
         DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
-        JFrame frame = new JFrame("OpenDNP3 testset");
+        JFrame frame = new JFrame("opendnp3");
         TestSetForm form = new TestSetForm(mgr);
-        frame.setContentPane(form.panel1);
+        frame.setJMenuBar(getMenuBar());
+        frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -30,16 +26,27 @@ public class TestSetForm {
         Master master = client.addMaster("master", LogLevel.INTERPRET, PrintingDataObserver.getInstance(), new MasterStackConfig());
     }
 
+    public static JMenuBar getMenuBar()
+    {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        menuBar.add(menu);
+        JMenuItem aboutItem = new JMenuItem("About");
+        menu.add(aboutItem);
+
+       return menuBar;
+    }
+
     public TestSetForm(DNP3Manager manager)
     {
         this.manager = manager;
         this.manager.addLogSubscriber(logTable);
     }
 
-    private JPanel panel1;
-    private JTree commsTree;
+    private JPanel mainPanel;
     private LogTable logTable;
     private JSplitPane splitPane;
+    private CommsTree commsTree;
     private final DNP3Manager manager;
 
 

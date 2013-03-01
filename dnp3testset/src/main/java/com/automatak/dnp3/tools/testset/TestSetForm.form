@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.automatak.dnp3.tools.testset.TestSetForm">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="FormLayout">
+  <grid id="27dc6" binding="mainPanel" layout-manager="FormLayout">
     <rowspec value="center:d:grow"/>
     <colspec value="fill:d:grow"/>
     <constraints>
@@ -19,12 +19,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="e9e17" class="javax.swing.JTree" binding="commsTree">
-            <constraints>
-              <splitpane position="left"/>
-            </constraints>
-            <properties/>
-          </component>
           <scrollpane id="4ec42">
             <constraints>
               <splitpane position="right"/>
@@ -40,6 +34,12 @@
               </component>
             </children>
           </scrollpane>
+          <component id="e16fd" class="com.automatak.dnp3.tools.controls.CommsTree" binding="commsTree">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties/>
+          </component>
         </children>
       </splitpane>
     </children>
