@@ -9,6 +9,10 @@ import com.automatak.dnp3.tools.controls.CommsTree;
 import com.automatak.dnp3.tools.controls.LogTable;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TestSetForm {
 
@@ -22,8 +26,8 @@ public class TestSetForm {
         frame.pack();
         frame.setVisible(true);
 
-        Channel client = mgr.addTCPClient("client", LogLevel.INTERPRET, 5000, "127.0.0.1", 20000);
-        Master master = client.addMaster("master", LogLevel.INTERPRET, PrintingDataObserver.getInstance(), new MasterStackConfig());
+        //Channel client = mgr.addTCPClient("client", LogLevel.INTERPRET, 5000, "127.0.0.1", 20000);
+        //Master master = client.addMaster("master", LogLevel.INTERPRET, PrintingDataObserver.getInstance(), new MasterStackConfig());
     }
 
     public static JMenuBar getMenuBar()
@@ -32,6 +36,15 @@ public class TestSetForm {
         JMenu menu = new JMenu("Menu");
         menuBar.add(menu);
         JMenuItem aboutItem = new JMenuItem("About");
+        aboutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AboutDialog dialog = new AboutDialog();
+                dialog.pack();
+                dialog.configure();
+                dialog.setVisible(true);
+            }
+        });
         menu.add(aboutItem);
 
        return menuBar;
@@ -41,6 +54,7 @@ public class TestSetForm {
     {
         this.manager = manager;
         this.manager.addLogSubscriber(logTable);
+        this.commsTree.setManager(manager);
     }
 
     private JPanel mainPanel;
