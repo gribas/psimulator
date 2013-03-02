@@ -25,9 +25,6 @@ public class TestSetForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
-        //Channel client = mgr.addTCPClient("client", LogLevel.INTERPRET, 5000, "127.0.0.1", 20000);
-        //Master master = client.addMaster("master", LogLevel.INTERPRET, PrintingDataObserver.getInstance(), new MasterStackConfig());
     }
 
     public static JMenuBar getMenuBar()

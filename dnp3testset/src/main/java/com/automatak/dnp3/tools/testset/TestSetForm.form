@@ -16,7 +16,9 @@
           </grid>
           <forms defaultalign-vert="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <dividerLocation value="100"/>
+        </properties>
         <border type="none"/>
         <children>
           <scrollpane id="4ec42">
