@@ -24,13 +24,14 @@ import com.automatak.dnp3.LogSubscriber;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 
 public class MeasTable extends JTable {
 
     private final static String[] tableColumns = new String[]{"index", "value", "quality", "timestamp"};
     private final DefaultTableModel model = new MyTableModel();
-    private final Map<Long, String[]> rowMap = new java.util.HashMap<Long, String[]>();
+    private final Map<Long, String> rowMap = new java.util.HashMap<Long, String>();
 
     private class MyTableModel extends DefaultTableModel {
 
@@ -50,19 +51,30 @@ public class MeasTable extends JTable {
         this.setModel(model);
     }
 
+    @Override
+    public String getToolTipText(MouseEvent e)
+    {
+        long row = rowAtPoint(e.getPoint());
+        String tip = rowMap.get(row);
+        return tip;
+    }
+
    public void updateBinary(BinaryInput bi, long index)
    {
       int idx = (int) index;
-      String[] rowData = rowMap.get(index);
+      String qualityPneumonic = QualityConverter.getBinaryQualitySummary(bi.getQuality());
+      String rowData = rowMap.get(index);
+
       if(rowData == null) {
-         rowData = new String[]{Long.toString(index), Boolean.toString(bi.getValue()), Byte.toString(bi.getQuality()), Long.toString(bi.getMsSinceEpoch())};
-         model.insertRow(idx, rowData);
-         rowMap.put(index, rowData);
+         String[] row = new String[]{Long.toString(index), Boolean.toString(bi.getValue()), qualityPneumonic, Long.toString(bi.getMsSinceEpoch())};
+         model.insertRow(idx, row);
+         rowMap.put(index, QualityConverter.getBinaryQualityDescription(bi.getQuality()));
       }
       else {
+         rowMap.put(index, QualityConverter.getBinaryQualityDescription(bi.getQuality()));
          model.setValueAt(Long.toString(idx), idx, 0);
          model.setValueAt(Boolean.toString(bi.getValue()), idx, 1);
-         model.setValueAt(Byte.toString(bi.getQuality()), idx, 2);
+         model.setValueAt(qualityPneumonic, idx, 2);
          model.setValueAt(Long.toString(bi.getMsSinceEpoch()), idx, 3);
       }
    }

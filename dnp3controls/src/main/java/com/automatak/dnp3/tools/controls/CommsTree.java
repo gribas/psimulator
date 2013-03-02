@@ -214,15 +214,6 @@ public class CommsTree extends JTree {
         }
     }
 
-    private ImageIcon createImageIcon(String path, String description) {
-        java.net.URL imgURL = getClass().getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL, description);
-        } else {
-            throw new RuntimeException("Couldn't find file: " + path);
-        }
-    }
-
     public void setManager(DNP3Manager manager) {
         this.manager = manager;
     }
