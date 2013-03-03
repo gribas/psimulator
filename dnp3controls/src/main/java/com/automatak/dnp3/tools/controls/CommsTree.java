@@ -138,6 +138,23 @@ public class CommsTree extends JTree {
         }
     }
 
+    private class SerialChannelNode extends ChannelNode {
+
+        private final SerialSettings settings;
+
+        public SerialChannelNode(DefaultTreeModel model, Channel channel, SerialSettings settings)
+        {
+            super(model, channel);
+            this.settings = settings;
+        }
+
+        @Override
+        public String toString()
+        {
+            return settings.port;
+        }
+    }
+
     private class MasterNode extends StackNode {
 
         public Master getMaster() {
@@ -327,6 +344,30 @@ public class CommsTree extends JTree {
             }
         });
         popup.add(addClientItem);
+        JMenuItem addSerialItem = new JMenuItem("Add Serial");
+        addSerialItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(SwingUtilities.isLeftMouseButton(e))
+                {
+                    AddSerialDialog dialog = new AddSerialDialog(new AddSerial() {
+                        @Override
+                        public void onAdd(LogLevel level, int retryMs, SerialSettings settings) {
+                            Channel c = manager.addSerial(settings.port, level, retryMs, settings);
+                            SerialChannelNode node = new SerialChannelNode(model, c, settings);
+                            c.addStateListener(node);
+                            MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+                            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+                            root.add(channelNode);
+                            model.reload();
+                        }
+                    });
+                    dialog.pack();
+                    dialog.setVisible(true);
+                }
+            }
+        });
+        popup.add(addSerialItem);
         return popup;
     }
 
