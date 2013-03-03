@@ -26,12 +26,20 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 
 public class CommsTree extends JTree {
 
     private final static Color darkGreen = new Color(0, 153, 51);
 
-    private class RootNode {
+    private abstract class UserNode {
+
+        // hierarchically do cleanup
+        public void cleanup()
+        {}
+    }
+
+    private class RootNode extends UserNode {
        @Override
        public String toString()
        {
@@ -39,7 +47,7 @@ public class CommsTree extends JTree {
        }
     }
 
-    private abstract class ChannelNode implements ChannelStateListener {
+    private abstract class ChannelNode extends UserNode implements ChannelStateListener {
 
         public Channel getChannel() {
             return channel;
@@ -74,7 +82,7 @@ public class CommsTree extends JTree {
         }
     }
 
-    private abstract class StackNode implements StackStateListener {
+    private abstract class StackNode extends UserNode implements StackStateListener {
 
         public Stack getStack() {
             return stack;
@@ -94,10 +102,6 @@ public class CommsTree extends JTree {
             this.stack = stack;
             this.model = model;
         }
-
-        // overridable to close windows, etc
-        protected void cleanup()
-        {}
 
         @Override
         public void onStateChange(final StackState state)
@@ -148,7 +152,7 @@ public class CommsTree extends JTree {
         private final MasterForm form;
 
         @Override
-        protected void cleanup()
+        public void cleanup()
         {
             this.form.setVisible(false);
         }
@@ -220,6 +224,22 @@ public class CommsTree extends JTree {
 
     private DNP3Manager manager = null;
 
+    private void recursivelyCleanup(DefaultMutableTreeNode node)
+    {
+        if(UserNode.class.isInstance(node.getUserObject()))
+        {
+            //depth first traversal
+            Enumeration e = node.children();
+            while(e.hasMoreElements())
+            {
+                Object o = e.nextElement();
+                if(DefaultMutableTreeNode.class.isInstance(o)) recursivelyCleanup((DefaultMutableTreeNode) o);
+            }
+            UserNode n = (UserNode) node.getUserObject();
+            n.cleanup();
+        }
+    }
+
     private JPopupMenu getStackMenu(final DefaultMutableTreeNode node, final StackNode snode)
     {
         JPopupMenu popup = new JPopupMenu();
@@ -227,7 +247,7 @@ public class CommsTree extends JTree {
         removeItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                snode.cleanup();
+                recursivelyCleanup(node);
                 snode.getStack().shutdown();
                 node.removeFromParent();
                 model.reload();
@@ -268,6 +288,7 @@ public class CommsTree extends JTree {
         removeItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                recursivelyCleanup(node);
                 Channel c = cnode.getChannel();
                 c.shutdown();
                 node.removeFromParent();
