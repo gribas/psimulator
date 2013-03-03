@@ -57,7 +57,7 @@ public class TestSetForm {
         splash.pack();
         splash.configure();
         splash.showSplash();
-        for(int i = 0; i <= 100; ++i)
+        for(int i = 0; i <= 100; ++i) //load plugins here instead of doing fake work
         {
             Thread.sleep(10);
             splash.setProcess(i);
