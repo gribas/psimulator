@@ -34,35 +34,35 @@ import java.awt.event.MouseEvent;
 
 public class TestSetForm {
 
-    public static void main(String[] args) {
+    private static void startApplication()
+    {
         DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
         JFrame frame = new JFrame("opendnp3");
         TestSetForm form = new TestSetForm(mgr);
-        frame.setJMenuBar(getMenuBar());
         frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
     }
 
-    public static JMenuBar getMenuBar()
+    public static void main(String[] args) throws InterruptedException
     {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
-        menuBar.add(menu);
-        JMenuItem aboutItem = new JMenuItem("About");
-        aboutItem.addActionListener(new ActionListener() {
+        SplashScreen splash = new SplashScreen(new SplashScreenListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                AboutDialog dialog = new AboutDialog();
-                dialog.pack();
-                dialog.configure();
-                dialog.setVisible(true);
+            public void onSplashClose() {
+                startApplication();
             }
         });
-        menu.add(aboutItem);
-
-       return menuBar;
+        splash.pack();
+        splash.configure();
+        splash.showSplash();
+        for(int i = 0; i <= 100; ++i)
+        {
+            Thread.sleep(10);
+            splash.setProcess(i);
+        }
+        splash.setComplete();
     }
 
     public TestSetForm(DNP3Manager manager)

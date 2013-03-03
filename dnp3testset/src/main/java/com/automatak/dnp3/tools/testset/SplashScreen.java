@@ -22,21 +22,64 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class AboutDialog extends JDialog {
-    private JPanel contentPane;
-    private JButton buttonOK;
+public class SplashScreen extends JDialog {
 
-    public AboutDialog() {
+    private JPanel contentPane;
+    private JButton buttonAccept;
+    private JProgressBar progressBarLoad;
+    private final SplashScreenListener listener;
+
+    public SplashScreen(SplashScreenListener listener) {
+        this.listener = listener;
+
         setContentPane(contentPane);
         setModal(true);
         setResizable(false);
-        getRootPane().setDefaultButton(buttonOK);
-        buttonOK.addActionListener(new ActionListener() {
+        setUndecorated(true);
+        progressBarLoad.setMinimum(0);
+        progressBarLoad.setMaximum(100);
+        buttonAccept.setVisible(false);
+        getRootPane().setDefaultButton(buttonAccept);
+        buttonAccept.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
             }
         });
     }
+
+    public void showSplash()
+    {
+        final SplashScreen myDialog = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.setVisible(true);
+            }
+        });
+    }
+
+    public void setProcess(final int value)
+    {
+        final SplashScreen myDialog = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.progressBarLoad.setValue(value);
+            }
+        });
+    }
+
+    public void setComplete()
+    {
+        final SplashScreen myDialog = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.buttonAccept.setVisible(true);
+            }
+        });
+    }
+
 
     public void configure()
     {
@@ -48,7 +91,7 @@ public class AboutDialog extends JDialog {
     }
 
     private void onOK() {
-// add your code here
+        listener.onSplashClose();
         dispose();
     }
 }

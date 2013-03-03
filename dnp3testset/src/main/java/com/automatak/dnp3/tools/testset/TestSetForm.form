@@ -7,7 +7,9 @@
       <xy x="50" y="20" width="538" height="446"/>
     </constraints>
     <properties/>
-    <border type="none"/>
+    <border type="empty">
+      <size top="10" left="10" bottom="10" right="10"/>
+    </border>
     <children>
       <splitpane id="8f9e" binding="splitPane">
         <constraints>
@@ -17,7 +19,7 @@
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <dividerLocation value="100"/>
+          <dividerLocation value="200"/>
         </properties>
         <border type="none"/>
         <children>
