@@ -46,7 +46,7 @@ public class TestSetForm {
         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
     }
 
-    public static void main(String[] args) throws InterruptedException
+    private static void startSplash()  throws InterruptedException
     {
         SplashScreen splash = new SplashScreen(new SplashScreenListener() {
             @Override
@@ -63,6 +63,29 @@ public class TestSetForm {
             splash.setProcess(i);
         }
         splash.setComplete();
+    }
+
+    public static void main(String[] args) throws InterruptedException
+    {
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        }
+        catch (ClassNotFoundException e) {
+            // handle exception
+        }
+        catch (InstantiationException e) {
+            // handle exception
+        }
+        catch (IllegalAccessException e) {
+            // handle exception
+        }
+        startSplash();
+
     }
 
     public TestSetForm(DNP3Manager manager)
