@@ -20,14 +20,16 @@ package com.automatak.dnp3.tools.controls;
 
 import javax.swing.*;
 
-public class TcpPortSpinner extends JSpinner {
+public class TcpPortSpinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
     public TcpPortSpinner()
     {
+       super();
        model = new SpinnerNumberModel(20000, 0, 65535, 1);
        this.setModel(model);
+       setNoComma();
     }
 
     public int getPort()

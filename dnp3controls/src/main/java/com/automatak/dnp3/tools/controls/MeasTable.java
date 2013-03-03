@@ -25,13 +25,17 @@ import com.automatak.dnp3.LogSubscriber;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class MeasTable extends JTable {
 
     private final static String[] tableColumns = new String[]{"index", "value", "quality", "timestamp"};
     private final DefaultTableModel model = new MyTableModel();
     private final Map<Long, String> rowMap = new java.util.HashMap<Long, String>();
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private class MyTableModel extends DefaultTableModel {
 
@@ -49,6 +53,7 @@ public class MeasTable extends JTable {
     public MeasTable() {
         super();
         this.setModel(model);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     @Override
@@ -63,10 +68,11 @@ public class MeasTable extends JTable {
    {
       int idx = (int) index;
       String qualityPneumonic = QualityConverter.getBinaryQualitySummary(bi.getQuality());
+      String timestamp = sdf.format(new Date(bi.getMsSinceEpoch()));
       String rowData = rowMap.get(index);
 
       if(rowData == null) {
-         String[] row = new String[]{Long.toString(index), Boolean.toString(bi.getValue()), qualityPneumonic, Long.toString(bi.getMsSinceEpoch())};
+         String[] row = new String[]{ Long.toString(index), Boolean.toString(bi.getValue()), qualityPneumonic, timestamp };
          model.insertRow(idx, row);
          rowMap.put(index, QualityConverter.getBinaryQualityDescription(bi.getQuality()));
       }
@@ -75,7 +81,7 @@ public class MeasTable extends JTable {
          model.setValueAt(Long.toString(idx), idx, 0);
          model.setValueAt(Boolean.toString(bi.getValue()), idx, 1);
          model.setValueAt(qualityPneumonic, idx, 2);
-         model.setValueAt(Long.toString(bi.getMsSinceEpoch()), idx, 3);
+         model.setValueAt(timestamp, idx, 3);
       }
    }
 }

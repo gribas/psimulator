@@ -20,18 +20,18 @@ package com.automatak.dnp3.tools.controls;
 
 import javax.swing.*;
 
-public class ControlCountSpinner extends NoCommaSpinner {
+public class UInt16Spinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
-    public ControlCountSpinner()
+    public UInt16Spinner()
     {
-       model = new SpinnerNumberModel(1, 0, 255, 1);
+       model = new SpinnerNumberModel(0, 0, 65535, 1);
        this.setModel(model);
        setNoComma();
     }
 
-    public int getControlCount()
+    public int getUInt16()
     {
         return (Integer) this.getValue();
     }

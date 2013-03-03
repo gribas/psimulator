@@ -77,7 +77,7 @@ public class AddTcpDialog extends JDialog {
     private void onOK() {
         String id = textFieldLoggerId.getText();
         LogLevel level = this.comboBoxLogLevel.getLogLevel();
-        int retry = this.spinnerRetry.getRetry();
+        int retry = this.spinnerRetry.getTimeout();
         String host =  this.textFieldHost.getText();
         int port = this.spinnerPort.getPort();
         this.listener.onAdd(id, level, retry, host, port);

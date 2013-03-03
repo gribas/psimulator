@@ -20,7 +20,7 @@ package com.automatak.dnp3.tools.controls;
 
 import javax.swing.*;
 
-public class IndexSpinner extends JSpinner {
+public class IndexSpinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
@@ -28,6 +28,7 @@ public class IndexSpinner extends JSpinner {
     {
        model = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
        this.setModel(model);
+       setNoComma();
     }
 
     public int getIndex()

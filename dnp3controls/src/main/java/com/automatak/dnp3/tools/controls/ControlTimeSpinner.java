@@ -20,7 +20,7 @@ package com.automatak.dnp3.tools.controls;
 
 import javax.swing.*;
 
-public class ControlTimeSpinner extends JSpinner {
+public class ControlTimeSpinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
@@ -28,6 +28,7 @@ public class ControlTimeSpinner extends JSpinner {
     {
        model = new SpinnerNumberModel(500, 0, 65535, 100);
        this.setModel(model);
+       setNoComma();
     }
 
     public int getControlTime()

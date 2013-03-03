@@ -28,8 +28,51 @@ public class AddMasterDialog extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTabbedPane tabbedPane1;
+    private JCheckBox checkBoxUseConfirms;
+    private UInt16Spinner spinnerLocalAddr;
+    private UInt16Spinner spinnerRemoteAddr;
+    private IntCountSpinner spinnerRspTimeout;
+    private TimeoutSpinner spinnerAppRspTimeout;
+    private UInt16Spinner spinnerRetryCount;
+    private UInt16Spinner spinnerFragSize;
+
+    //used to set defaults
+    private final MasterStackConfig config = new MasterStackConfig();
 
     private final AddMasterListener listener;
+
+    private void setDefaults()
+    {
+        // link
+        this.checkBoxUseConfirms.setSelected(config.linkConfig.useConfirms);
+        this.spinnerLocalAddr.setValue(config.linkConfig.localAddr);
+        this.spinnerRemoteAddr.setValue(config.linkConfig.remoteAddr);
+        this.spinnerRspTimeout.setValue((int) config.linkConfig.timeoutMs);
+
+        // app
+        this.spinnerAppRspTimeout.setValue((int) config.appConfig.rspTimeoutMs);
+        this.spinnerRetryCount.setValue(config.appConfig.numRetry);
+        this.spinnerFragSize.setValue(config.appConfig.maxFragSize);
+    }
+
+    private MasterStackConfig getConfig()
+    {
+        MasterStackConfig cfg = new MasterStackConfig();
+
+        // link
+        cfg.linkConfig.useConfirms = this.checkBoxUseConfirms.isSelected();
+        cfg.linkConfig.localAddr = this.spinnerLocalAddr.getUInt16();
+        cfg.linkConfig.remoteAddr = this.spinnerRemoteAddr.getUInt16();
+        cfg.linkConfig.timeoutMs = this.spinnerRspTimeout.getCount();
+
+        // app
+        cfg.appConfig.rspTimeoutMs = this.spinnerAppRspTimeout.getTimeout();
+        cfg.appConfig.numRetry = this.spinnerRetryCount.getUInt16();
+        cfg.appConfig.maxFragSize = spinnerFragSize.getUInt16();
+
+
+        return cfg;
+    }
 
     public AddMasterDialog(AddMasterListener listener) {
         setContentPane(contentPane);
@@ -37,6 +80,8 @@ public class AddMasterDialog extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
 
         this.listener = listener;
+
+        this.setDefaults();
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -67,7 +112,7 @@ public class AddMasterDialog extends JDialog {
     }
 
     private void onOK() {
-        MasterStackConfig cfg = new MasterStackConfig();
+        MasterStackConfig cfg = getConfig();
         cfg.masterConfig.doUnsolOnStartup = true;
         cfg.masterConfig.enableUnsol = true;
         this.listener.onAdd(cfg);

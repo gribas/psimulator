@@ -20,7 +20,7 @@ package com.automatak.dnp3.tools.controls;
 
 import javax.swing.*;
 
-public class TimeoutSpinner extends JSpinner {
+public class TimeoutSpinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
@@ -28,9 +28,10 @@ public class TimeoutSpinner extends JSpinner {
     {
        model = new SpinnerNumberModel(5000, 500, 60000, 500);
        this.setModel(model);
+       setNoComma();
     }
 
-    public int getRetry()
+    public int getTimeout()
     {
         return (Integer) this.getValue();
     }

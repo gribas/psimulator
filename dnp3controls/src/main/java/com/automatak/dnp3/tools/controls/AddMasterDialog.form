@@ -67,24 +67,201 @@
             <border type="none"/>
             <children>
               <grid id="10140" layout-manager="FormLayout">
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
                 <rowspec value="center:d:grow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <colspec value="fill:d:noGrow"/>
+                <colspec value="left:4dlu:noGrow"/>
                 <colspec value="fill:d:grow"/>
                 <constraints>
                   <tabbedpane title="Link Layer"/>
                 </constraints>
                 <properties/>
-                <border type="none"/>
-                <children/>
+                <border type="empty">
+                  <size top="10" left="10" bottom="0" right="0"/>
+                </border>
+                <children>
+                  <vspacer id="11a16">
+                    <constraints>
+                      <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-vert="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="c784" class="com.automatak.dnp3.tools.controls.IntCountSpinner">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-horz="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="6f7e9" class="javax.swing.JCheckBox" binding="checkBoxUseConfirms">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-vert="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Use Confirms?"/>
+                    </properties>
+                  </component>
+                  <component id="dabce" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Confrimed data retry"/>
+                    </properties>
+                  </component>
+                  <hspacer id="ee074">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-horz="false"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="1ca37" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerLocalAddr">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="6af4" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Local Address"/>
+                    </properties>
+                  </component>
+                  <component id="5268c" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerRemoteAddr">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="de341" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Remote Address"/>
+                    </properties>
+                  </component>
+                  <component id="95e17" class="com.automatak.dnp3.tools.controls.IntCountSpinner" binding="spinnerRspTimeout">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="8bbeb" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Response Timeout (ms)"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
               <grid id="5cac9" layout-manager="FormLayout">
                 <rowspec value="center:d:grow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:d:grow"/>
+                <colspec value="fill:d:noGrow"/>
+                <colspec value="left:4dlu:noGrow"/>
+                <colspec value="fill:max(d;4px):noGrow"/>
+                <colspec value="left:4dlu:noGrow"/>
                 <colspec value="fill:d:grow"/>
                 <constraints>
                   <tabbedpane title="Application Layer"/>
                 </constraints>
                 <properties/>
-                <border type="none"/>
-                <children/>
+                <border type="empty">
+                  <size top="10" left="10" bottom="0" right="0"/>
+                </border>
+                <children>
+                  <hspacer id="cb325">
+                    <constraints>
+                      <grid row="0" column="4" row-span="9" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-horz="false"/>
+                    </constraints>
+                  </hspacer>
+                  <vspacer id="bdb91">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-vert="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="91b61" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerRetryCount">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="dbfa8" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Retry Count"/>
+                    </properties>
+                  </component>
+                  <component id="a7d79" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerFragSize">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="628f8" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Fragment Size"/>
+                    </properties>
+                  </component>
+                  <component id="5c56" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerAppRspTimeout">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="8c95" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Response Timeout (ms)"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
               <grid id="4c1e7" layout-manager="FormLayout">
                 <rowspec value="center:d:grow"/>
