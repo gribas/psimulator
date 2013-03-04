@@ -55,6 +55,7 @@ public class MasterForm extends JFrame implements DataObserver {
     {
         super(name);
         this.setContentPane(panelMain);
+        this.setIconImage(StaticResources.dnpIcon);
         this.pack();
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }

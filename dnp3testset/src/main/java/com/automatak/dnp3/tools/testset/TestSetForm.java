@@ -27,13 +27,15 @@ import com.automatak.dnp3.tools.controls.LogTable;
 import com.automatak.dnp3.tools.controls.StaticResources;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 
 public class TestSetForm {
 
     private static void startApplication()
     {
-        DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
+        final DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
         JFrame frame = new JFrame("opendnp3");
         frame.setIconImage(StaticResources.dnpIcon);
         TestSetForm form = new TestSetForm(mgr);
@@ -42,6 +44,12 @@ public class TestSetForm {
         frame.pack();
         frame.setVisible(true);
         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                mgr.shutdown();
+            }
+        });
     }
 
     private static void startSplash()  throws InterruptedException
@@ -83,7 +91,6 @@ public class TestSetForm {
             // handle exception
         }
         startSplash();
-
     }
 
     public TestSetForm(DNP3Manager manager)
