@@ -36,7 +36,7 @@ public class TestSetForm {
     private static void startApplication()
     {
         final DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
-        JFrame frame = new JFrame("opendnp3");
+        JFrame frame = new JFrame("Automatak Protocol Simulator");
         frame.setIconImage(StaticResources.dnpIcon);
         TestSetForm form = new TestSetForm(mgr);
         frame.setContentPane(form.mainPanel);
