@@ -53,7 +53,8 @@ public class LogTable extends JTable implements LogSubscriber {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                String[] row = new String[]{entry.getTimestamp().toString(), entry.getLogLevel().toString(), entry.getLoggerName(), entry.getMessage()};
+                String timestamp = StaticResources.defaulUTCDateFormat.format(entry.getTimestamp());
+                String[] row = new String[]{timestamp, entry.getLogLevel().toString(), entry.getLoggerName(), entry.getMessage()};
                 model.addRow(row);
             }
         });

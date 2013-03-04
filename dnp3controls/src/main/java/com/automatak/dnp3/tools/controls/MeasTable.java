@@ -19,23 +19,18 @@
 package com.automatak.dnp3.tools.controls;
 
 import com.automatak.dnp3.BinaryInput;
-import com.automatak.dnp3.LogEntry;
-import com.automatak.dnp3.LogSubscriber;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseEvent;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class MeasTable extends JTable {
 
     private final static String[] tableColumns = new String[]{"index", "value", "quality", "timestamp"};
     private final DefaultTableModel model = new MyTableModel();
     private final Map<Long, String> rowMap = new java.util.HashMap<Long, String>();
-    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private class MyTableModel extends DefaultTableModel {
 
@@ -53,7 +48,6 @@ public class MeasTable extends JTable {
     public MeasTable() {
         super();
         this.setModel(model);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     @Override
@@ -68,7 +62,7 @@ public class MeasTable extends JTable {
    {
       int idx = (int) index;
       String qualityPneumonic = QualityConverter.getBinaryQualitySummary(bi.getQuality());
-      String timestamp = sdf.format(new Date(bi.getMsSinceEpoch()));
+      String timestamp = StaticResources.defaulUTCDateFormat.format(new Date(bi.getMsSinceEpoch()));
       String rowData = rowMap.get(index);
 
       if(rowData == null) {
