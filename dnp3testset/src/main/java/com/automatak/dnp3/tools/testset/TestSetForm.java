@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class TestSetForm {
 
@@ -38,6 +39,8 @@ public class TestSetForm {
     {
         DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
         JFrame frame = new JFrame("opendnp3");
+        URL url = TestSetForm.class.getResource("/icon.png");
+        frame.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
         TestSetForm form = new TestSetForm(mgr);
         frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

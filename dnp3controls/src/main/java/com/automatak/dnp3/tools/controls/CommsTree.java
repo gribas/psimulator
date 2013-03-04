@@ -19,7 +19,6 @@
 package com.automatak.dnp3.tools.controls;
 
 import com.automatak.dnp3.*;
-import com.automatak.dnp3.mock.PrintingDataObserver;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -27,6 +26,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
+import java.util.LinkedList;
 
 public class CommsTree extends JTree {
 
@@ -34,9 +34,21 @@ public class CommsTree extends JTree {
 
     private abstract class UserNode {
 
+        private final java.util.List<NodeUpdateListener> listeners = new LinkedList<NodeUpdateListener>();
+
         // hierarchically do cleanup
         public void cleanup()
         {}
+
+        protected void notifyNodeUpdateListeners()
+        {
+            for(NodeUpdateListener l : listeners) l.onNodeUpdate();
+        }
+
+        public void addUpdateListener(NodeUpdateListener listener)
+        {
+            listeners.add(listener);
+        }
     }
 
     private class RootNode extends UserNode {
@@ -54,7 +66,6 @@ public class CommsTree extends JTree {
         }
 
         private final Channel channel;
-        private final DefaultTreeModel model;
 
         public ChannelState getState() {
             return state;
@@ -62,10 +73,9 @@ public class CommsTree extends JTree {
 
         private ChannelState state = ChannelState.OPEN;
 
-        public ChannelNode(DefaultTreeModel model, Channel channel)
+        public ChannelNode(Channel channel)
         {
             this.channel = channel;
-            this.model = model;
         }
 
         @Override
@@ -76,7 +86,7 @@ public class CommsTree extends JTree {
                 @Override
                 public void run() {
                     node.state = state;
-                    node.model.reload();
+                    node.notifyNodeUpdateListeners();
                 }
             });
         }
@@ -89,7 +99,6 @@ public class CommsTree extends JTree {
         }
 
         private final Stack stack;
-        private final DefaultTreeModel model;
 
         public StackState getState() {
             return state;
@@ -97,10 +106,9 @@ public class CommsTree extends JTree {
 
         private StackState state = StackState.COMMS_DOWN;
 
-        public StackNode(DefaultTreeModel model, Stack stack)
+        public StackNode(Stack stack)
         {
             this.stack = stack;
-            this.model = model;
         }
 
         @Override
@@ -111,7 +119,7 @@ public class CommsTree extends JTree {
                 @Override
                 public void run() {
                     node.state = state;
-                    node.model.reload();
+                    node.notifyNodeUpdateListeners();
                 }
             });
         }
@@ -123,9 +131,9 @@ public class CommsTree extends JTree {
         private final String host;
         private final int port;
 
-        public TcpClientChannelNode(DefaultTreeModel model, String id, String host, int port, Channel channel)
+        public TcpClientChannelNode(String id, String host, int port, Channel channel)
         {
-            super(model, channel);
+            super(channel);
             this.id = id;
             this.host = host;
             this.port = port;
@@ -142,9 +150,9 @@ public class CommsTree extends JTree {
 
         private final SerialSettings settings;
 
-        public SerialChannelNode(DefaultTreeModel model, Channel channel, SerialSettings settings)
+        public SerialChannelNode(SerialSettings settings, Channel channel)
         {
-            super(model, channel);
+            super(channel);
             this.settings = settings;
         }
 
@@ -174,9 +182,9 @@ public class CommsTree extends JTree {
             this.form.setVisible(false);
         }
 
-        public MasterNode(DefaultTreeModel model, Master master, MasterForm form)
+        public MasterNode(Master master, MasterForm form)
         {
-            super(model, master);
+            super(master);
             this.master = master;
             this.form = form;
         }
@@ -288,10 +296,16 @@ public class CommsTree extends JTree {
                        MasterForm form = new MasterForm("master");
                        Master m = c.addMaster("master", LogLevel.INTERPRET, form, config);
                        form.configureWithMaster(m);
-                       MasterNode mnode = new MasterNode(model, m, form);
+                       MasterNode mnode = new MasterNode(m, form);
                        m.addStateListener(mnode);
-                       DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
+                       final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
                        node.add(child);
+                       mnode.addUpdateListener(new NodeUpdateListener() {
+                           @Override
+                           public void onNodeUpdate() {
+                               model.nodeChanged(child);
+                           }
+                       });
                        model.reload();
                    }
                });
@@ -330,11 +344,17 @@ public class CommsTree extends JTree {
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
                             Channel c = manager.addTCPClient(loggerId, level, retryMs, host, port);
-                            TcpClientChannelNode node = new TcpClientChannelNode(model, loggerId, host, port, c);
+                            TcpClientChannelNode node = new TcpClientChannelNode(loggerId, host, port, c);
                             c.addStateListener(node);
-                            MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+                            final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
                             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
                             root.add(channelNode);
+                            node.addUpdateListener(new NodeUpdateListener() {
+                                @Override
+                                public void onNodeUpdate() {
+                                  model.nodeChanged(channelNode);
+                                }
+                            });
                             model.reload();
                         }
                     });
@@ -354,11 +374,17 @@ public class CommsTree extends JTree {
                         @Override
                         public void onAdd(LogLevel level, int retryMs, SerialSettings settings) {
                             Channel c = manager.addSerial(settings.port, level, retryMs, settings);
-                            SerialChannelNode node = new SerialChannelNode(model, c, settings);
+                            SerialChannelNode node = new SerialChannelNode(settings, c);
                             c.addStateListener(node);
-                            MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+                            final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
                             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
                             root.add(channelNode);
+                            node.addUpdateListener(new NodeUpdateListener() {
+                                @Override
+                                public void onNodeUpdate() {
+                                    model.nodeChanged(channelNode);
+                                }
+                            });
                             model.reload();
                         }
                     });
