@@ -55,7 +55,7 @@ public class TestSetForm {
 
     private static void startSplash()  throws InterruptedException
     {
-        SplashScreen splash = new SplashScreen(new SplashScreenListener() {
+        final SplashScreen splash = new SplashScreen(new SplashScreenListener() {
             @Override
             public void onSplashClose() {
                 startApplication();
@@ -64,11 +64,18 @@ public class TestSetForm {
         splash.pack();
         splash.configure();
         splash.showSplash();
-        for(int i = 0; i <= 100; ++i) //load plugins here instead of doing fake work
-        {
-            Thread.sleep(10);
-            splash.setProcess(i);
-        }
+        OutstationPluginLoader loader = new OutstationPluginLoader();
+        loader.loadOutstationPlugins(new PluginLoaderListener() {
+            @Override
+            public void onProgressUpdate(int step, int max) {
+                splash.setProgress(step, max);
+            }
+
+            @Override
+            public void onException(Exception ex) {
+
+            }
+        });
         splash.setComplete();
     }
 

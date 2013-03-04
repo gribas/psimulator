@@ -58,13 +58,13 @@ public class SplashScreen extends JDialog {
         });
     }
 
-    public void setProcess(final int value)
+    public void setProgress(final int step, final int max)
     {
         final SplashScreen myDialog = this;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                myDialog.progressBarLoad.setValue(value);
+                myDialog.progressBarLoad.setValue(step/max);
             }
         });
     }

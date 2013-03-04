@@ -31,6 +31,9 @@ class ExampleOutstationPlugin implements OutstationPlugin {
     public void setDataObserver(DataObserver publisher)
     {
         this.publisher = publisher;
+        publisher.start();
+        publisher.update(new BinaryInput(true, BinaryInputQuality.ONLINE.toByte(), 0), 0);
+        publisher.end();
     }
 
     @Override
