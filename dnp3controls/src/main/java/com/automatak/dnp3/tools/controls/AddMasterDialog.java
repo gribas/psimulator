@@ -19,11 +19,15 @@
 package com.automatak.dnp3.tools.controls;
 
 import com.automatak.dnp3.MasterStackConfig;
+import com.automatak.dnp3.PointClass;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AddMasterDialog extends JDialog {
+
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -34,7 +38,16 @@ public class AddMasterDialog extends JDialog {
     private IntCountSpinner spinnerRspTimeout;
     private TimeoutSpinner spinnerAppRspTimeout;
     private UInt16Spinner spinnerRetryCount;
-    private UInt16Spinner spinnerFragSize;
+    private UInt16Spinner spinnerMaxReceiveFragSize;
+    private JCheckBox allowTimeSyncCheckBox;
+    private JCheckBox doUnsolEnableDisableCheckBox;
+    private JCheckBox enableUnsolCheckBox;
+    private JCheckBox class3CheckBox;
+    private JCheckBox class2CheckBox;
+    private JCheckBox class1CheckBox;
+    private TimeoutSpinner spinnerIntegrityRate;
+    private JCheckBox periodicIntegrityPollCheckBox;
+    private TimeoutSpinner spinnerTaskRetryRate;
 
     //used to set defaults
     private final MasterStackConfig config = new MasterStackConfig();
@@ -52,7 +65,23 @@ public class AddMasterDialog extends JDialog {
         // app
         this.spinnerAppRspTimeout.setValue((int) config.appConfig.rspTimeoutMs);
         this.spinnerRetryCount.setValue(config.appConfig.numRetry);
-        this.spinnerFragSize.setValue(config.appConfig.maxFragSize);
+        this.spinnerMaxReceiveFragSize.setValue(config.appConfig.maxFragSize);
+
+        // master
+        this.allowTimeSyncCheckBox.setSelected(config.masterConfig.allowTimeSync);
+        this.doUnsolEnableDisableCheckBox.setSelected(config.masterConfig.doUnsolOnStartup);
+        this.enableUnsolCheckBox.setSelected(config.masterConfig.enableUnsol);
+
+        int mask = config.masterConfig.unsolClassMask;
+        class1CheckBox.setSelected((mask & PointClass.CLASS_1.toInt()) != 0);
+        class2CheckBox.setSelected((mask & PointClass.CLASS_2.toInt()) != 0);
+        class3CheckBox.setSelected((mask & PointClass.CLASS_3.toInt()) != 0);
+
+        long rate = config.masterConfig.integrityRateMs;
+
+        periodicIntegrityPollCheckBox.setSelected(rate >= 0);
+        spinnerIntegrityRate.setValue((int) rate);
+        spinnerTaskRetryRate.setValue((int) config.masterConfig.taskRetryRateMs);
     }
 
     private MasterStackConfig getConfig()
@@ -68,8 +97,21 @@ public class AddMasterDialog extends JDialog {
         // app
         cfg.appConfig.rspTimeoutMs = this.spinnerAppRspTimeout.getTimeout();
         cfg.appConfig.numRetry = this.spinnerRetryCount.getUInt16();
-        cfg.appConfig.maxFragSize = spinnerFragSize.getUInt16();
+        cfg.appConfig.maxFragSize = spinnerMaxReceiveFragSize.getUInt16();
 
+        //master
+        cfg.masterConfig.allowTimeSync = allowTimeSyncCheckBox.isSelected();
+        cfg.masterConfig.doUnsolOnStartup = doUnsolEnableDisableCheckBox.isSelected();
+        cfg.masterConfig.enableUnsol = enableUnsolCheckBox.isSelected();
+
+        int mask = 0;
+        if(class1CheckBox.isSelected()) mask |= PointClass.CLASS_1.toInt();
+        if(class2CheckBox.isSelected()) mask |= PointClass.CLASS_2.toInt();
+        if(class3CheckBox.isSelected()) mask |= PointClass.CLASS_3.toInt();
+
+        cfg.masterConfig.unsolClassMask = mask;
+        cfg.masterConfig.integrityRateMs = periodicIntegrityPollCheckBox.isSelected() ? spinnerIntegrityRate.getTimeout() : -1;
+        cfg.masterConfig.taskRetryRateMs = spinnerTaskRetryRate.getTimeout();
 
         return cfg;
     }

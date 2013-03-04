@@ -198,7 +198,7 @@
                 </constraints>
                 <properties/>
                 <border type="empty">
-                  <size top="10" left="10" bottom="0" right="0"/>
+                  <size top="10" left="10" bottom="10" right="10"/>
                 </border>
                 <children>
                   <hspacer id="cb325">
@@ -229,7 +229,7 @@
                       <text value="Retry Count"/>
                     </properties>
                   </component>
-                  <component id="a7d79" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerFragSize">
+                  <component id="a7d79" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerMaxReceiveFragSize">
                     <constraints>
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
@@ -242,7 +242,7 @@
                       <forms/>
                     </constraints>
                     <properties>
-                      <text value="Fragment Size"/>
+                      <text value="Max Receive Fragment Size"/>
                     </properties>
                   </component>
                   <component id="5c56" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerAppRspTimeout">
@@ -264,14 +264,158 @@
                 </children>
               </grid>
               <grid id="4c1e7" layout-manager="FormLayout">
+                <rowspec value="center:d:noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
+                <rowspec value="center:max(d;4px):noGrow"/>
+                <rowspec value="top:4dlu:noGrow"/>
                 <rowspec value="center:d:grow"/>
+                <colspec value="fill:d:noGrow"/>
+                <colspec value="left:4dlu:noGrow"/>
                 <colspec value="fill:d:grow"/>
                 <constraints>
                   <tabbedpane title="Master"/>
                 </constraints>
                 <properties/>
-                <border type="none"/>
-                <children/>
+                <border type="empty">
+                  <size top="10" left="10" bottom="10" right="10"/>
+                </border>
+                <children>
+                  <vspacer id="56a5e">
+                    <constraints>
+                      <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-vert="false"/>
+                    </constraints>
+                  </vspacer>
+                  <hspacer id="cc607">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <forms defaultalign-horz="false"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="5d7d2" class="javax.swing.JCheckBox" binding="allowTimeSyncCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Allow Time Sync"/>
+                    </properties>
+                  </component>
+                  <component id="93f6d" class="javax.swing.JCheckBox" binding="doUnsolEnableDisableCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Do Unsol Enable/Disable"/>
+                    </properties>
+                  </component>
+                  <component id="73c2d" class="javax.swing.JCheckBox" binding="enableUnsolCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Enable Unsol"/>
+                    </properties>
+                  </component>
+                  <grid id="ddb15" layout-manager="FormLayout">
+                    <rowspec value="center:d:grow"/>
+                    <rowspec value="top:4dlu:noGrow"/>
+                    <rowspec value="center:max(d;4px):noGrow"/>
+                    <colspec value="fill:max(d;4px):noGrow"/>
+                    <colspec value="left:4dlu:noGrow"/>
+                    <colspec value="fill:max(d;4px):noGrow"/>
+                    <colspec value="left:4dlu:noGrow"/>
+                    <colspec value="fill:d:grow"/>
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="e9d0e" class="javax.swing.JCheckBox" binding="class3CheckBox" default-binding="true">
+                        <constraints>
+                          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <forms defaultalign-horz="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Class3?"/>
+                        </properties>
+                      </component>
+                      <component id="c0eaf" class="javax.swing.JCheckBox" binding="class2CheckBox" default-binding="true">
+                        <constraints>
+                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <forms/>
+                        </constraints>
+                        <properties>
+                          <text value="Class2?"/>
+                        </properties>
+                      </component>
+                      <component id="e0a7c" class="javax.swing.JCheckBox" binding="class1CheckBox" default-binding="true">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <forms/>
+                        </constraints>
+                        <properties>
+                          <text value="Class1?"/>
+                        </properties>
+                      </component>
+                    </children>
+                  </grid>
+                  <component id="f16d3" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerIntegrityRate">
+                    <constraints>
+                      <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="67eef" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Integrity Poll Rate"/>
+                    </properties>
+                  </component>
+                  <component id="278a9" class="javax.swing.JCheckBox" binding="periodicIntegrityPollCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Periodic Integrity Poll?"/>
+                    </properties>
+                  </component>
+                  <component id="36c78" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerTaskRetryRate">
+                    <constraints>
+                      <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="3d5b3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <forms/>
+                    </constraints>
+                    <properties>
+                      <text value="Global Task Retry Rate"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
             </children>
           </tabbedpane>
