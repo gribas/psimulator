@@ -64,7 +64,8 @@ public class SplashScreen extends JDialog {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                myDialog.progressBarLoad.setValue(step/max);
+                int value = ((step+1)*100)/max;
+                myDialog.progressBarLoad.setValue(value);
             }
         });
     }

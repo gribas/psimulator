@@ -18,9 +18,9 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
-                        <manifest>
+                        <manifestEntries>
                             <outstationPluginFactoryClass>com.automatak.dnp3.tools.plugins.example.ExampleOutstationPluginFactory</outstationPluginFactoryClass>
-                        </manifest>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>

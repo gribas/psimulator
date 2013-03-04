@@ -25,6 +25,7 @@ import com.automatak.dnp3.impl.DNP3ManagerFactory;
 import com.automatak.dnp3.tools.controls.CommsTree;
 import com.automatak.dnp3.tools.controls.LogTable;
 import com.automatak.dnp3.tools.controls.StaticResources;
+import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -65,7 +66,7 @@ public class TestSetForm {
         splash.configure();
         splash.showSplash();
         OutstationPluginLoader loader = new OutstationPluginLoader();
-        loader.loadOutstationPlugins(new PluginLoaderListener() {
+        java.util.List<OutstationPluginFactory> outstations = loader.loadOutstationPlugins(new PluginLoaderListener() {
             @Override
             public void onProgressUpdate(int step, int max) {
                 splash.setProgress(step, max);
@@ -73,7 +74,7 @@ public class TestSetForm {
 
             @Override
             public void onException(Exception ex) {
-
+               System.out.println(ex.getMessage());
             }
         });
         splash.setComplete();
