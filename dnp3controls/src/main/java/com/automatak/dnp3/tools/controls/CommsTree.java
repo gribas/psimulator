@@ -175,6 +175,7 @@ public class CommsTree extends JTree {
 
         private final Master master;
         private final MasterForm form;
+        private final String id;
 
         @Override
         public void cleanup()
@@ -182,9 +183,10 @@ public class CommsTree extends JTree {
             this.form.setVisible(false);
         }
 
-        public MasterNode(Master master, MasterForm form)
+        public MasterNode(String loggerID, Master master, MasterForm form)
         {
             super(master);
+            this.id = loggerID;
             this.master = master;
             this.form = form;
         }
@@ -192,7 +194,7 @@ public class CommsTree extends JTree {
         @Override
         public String toString()
         {
-            return "master";
+            return id;
         }
     }
 
@@ -291,12 +293,12 @@ public class CommsTree extends JTree {
             public void mousePressed(MouseEvent e) {
                AddMasterDialog dialog = new AddMasterDialog(new AddMasterListener() {
                    @Override
-                   public void onAdd(MasterStackConfig config) {
+                   public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
                        Channel c = cnode.getChannel();
-                       MasterForm form = new MasterForm("master");
-                       Master m = c.addMaster("master", LogLevel.INTERPRET, form, config);
+                       MasterForm form = new MasterForm(loggerID);
+                       Master m = c.addMaster(loggerID, level, form, config);
                        form.configureWithMaster(m);
-                       MasterNode mnode = new MasterNode(m, form);
+                       MasterNode mnode = new MasterNode(loggerID, m, form);
                        m.addStateListener(mnode);
                        final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
                        node.add(child);

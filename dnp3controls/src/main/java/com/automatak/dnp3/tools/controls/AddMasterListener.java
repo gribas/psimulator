@@ -18,8 +18,9 @@
  */
 package com.automatak.dnp3.tools.controls;
 
+import com.automatak.dnp3.LogLevel;
 import com.automatak.dnp3.MasterStackConfig;
 
 public interface AddMasterListener {
-    void onAdd(MasterStackConfig config);
+    void onAdd(String loggerID, LogLevel level, MasterStackConfig config);
 }

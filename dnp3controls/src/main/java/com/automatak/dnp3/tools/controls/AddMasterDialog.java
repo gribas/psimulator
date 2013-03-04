@@ -18,6 +18,7 @@
  */
 package com.automatak.dnp3.tools.controls;
 
+import com.automatak.dnp3.LogLevel;
 import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.PointClass;
 
@@ -48,6 +49,8 @@ public class AddMasterDialog extends JDialog {
     private TimeoutSpinner spinnerIntegrityRate;
     private JCheckBox periodicIntegrityPollCheckBox;
     private TimeoutSpinner spinnerTaskRetryRate;
+    private JTextArea textAreaLoggerId;
+    private LogComboBox comboxBoxLogLevel;
 
     //used to set defaults
     private final MasterStackConfig config = new MasterStackConfig();
@@ -121,6 +124,9 @@ public class AddMasterDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        this.setResizable(false);
+        this.setIconImage(StaticResources.dnpIcon);
+
         this.listener = listener;
 
         this.setDefaults();
@@ -157,7 +163,9 @@ public class AddMasterDialog extends JDialog {
         MasterStackConfig cfg = getConfig();
         cfg.masterConfig.doUnsolOnStartup = true;
         cfg.masterConfig.enableUnsol = true;
-        this.listener.onAdd(cfg);
+        LogLevel level = comboxBoxLogLevel.getLogLevel();
+        String id = textAreaLoggerId.getText();
+        this.listener.onAdd(id, level, cfg);
         dispose();
     }
 
