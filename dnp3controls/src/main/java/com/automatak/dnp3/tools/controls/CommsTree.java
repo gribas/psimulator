@@ -19,6 +19,8 @@
 package com.automatak.dnp3.tools.controls;
 
 import com.automatak.dnp3.*;
+import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
+import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -198,6 +200,27 @@ public class CommsTree extends JTree {
         }
     }
 
+    private class OutstationNode extends StackNode {
+
+        private final String loggerId;
+        private final Outstation outstation;
+        private final OutstationPlugin plugin;
+
+        public OutstationNode(String loggerId, Outstation outstation, OutstationPlugin plugin)
+        {
+            super(outstation);
+            this.loggerId = loggerId;
+            this.outstation = outstation;
+            this.plugin = plugin;
+        }
+
+        @Override
+        public String toString()
+        {
+            return loggerId;
+        }
+    }
+
     private final DefaultMutableTreeNode root = new DefaultMutableTreeNode(new Dnp3RootNode());
     private final DefaultTreeModel model = new DefaultTreeModel(root);
     private final JPopupMenu rootMenu = getRootMenu();
@@ -245,11 +268,15 @@ public class CommsTree extends JTree {
         }
     }
 
-    public void setManager(DNP3Manager manager) {
+    private DNP3Manager manager = null;
+    private java.util.List<OutstationPluginFactory> plugins = null;
+
+    public void configure(DNP3Manager manager, java.util.List<OutstationPluginFactory> plugins) {
         this.manager = manager;
+        this.plugins = plugins;
     }
 
-    private DNP3Manager manager = null;
+
 
     private void recursivelyCleanup(DefaultMutableTreeNode node)
     {
@@ -316,6 +343,34 @@ public class CommsTree extends JTree {
             }
         });
         popup.add(addMasterItem);
+        JMenu addOutstationMenu = new JMenu("Add Outstation");
+        for(final OutstationPluginFactory plugin: plugins)
+        {
+             JMenuItem addPluginItem = new JMenuItem(plugin.getPluginName());
+             addPluginItem.addMouseListener(new MouseAdapter() {
+                 @Override
+                 public void mousePressed(MouseEvent e) {
+                     Channel c = cnode.getChannel();
+                     OutstationPlugin instance = plugin.newOutstationInstance("");
+                     OutstationStackConfig config = new OutstationStackConfig(instance.getDatabaseConfig());
+                     Outstation os = c.addOutstation("test", LogLevel.INTERPRET, instance.getCommandHandler(), config);
+                     instance.setDataObserver(os.getDataObserver());
+                     OutstationNode onode = new OutstationNode("test", os, instance);
+                     os.addStateListener(onode);
+                     final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
+                     node.add(child);
+                     onode.addUpdateListener(new NodeUpdateListener() {
+                         @Override
+                         public void onNodeUpdate() {
+                             model.nodeChanged(child);
+                         }
+                     });
+                     model.reload();
+                 }
+             });
+             addOutstationMenu.add(addPluginItem);
+        }
+        popup.add(addOutstationMenu);
         popup.add(new JPopupMenu.Separator());
         JMenuItem removeItem = new JMenuItem("Remove");
         removeItem.addMouseListener(new MouseAdapter() {
@@ -366,6 +421,37 @@ public class CommsTree extends JTree {
             }
         });
         popup.add(addClientItem);
+        JMenuItem addServerItem = new JMenuItem("Add Tcp Server");
+        addServerItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(SwingUtilities.isLeftMouseButton(e))
+                {
+                    AddTcpDialog dialog = new AddTcpDialog("Add Tcp Server", "Endpoint", new AddTcpListener() {
+                        @Override
+                        public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
+                        {
+                            Channel c = manager.addTCPServer(loggerId, level, retryMs, host, port);
+                            TcpClientChannelNode node = new TcpClientChannelNode(loggerId, host, port, c);
+                            c.addStateListener(node);
+                            final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+                            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+                            root.add(channelNode);
+                            node.addUpdateListener(new NodeUpdateListener() {
+                                @Override
+                                public void onNodeUpdate() {
+                                    model.nodeChanged(channelNode);
+                                }
+                            });
+                            model.reload();
+                        }
+                    });
+                    dialog.pack();
+                    dialog.setVisible(true);
+                }
+            }
+        });
+        popup.add(addServerItem);
         JMenuItem addSerialItem = new JMenuItem("Add Serial");
         addSerialItem.addMouseListener(new MouseAdapter() {
             @Override

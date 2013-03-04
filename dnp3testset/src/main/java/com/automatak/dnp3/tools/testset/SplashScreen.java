@@ -21,16 +21,21 @@ package com.automatak.dnp3.tools.testset;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
 
 public class SplashScreen extends JDialog {
 
     private JPanel contentPane;
     private JButton buttonAccept;
     private JProgressBar progressBarLoad;
-    private final SplashScreenListener listener;
+    private final java.util.List<SplashScreenListener> listeners  = new LinkedList<SplashScreenListener>();
 
-    public SplashScreen(SplashScreenListener listener) {
-        this.listener = listener;
+    public void addSplashCloseListener(SplashScreenListener listener)
+    {
+        this.listeners.add(listener);
+    }
+
+    public SplashScreen() {
 
         setContentPane(contentPane);
         setModal(true);
@@ -92,7 +97,7 @@ public class SplashScreen extends JDialog {
     }
 
     private void onOK() {
-        listener.onSplashClose();
+        for(SplashScreenListener listener: listeners) listener.onSplashClose();
         dispose();
     }
 }

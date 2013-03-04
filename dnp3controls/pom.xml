@@ -40,6 +40,11 @@
             <artifactId>opendnp3-api</artifactId>
             <version>1.1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.automatak.dnp3.tools</groupId>
+            <artifactId>plugin-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
