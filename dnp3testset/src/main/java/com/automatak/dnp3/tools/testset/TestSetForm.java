@@ -44,6 +44,7 @@ public class TestSetForm {
         frame.pack();
         frame.setVisible(true);
         frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        // explicitly shutdown the dnp3 interface, detaching native threads from the JVM
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

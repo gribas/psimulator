@@ -51,11 +51,11 @@ public class CommsTree extends JTree {
         }
     }
 
-    private class RootNode extends UserNode {
+    private class Dnp3RootNode extends UserNode {
        @Override
        public String toString()
        {
-           return "root";
+           return "dnp3";
        }
     }
 
@@ -196,7 +196,7 @@ public class CommsTree extends JTree {
         }
     }
 
-    private final DefaultMutableTreeNode root = new DefaultMutableTreeNode(new RootNode());
+    private final DefaultMutableTreeNode root = new DefaultMutableTreeNode(new Dnp3RootNode());
     private final DefaultTreeModel model = new DefaultTreeModel(root);
     private final JPopupMenu rootMenu = getRootMenu();
 
@@ -209,7 +209,7 @@ public class CommsTree extends JTree {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             Object userObject = node.getUserObject();
 
-            if(RootNode.class.isInstance(userObject)) {
+            if(Dnp3RootNode.class.isInstance(userObject)) {
 
             }
             else if(ChannelNode.class.isInstance(userObject)) {
@@ -416,7 +416,7 @@ public class CommsTree extends JTree {
                     final DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
                     if(SwingUtilities.isRightMouseButton(e))
                     {
-                        if(RootNode.class.isInstance(node.getUserObject()))
+                        if(Dnp3RootNode.class.isInstance(node.getUserObject()))
                         {
                             rootMenu.show(tree, x, y);
                         } else if(ChannelNode.class.isInstance(node.getUserObject())) {
