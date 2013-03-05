@@ -194,7 +194,7 @@ class ExampleOutstationPlugin implements OutstationPlugin {
 
             @Override
             public CommandStatus directOperate(AnalogOutputInt16 command, long index) {
-                return CommandStatus.NOT_SUPPORTED;
+                return operateAnalog(command.value, index);
             }
 
             @Override

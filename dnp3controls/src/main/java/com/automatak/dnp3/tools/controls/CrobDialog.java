@@ -34,6 +34,8 @@ public class CrobDialog extends JDialog {
     private CrobComboBox comboBoxCode;
     private IndexSpinner spinnerIndex;
     private ControlCountSpinner spinnerCount;
+    private JTabbedPane tabbedPane1;
+    private JSpinner spinnerInt16;
 
     private final CommandProcessor processor;
 
@@ -74,6 +76,8 @@ public class CrobDialog extends JDialog {
         setResizable(false);
 
         this.processor = processor;
+        spinnerInt16.setModel(new SpinnerNumberModel(0, 0, 65535, 1));
+
         final CrobDialog myDialog = this;
 
         buttonDO.addMouseListener(new MouseAdapter() {
@@ -81,14 +85,25 @@ public class CrobDialog extends JDialog {
             public void mousePressed(MouseEvent e) {
                 if(myDialog.buttonDO.isEnabled()) {
                     int index = spinnerIndex.getIndex();
-                    ControlRelayOutputBlock crob = createCROB();
-                    beginCommand("Direct operate... ");
-                    processor.directOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
-                        @Override
-                        public void onComplete(CommandStatus value) {
-                            myDialog.endCommand(value);
-                        }
-                    });
+                    if(tabbedPane1.getSelectedIndex() == 0) {
+                        ControlRelayOutputBlock crob = createCROB();
+                        beginCommand("Direct operate... ");
+                        processor.directOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myDialog.endCommand(value);
+                            }
+                        });
+                    } else if(tabbedPane1.getSelectedIndex() == 1) {
+                        AnalogOutputInt16 ao = new AnalogOutputInt16(((Integer) spinnerInt16.getValue()).shortValue(), CommandStatus.SUCCESS);
+                        beginCommand("Direct operate... ");
+                        processor.directOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myDialog.endCommand(value);
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -98,14 +113,26 @@ public class CrobDialog extends JDialog {
             public void mousePressed(MouseEvent e) {
                 if(myDialog.buttonDO.isEnabled()) {
                     int index = spinnerIndex.getIndex();
-                    ControlRelayOutputBlock crob = createCROB();
-                    beginCommand("Select and operate... ");
-                    processor.selectAndOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
-                        @Override
-                        public void onComplete(CommandStatus value) {
-                            myDialog.endCommand(value);
-                        }
-                    });
+
+                    if(tabbedPane1.getSelectedIndex() == 0) {
+                        ControlRelayOutputBlock crob = createCROB();
+                        beginCommand("Select and operate... ");
+                        processor.selectAndOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myDialog.endCommand(value);
+                            }
+                        });
+                    } else if(tabbedPane1.getSelectedIndex() == 1) {
+                        AnalogOutputInt16 ao = new AnalogOutputInt16(((Integer) spinnerInt16.getValue()).shortValue(), CommandStatus.SUCCESS);
+                        beginCommand("Direct operate... ");
+                        processor.selectAndOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myDialog.endCommand(value);
+                            }
+                        });
+                    }
                 }
             }
         });
