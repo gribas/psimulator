@@ -16,23 +16,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.pluginapi;
 
 import com.automatak.dnp3.tools.pluginapi.NoCommaSpinner;
 
 import javax.swing.*;
 
-public class IntCountSpinner extends NoCommaSpinner {
+public class IndexSpinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
-    public IntCountSpinner()
+    public IndexSpinner()
     {
        model = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
        this.setModel(model);
+       setNoComma();
     }
 
-    public int getCount()
+    public int getIndex()
     {
         return (Integer) this.getValue();
     }

@@ -18,6 +18,8 @@
  */
 package com.automatak.dnp3.tools.testset;
 
+import com.automatak.dnp3.tools.controls.PluginConfiguration;
+import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 
 import java.io.*;
@@ -30,11 +32,11 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
-class OutstationPluginLoader {
+class PluginLoader {
 
-    List<OutstationPluginFactory> loadOutstationPlugins(PluginLoaderListener listener)
+    PluginConfiguration loadPlugins(PluginLoaderListener listener)
     {
-        List<OutstationPluginFactory> factories = new LinkedList<OutstationPluginFactory>();
+        PluginConfiguration config = new PluginConfiguration();
 
         File folder = new File("./plugins");
         File[] jars = folder.listFiles(new FilenameFilter() {
@@ -61,7 +63,7 @@ class OutstationPluginLoader {
                         );
                         Class<?> clazz = Class.forName(outstationFactory, true, loader);
                         Object factory = clazz.newInstance();
-                        factories.add((OutstationPluginFactory) factory);
+                        config.getOutstations().add((OutstationPluginFactory) factory);
                     }
                 }
                 catch(IllegalAccessException ex) {
@@ -84,7 +86,7 @@ class OutstationPluginLoader {
             }
         }
 
-        return factories;
+        return config;
     }
 
 

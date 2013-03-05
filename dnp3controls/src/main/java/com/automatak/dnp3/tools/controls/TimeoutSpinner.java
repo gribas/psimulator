@@ -18,6 +18,8 @@
  */
 package com.automatak.dnp3.tools.controls;
 
+import com.automatak.dnp3.tools.pluginapi.NoCommaSpinner;
+
 import javax.swing.*;
 
 public class TimeoutSpinner extends NoCommaSpinner {

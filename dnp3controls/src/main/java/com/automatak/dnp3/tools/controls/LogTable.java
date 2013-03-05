@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.automatak.dnp3.LogEntry;
 import com.automatak.dnp3.LogSubscriber;
+import com.automatak.dnp3.tools.pluginapi.StaticResources;
 
 public class LogTable extends JTable implements LogSubscriber {
 

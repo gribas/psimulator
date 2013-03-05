@@ -24,21 +24,23 @@ import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
 import com.automatak.dnp3.tools.controls.CommsTree;
 import com.automatak.dnp3.tools.controls.LogTable;
-import com.automatak.dnp3.tools.controls.StaticResources;
+import com.automatak.dnp3.tools.controls.PluginConfiguration;
+import com.automatak.dnp3.tools.pluginapi.StaticResources;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
-import com.automatak.dnp3.tools.plugins.example.ExampleOutstationPluginFactory;
+import com.automatak.dnp3.tools.plugins.example.master.ExampleMasterPluginFactory;
+import com.automatak.dnp3.tools.plugins.example.outstation.ExampleOutstationPluginFactory;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class TestSetForm {
 
-    private static void startApplication(java.util.List<OutstationPluginFactory> plugins)
+    private static void startApplication(PluginConfiguration config)
     {
         final DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
         JFrame frame = new JFrame("Automatak Protocol Simulator");
         frame.setIconImage(StaticResources.dnpIcon);
-        TestSetForm form = new TestSetForm(mgr, plugins);
+        TestSetForm form = new TestSetForm(mgr, config);
         frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -59,8 +61,8 @@ public class TestSetForm {
         splash.pack();
         splash.configure();
         splash.showSplash();
-        OutstationPluginLoader loader = new OutstationPluginLoader();
-        final java.util.List<OutstationPluginFactory> outstations = loader.loadOutstationPlugins(new PluginLoaderListener() {
+        PluginLoader loader = new PluginLoader();
+        final PluginConfiguration config = loader.loadPlugins(new PluginLoaderListener() {
             @Override
             public void onProgressUpdate(int step, int max) {
                 splash.setProgress(step, max);
@@ -68,15 +70,16 @@ public class TestSetForm {
 
             @Override
             public void onException(Exception ex) {
-               System.out.println(ex.getMessage());
-               ex.printStackTrace();
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
             }
         });
-        outstations.add(new ExampleOutstationPluginFactory());
+        config.getOutstations().add(new ExampleOutstationPluginFactory());
+        config.getMasters().add(new ExampleMasterPluginFactory());
         splash.addSplashCloseListener(new SplashScreenListener() {
             @Override
             public void onSplashClose() {
-                startApplication(outstations);
+                startApplication(config);
             }
         });
         splash.setComplete();
@@ -104,10 +107,10 @@ public class TestSetForm {
         startSplash();
     }
 
-    public TestSetForm(DNP3Manager manager, java.util.List<OutstationPluginFactory> plugins)
+    public TestSetForm(DNP3Manager manager, PluginConfiguration config)
     {
         manager.addLogSubscriber(logTable);
-        this.commsTree.configure(manager,plugins);
+        this.commsTree.configure(manager, config);
     }
 
     private JPanel mainPanel;

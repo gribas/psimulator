@@ -19,6 +19,8 @@
 package com.automatak.dnp3.tools.controls;
 
 import com.automatak.dnp3.*;
+import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
+import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 
@@ -171,26 +173,27 @@ public class CommsTree extends JTree {
             return master;
         }
 
-        public MasterForm getForm() {
-            return form;
+        private final Master master;
+
+        public MasterPlugin getPlugin() {
+            return plugin;
         }
 
-        private final Master master;
-        private final MasterForm form;
+        private final MasterPlugin plugin;
         private final String id;
 
         @Override
         public void cleanup()
         {
-            this.form.setVisible(false);
+            plugin.shutdown();
         }
 
-        public MasterNode(String loggerID, Master master, MasterForm form)
+        public MasterNode(String loggerID, Master master, MasterPlugin plugin)
         {
             super(master);
             this.id = loggerID;
             this.master = master;
-            this.form = form;
+            this.plugin = plugin;
         }
 
         @Override
@@ -279,9 +282,9 @@ public class CommsTree extends JTree {
     }
 
     private DNP3Manager manager = null;
-    private java.util.List<OutstationPluginFactory> plugins = null;
+    private PluginConfiguration plugins = null;
 
-    public void configure(DNP3Manager manager, java.util.List<OutstationPluginFactory> plugins) {
+    public void configure(DNP3Manager manager, PluginConfiguration plugins) {
         this.manager = manager;
         this.plugins = plugins;
     }
@@ -324,47 +327,53 @@ public class CommsTree extends JTree {
     private JPopupMenu getChannelMenu(final DefaultMutableTreeNode node, final ChannelNode cnode)
     {
         JPopupMenu popup = new JPopupMenu();
-        JMenuItem addMasterItem = new JMenuItem("Add Master");
-        addMasterItem.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-               AddMasterDialog dialog = new AddMasterDialog(new AddMasterListener() {
-                   @Override
-                   public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
-                       Channel c = cnode.getChannel();
-                       MasterForm form = new MasterForm(loggerID);
-                       Master m = c.addMaster(loggerID, level, form, config);
-                       form.configureWithMaster(m);
-                       MasterNode mnode = new MasterNode(loggerID, m, form);
-                       m.addStateListener(mnode);
-                       final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
-                       node.add(child);
-                       mnode.addUpdateListener(new NodeUpdateListener() {
-                           @Override
-                           public void onNodeUpdate() {
-                               model.nodeChanged(child);
-                           }
-                       });
-                       model.reload();
-                   }
-               });
-               dialog.pack();
-               dialog.setVisible(true);
-            }
-        });
-        popup.add(addMasterItem);
-        JMenu addOutstationMenu = new JMenu("Add Outstation");
-        for(final OutstationPluginFactory plugin: plugins)
+        JMenu addMasterMenu = new JMenu("Add Master");
+        for(final MasterPluginFactory factory: plugins.getMasters())
         {
-             JMenuItem addPluginItem = new JMenuItem(plugin.getPluginName());
+            JMenuItem addPluginItem = new JMenuItem(factory.getPluginName());
+            addPluginItem.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                   AddMasterDialog dialog = new AddMasterDialog(new AddMasterListener() {
+                       @Override
+                       public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
+                           Channel c = cnode.getChannel();
+                           MasterPlugin plugin = factory.newMasterInstance("");
+                           Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
+                           plugin.configure(m.getCommandProcessor());
+                           MasterNode mnode = new MasterNode(loggerID, m, plugin);
+                           m.addStateListener(mnode);
+                           final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
+                           node.add(child);
+                           mnode.addUpdateListener(new NodeUpdateListener() {
+                               @Override
+                               public void onNodeUpdate() {
+                                   model.nodeChanged(child);
+                               }
+                           });
+                           model.reload();
+                       }
+                   });
+                   dialog.pack();
+                   dialog.setVisible(true);
+                }
+            });
+            addMasterMenu.add(addPluginItem);
+        }
+        popup.add(addMasterMenu);
+
+        JMenu addOutstationMenu = new JMenu("Add Outstation");
+        for(final OutstationPluginFactory factory: plugins.getOutstations())
+        {
+             JMenuItem addPluginItem = new JMenuItem(factory.getPluginName());
              addPluginItem.addMouseListener(new MouseAdapter() {
                  @Override
                  public void mousePressed(MouseEvent e) {
                      Channel c = cnode.getChannel();
-                     OutstationPlugin instance = plugin.newOutstationInstance("");
-                     OutstationStackConfig config = new OutstationStackConfig(instance.getDatabaseConfig());
+                     OutstationPlugin instance = factory.newOutstationInstance("");
+                     OutstationStackConfig config = instance.getDefaultConfig();
                      Outstation os = c.addOutstation("test", LogLevel.INTERPRET, instance.getCommandHandler(), config);
-                     instance.setDataObserver(os.getDataObserver());
+                     instance.configure(os.getDataObserver());
                      OutstationNode onode = new OutstationNode("test", os, instance);
                      os.addStateListener(onode);
                      final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
@@ -530,7 +539,8 @@ public class CommsTree extends JTree {
                         if(MasterNode.class.isInstance(node.getUserObject()) && e.getClickCount() == 2)
                         {
                             MasterNode mnode = (MasterNode) node.getUserObject();
-                            mnode.getForm().setVisible(true);
+                            MasterPlugin plugin = mnode.getPlugin();
+                            if(plugin.hasUiComponent()) plugin.showUi();
                         }
                         else if(OutstationNode.class.isInstance(node.getUserObject()) && e.getClickCount() == 2)
                         {

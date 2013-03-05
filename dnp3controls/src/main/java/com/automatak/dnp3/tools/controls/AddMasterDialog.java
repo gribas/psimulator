@@ -21,11 +21,10 @@ package com.automatak.dnp3.tools.controls;
 import com.automatak.dnp3.LogLevel;
 import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.PointClass;
+import com.automatak.dnp3.tools.pluginapi.StaticResources;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.LinkedList;
-import java.util.List;
 
 public class AddMasterDialog extends JDialog {
 

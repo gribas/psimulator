@@ -16,23 +16,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.pluginapi;
 
-import javax.swing.*;
+import com.automatak.dnp3.*;
 
-public class ControlTimeSpinner extends NoCommaSpinner {
+public interface MasterPlugin {
 
-    private SpinnerNumberModel model;
+    DataObserver getDataObserver();
 
-    public ControlTimeSpinner()
-    {
-       model = new SpinnerNumberModel(500, 0, 65535, 100);
-       this.setModel(model);
-       setNoComma();
-    }
+    MasterStackConfig getDefaultConfig();
 
-    public int getControlTime()
-    {
-        return (Integer) this.getValue();
-    }
+    void configure(CommandProcessor processor);
+
+    boolean hasUiComponent();
+
+    void shutdown();
+
+    void showUi();
+
 }

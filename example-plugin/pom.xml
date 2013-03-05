@@ -19,7 +19,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <outstationPluginFactoryClass>com.automatak.dnp3.tools.plugins.example.ExampleOutstationPluginFactory</outstationPluginFactoryClass>
+                            <outstationPluginFactoryClass>com.automatak.dnp3.tools.plugins.example.outstation.ExampleOutstationPluginFactory</outstationPluginFactoryClass>
                         </manifestEntries>
                     </archive>
                 </configuration>

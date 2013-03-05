@@ -16,18 +16,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.pluginapi;
 
-import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import javax.swing.*;
 
-public class StaticResources {
+public class NoCommaSpinner extends JSpinner {
 
-    public static final Image dnpIcon = Toolkit.getDefaultToolkit().getImage(StaticResources.class.getResource("/images/icon.png"));
-    public static final SimpleDateFormat defaulUTCDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    public NoCommaSpinner()
+    {
 
-    static {
-        defaulUTCDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
+    protected void setNoComma()
+    {
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(this, "#");
+        this.setEditor(editor);
     }
 }

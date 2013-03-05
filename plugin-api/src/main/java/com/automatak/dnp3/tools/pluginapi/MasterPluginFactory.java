@@ -16,23 +16,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.pluginapi;
 
-import javax.swing.*;
+public interface MasterPluginFactory {
 
-public class ControlCountSpinner extends NoCommaSpinner {
+    String getPluginName();
 
-    private SpinnerNumberModel model;
+    boolean requiresConfigurationString();
 
-    public ControlCountSpinner()
-    {
-       model = new SpinnerNumberModel(1, 0, 255, 1);
-       this.setModel(model);
-       setNoComma();
-    }
+    MasterPlugin newMasterInstance(String configuration);
 
-    public int getControlCount()
-    {
-        return (Integer) this.getValue();
-    }
 }

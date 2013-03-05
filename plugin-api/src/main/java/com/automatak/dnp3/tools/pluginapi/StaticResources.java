@@ -16,29 +16,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example;
+package com.automatak.dnp3.tools.pluginapi;
 
-import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
-import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
-public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
+public class StaticResources {
 
-    @Override
-    public String getPluginName()
-    {
-        return "Example Outstation Plugin";
+    public static final Image dnpIcon = Toolkit.getDefaultToolkit().getImage(StaticResources.class.getResource("/images/icon.png"));
+    public static final SimpleDateFormat defaulUTCDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    static {
+        defaulUTCDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
-
-    @Override
-    public boolean requiresConfigurationString()
-    {
-        return false;
-    }
-
-    @Override
-    public OutstationPlugin newOutstationInstance(String configuration)
-    {
-        return new ExampleOutstationPlugin();
-    }
-
 }

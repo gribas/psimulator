@@ -18,18 +18,15 @@
  */
 package com.automatak.dnp3.tools.pluginapi;
 
-import com.automatak.dnp3.CommandHandler;
-import com.automatak.dnp3.DataObserver;
-import com.automatak.dnp3.DatabaseConfig;
-import com.automatak.dnp3.OutstationConfig;
+import com.automatak.dnp3.*;
 
 public interface OutstationPlugin {
 
     CommandHandler getCommandHandler();
 
-    DatabaseConfig getDatabaseConfig();
+    OutstationStackConfig getDefaultConfig();
 
-    void setDataObserver(DataObserver publisher);
+    void configure(DataObserver publisher);
 
     boolean hasUiComponent();
 
