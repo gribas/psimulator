@@ -18,11 +18,15 @@
  */
 package com.automatak.dnp3.tools.pluginapi;
 
+import com.automatak.dnp3.OutstationStackConfig;
+
 public interface OutstationPluginFactory {
 
     String getPluginName();
 
     boolean requiresConfigurationString();
+
+    OutstationStackConfig getDefaultConfig();
 
     OutstationPlugin newOutstationInstance(String configuration);
 

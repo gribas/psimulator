@@ -336,7 +336,7 @@ public class CommsTree extends JTree {
             addPluginItem.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                   AddMasterDialog dialog = new AddMasterDialog(new AddMasterListener() {
+                   AddMasterDialog dialog = new AddMasterDialog(factory, new AddMasterListener() {
                        @Override
                        public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
                            Channel c = cnode.getChannel();
@@ -373,7 +373,7 @@ public class CommsTree extends JTree {
                  public void mousePressed(MouseEvent e) {
                      Channel c = cnode.getChannel();
                      OutstationPlugin instance = factory.newOutstationInstance("");
-                     OutstationStackConfig config = instance.getDefaultConfig();
+                     OutstationStackConfig config = factory.getDefaultConfig();
                      Outstation os = c.addOutstation("test", LogLevel.INTERPRET, instance.getCommandHandler(), config);
                      instance.configure(os.getDataObserver());
                      OutstationNode onode = new OutstationNode("test", os, instance);

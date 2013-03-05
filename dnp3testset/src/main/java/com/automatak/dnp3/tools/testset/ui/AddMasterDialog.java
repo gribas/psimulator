@@ -21,6 +21,7 @@ package com.automatak.dnp3.tools.testset.ui;
 import com.automatak.dnp3.LogLevel;
 import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.PointClass;
+import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
 
 import javax.swing.*;
@@ -52,8 +53,7 @@ public class AddMasterDialog extends JDialog {
     private LogComboBox comboxBoxLogLevel;
 
     //used to set defaults
-    private final MasterStackConfig config = new MasterStackConfig();
-
+    private final MasterStackConfig config;
     private final AddMasterListener listener;
 
     private void setDefaults()
@@ -118,7 +118,7 @@ public class AddMasterDialog extends JDialog {
         return cfg;
     }
 
-    public AddMasterDialog(AddMasterListener listener) {
+    public AddMasterDialog(MasterPluginFactory factory, AddMasterListener listener) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -127,6 +127,7 @@ public class AddMasterDialog extends JDialog {
         this.setIconImage(StaticResources.dnpIcon);
 
         this.listener = listener;
+        this.config = factory.getDefaultConfig();
 
         this.setDefaults();
 

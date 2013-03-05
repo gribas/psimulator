@@ -24,8 +24,6 @@ public interface MasterPlugin {
 
     DataObserver getDataObserver();
 
-    MasterStackConfig getDefaultConfig();
-
     void configure(CommandProcessor processor);
 
     boolean hasUiComponent();

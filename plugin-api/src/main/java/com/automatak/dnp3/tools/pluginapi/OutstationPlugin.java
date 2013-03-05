@@ -24,8 +24,6 @@ public interface OutstationPlugin {
 
     CommandHandler getCommandHandler();
 
-    OutstationStackConfig getDefaultConfig();
-
     void configure(DataObserver publisher);
 
     boolean hasUiComponent();

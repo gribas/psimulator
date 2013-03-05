@@ -18,11 +18,15 @@
  */
 package com.automatak.dnp3.tools.pluginapi;
 
+import com.automatak.dnp3.MasterStackConfig;
+
 public interface MasterPluginFactory {
 
     String getPluginName();
 
     boolean requiresConfigurationString();
+
+    MasterStackConfig getDefaultConfig();
 
     MasterPlugin newMasterInstance(String configuration);
 
