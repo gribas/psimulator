@@ -315,9 +315,9 @@ public class CommsTree extends JTree {
     {
         JPopupMenu popup = new JPopupMenu();
         JMenuItem removeItem = new JMenuItem("Remove");
-        removeItem.addMouseListener(new MouseAdapter() {
+        removeItem.addActionListener(new ActionListener() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 recursivelyCleanup(node);
                 snode.getStack().shutdown();
                 node.removeFromParent();
@@ -396,9 +396,9 @@ public class CommsTree extends JTree {
         popup.add(addOutstationMenu);
         popup.add(new JPopupMenu.Separator());
         JMenuItem removeItem = new JMenuItem("Remove");
-        removeItem.addMouseListener(new MouseAdapter() {
+        removeItem.addActionListener(new ActionListener() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 recursivelyCleanup(node);
                 Channel c = cnode.getChannel();
                 c.shutdown();
