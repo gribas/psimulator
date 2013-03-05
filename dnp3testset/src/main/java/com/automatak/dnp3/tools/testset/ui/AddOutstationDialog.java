@@ -24,6 +24,13 @@ public class AddOutstationDialog extends JDialog {
     private TimeoutSpinner spinnerAppRspTimeout;
     private LogComboBox comboxBoxLogLevel;
     private JTextArea textAreaLoggerId;
+    private StaticBinaryComboBox comboBoxStaticBinary;
+    private StaticAnalogComboBox comboBoxStaticAnalog;
+    private StaticCounterComboBox comboBoxStaticCounter;
+    private StaticAnalogOutputStatusComboBox comboBoxStaticAnalogOutputStatus;
+    private EventBinaryComboBox comboBoxEventBinary;
+    private EventAnalogComboBox comboBoxEventAnalog;
+    private EventCounterComboBox comboBoxEventCounter;
 
     private final OutstationPluginFactory factory;
     private final AddOutstationListener listener;
@@ -57,6 +64,15 @@ public class AddOutstationDialog extends JDialog {
         cfg.appConfig.rspTimeoutMs = this.spinnerAppRspTimeout.getTimeout();
         cfg.appConfig.numRetry = this.spinnerRetryCount.getUInt16();
         cfg.appConfig.maxFragSize = spinnerMaxReceiveFragSize.getUInt16();
+
+        // outstation
+        cfg.outstationConfig.staticBinaryInput = this.comboBoxStaticBinary.getResponse();
+        cfg.outstationConfig.staticAnalogInput = this.comboBoxStaticAnalog.getResponse();
+        cfg.outstationConfig.staticCounter = this.comboBoxStaticCounter.getResponse();
+        cfg.outstationConfig.staticAnalogOutputStatus = this.comboBoxStaticAnalogOutputStatus.getResponse();
+        cfg.outstationConfig.eventBinaryInput = this.comboBoxEventBinary.getResponse();
+        cfg.outstationConfig.eventAnalogInput = this.comboBoxEventAnalog.getResponse();
+        cfg.outstationConfig.eventCounter = this.comboBoxEventCounter.getResponse();
 
         return cfg;
     }
