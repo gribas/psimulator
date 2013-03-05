@@ -97,7 +97,7 @@
                       <forms defaultalign-vert="false"/>
                     </constraints>
                   </vspacer>
-                  <component id="c784" class="com.automatak.dnp3.tools.controls.IntCountSpinner">
+                  <component id="a0c8f" class="com.automatak.dnp3.tools.testset.ui.IntCountSpinner">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms defaultalign-horz="false"/>
@@ -128,12 +128,11 @@
                       <forms defaultalign-horz="false"/>
                     </constraints>
                   </hspacer>
-                  <component id="1ca37" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerLocalAddr">
+                  <component id="15d15" class="com.automatak.dnp3.tools.testset.ui.UInt16Spinner" binding="spinnerLocalAddr">
                     <constraints>
                       <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
                     </constraints>
-                    <properties/>
                   </component>
                   <component id="6af4" class="javax.swing.JLabel">
                     <constraints>
@@ -144,12 +143,11 @@
                       <text value="Local Address"/>
                     </properties>
                   </component>
-                  <component id="5268c" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerRemoteAddr">
+                  <component id="b5385" class="com.automatak.dnp3.tools.testset.ui.UInt16Spinner" binding="spinnerRemoteAddr">
                     <constraints>
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
                     </constraints>
-                    <properties/>
                   </component>
                   <component id="de341" class="javax.swing.JLabel">
                     <constraints>
@@ -160,7 +158,7 @@
                       <text value="Remote Address"/>
                     </properties>
                   </component>
-                  <component id="95e17" class="com.automatak.dnp3.tools.controls.IntCountSpinner" binding="spinnerRspTimeout">
+                  <component id="fad9f" class="com.automatak.dnp3.tools.testset.ui.IntCountSpinner" binding="spinnerRspTimeout">
                     <constraints>
                       <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
@@ -213,7 +211,7 @@
                       <forms defaultalign-vert="false"/>
                     </constraints>
                   </vspacer>
-                  <component id="91b61" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerRetryCount">
+                  <component id="b7ba8" class="com.automatak.dnp3.tools.testset.ui.UInt16Spinner" binding="spinnerRetryCount">
                     <constraints>
                       <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
@@ -229,7 +227,7 @@
                       <text value="Retry Count"/>
                     </properties>
                   </component>
-                  <component id="a7d79" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerMaxReceiveFragSize">
+                  <component id="c8c4b" class="com.automatak.dnp3.tools.testset.ui.UInt16Spinner" binding="spinnerMaxReceiveFragSize">
                     <constraints>
                       <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
@@ -245,7 +243,7 @@
                       <text value="Max Receive Fragment Size"/>
                     </properties>
                   </component>
-                  <component id="5c56" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerAppRspTimeout">
+                  <component id="2fa72" class="com.automatak.dnp3.tools.testset.ui.TimeoutSpinner" binding="spinnerAppRspTimeout">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
@@ -374,7 +372,7 @@
                       </component>
                     </children>
                   </grid>
-                  <component id="f16d3" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerIntegrityRate">
+                  <component id="6bf06" class="com.automatak.dnp3.tools.testset.ui.TimeoutSpinner" binding="spinnerIntegrityRate">
                     <constraints>
                       <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>
@@ -399,7 +397,7 @@
                       <text value="Periodic Integrity Poll?"/>
                     </properties>
                   </component>
-                  <component id="36c78" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerTaskRetryRate">
+                  <component id="ca027" class="com.automatak.dnp3.tools.testset.ui.TimeoutSpinner" binding="spinnerTaskRetryRate">
                     <constraints>
                       <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms/>

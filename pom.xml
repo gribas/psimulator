@@ -13,9 +13,8 @@
 
     <modules>
        <module>dnp3testset</module>
-        <module>dnp3controls</module>
-        <module>plugin-api</module>
-        <module>example-plugin</module>
+       <module>plugin-api</module>
+       <module>example-plugin</module>
     </modules>
 
     <properties>

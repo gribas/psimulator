@@ -19,8 +19,6 @@
 package com.automatak.dnp3.tools.testset.ui;
 
 import com.automatak.dnp3.LogLevel;
-import com.automatak.dnp3.tools.controls.TcpPortSpinner;
-import com.automatak.dnp3.tools.controls.TimeoutSpinner;
 
 import javax.swing.*;
 import java.awt.event.*;

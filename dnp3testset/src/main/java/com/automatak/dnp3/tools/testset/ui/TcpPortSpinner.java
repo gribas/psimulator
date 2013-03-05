@@ -16,24 +16,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
 import com.automatak.dnp3.tools.pluginapi.NoCommaSpinner;
 
 import javax.swing.*;
 
-public class UInt16Spinner extends NoCommaSpinner {
+public class TcpPortSpinner extends NoCommaSpinner {
 
     private SpinnerNumberModel model;
 
-    public UInt16Spinner()
+    public TcpPortSpinner()
     {
-       model = new SpinnerNumberModel(0, 0, 65535, 1);
+       super();
+       model = new SpinnerNumberModel(20000, 0, 65535, 1);
        this.setModel(model);
        setNoComma();
     }
 
-    public int getUInt16()
+    public int getPort()
     {
         return (Integer) this.getValue();
     }

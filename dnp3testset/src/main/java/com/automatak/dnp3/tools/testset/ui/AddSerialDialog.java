@@ -22,7 +22,6 @@ import com.automatak.dnp3.FlowControl;
 import com.automatak.dnp3.LogLevel;
 import com.automatak.dnp3.Parity;
 import com.automatak.dnp3.SerialSettings;
-import com.automatak.dnp3.tools.controls.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

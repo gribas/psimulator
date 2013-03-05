@@ -86,11 +86,10 @@
               <text value="Log level"/>
             </properties>
           </component>
-          <component id="17a7f" class="com.automatak.dnp3.tools.controls.TimeoutSpinner" binding="spinnerOpenRetry">
+          <component id="d2a80" class="com.automatak.dnp3.tools.testset.ui.TimeoutSpinner" binding="spinnerOpenRetry">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
           </component>
           <component id="84851" class="javax.swing.JLabel">
             <constraints>
@@ -114,11 +113,10 @@
               <text value="Baud rate"/>
             </properties>
           </component>
-          <component id="bde8a" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerDataBits">
+          <component id="b9f8e" class="com.automatak.dnp3.tools.testset.ui.UInt16Spinner" binding="spinnerDataBits">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
           </component>
           <component id="cbcf0" class="javax.swing.JLabel">
             <constraints>
@@ -128,11 +126,10 @@
               <text value="Data bits"/>
             </properties>
           </component>
-          <component id="784dc" class="com.automatak.dnp3.tools.controls.UInt16Spinner" binding="spinnerStopBits">
+          <component id="f877d" class="com.automatak.dnp3.tools.testset.ui.UInt16Spinner" binding="spinnerStopBits">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
           </component>
           <component id="5f0ca" class="javax.swing.JLabel">
             <constraints>
