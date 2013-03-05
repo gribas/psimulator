@@ -22,14 +22,13 @@ import com.automatak.dnp3.FlowControl;
 
 import javax.swing.*;
 
-public class FlowControlComboBox extends JComboBox {
+public class FlowControlComboBox extends JComboBox<FlowControl> {
+
+    private final static ComboBoxModel<FlowControl> model = new DefaultComboBoxModel<FlowControl>(FlowControl.values());
 
     public FlowControlComboBox()
     {
-        for(FlowControl level : FlowControl.values()) {
-            this.addItem(level);
-            this.setSelectedItem(FlowControl.FLOW_NONE);
-        }
+        this.setSelectedItem(FlowControl.FLOW_NONE);
     }
 
     public FlowControl getFlowControl()

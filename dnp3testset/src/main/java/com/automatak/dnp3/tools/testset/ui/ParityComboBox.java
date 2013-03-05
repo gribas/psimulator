@@ -22,14 +22,14 @@ import com.automatak.dnp3.Parity;
 
 import javax.swing.*;
 
-public class ParityComboBox extends JComboBox {
+public class ParityComboBox extends JComboBox<Parity> {
+
+    private static final ComboBoxModel<Parity> model = new DefaultComboBoxModel<Parity>(Parity.values());
 
     public ParityComboBox()
     {
-        for(Parity level : Parity.values()) {
-            this.addItem(level);
-            this.setSelectedItem(Parity.PAR_NONE);
-        }
+        super(model);
+        this.setSelectedItem(Parity.PAR_NONE);
     }
 
     public Parity getParity()

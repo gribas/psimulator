@@ -22,14 +22,14 @@ import com.automatak.dnp3.ControlCode;
 
 import javax.swing.*;
 
-public class CrobComboBox extends JComboBox {
+public class CrobComboBox extends JComboBox<ControlCode> {
+
+    private static final ComboBoxModel<ControlCode> model = new DefaultComboBoxModel<ControlCode>(ControlCode.values());
 
     public CrobComboBox()
     {
-        for(ControlCode code : ControlCode.values()) {
-            this.addItem(code);
-            this.setSelectedItem(ControlCode.LATCH_ON);
-        }
+       super(model);
+       this.setSelectedItem(ControlCode.LATCH_ON);
     }
 
     public ControlCode getControlCode()

@@ -21,14 +21,14 @@ package com.automatak.dnp3.tools.testset.ui;
 import javax.swing.*;
 import com.automatak.dnp3.LogLevel;
 
-public class LogComboBox extends JComboBox {
+public class LogComboBox extends JComboBox<LogLevel> {
+
+    private final static ComboBoxModel<LogLevel> model = new DefaultComboBoxModel<LogLevel>(LogLevel.values());
 
     public LogComboBox()
     {
-        for(LogLevel level : LogLevel.values()) {
-            this.addItem(level);
-            this.setSelectedItem(LogLevel.INFO);
-        }
+        super(model);
+        this.setSelectedItem(LogLevel.INFO);
     }
 
     public LogLevel getLogLevel()
