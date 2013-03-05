@@ -26,6 +26,7 @@ class ExampleOutstationPlugin implements OutstationPlugin {
 
     private DataObserver publisher = null;
     private final DatabaseConfig database = new DatabaseConfig(5,0,0,0,0);
+    private ExampleOutstationUI ui = null;
 
     public ExampleOutstationPlugin()
     {
@@ -48,20 +49,18 @@ class ExampleOutstationPlugin implements OutstationPlugin {
     public void setDataObserver(DataObserver publisher)
     {
         this.publisher = publisher;
-        publisher.start();
-        publisher.update(new BinaryInput(true, BinaryInputQuality.ONLINE.toByte(), 0), 0);
-        publisher.end();
+        this.ui = new ExampleOutstationUI(publisher);
     }
 
     @Override
     public boolean hasUiComponent()
     {
-        return false;
+        return true;
     }
 
     @Override
     public void showUi()
     {
-
+        ui.setVisible(true);
     }
 }

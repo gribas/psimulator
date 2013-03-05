@@ -36,12 +36,14 @@ public class AddTcpDialog extends JDialog {
 
     private final AddTcpListener listener;
 
-    public AddTcpDialog(String title, String hostFieldName, AddTcpListener listener) {
+    public AddTcpDialog(String title, String hostFieldName, String defaultHost, String defaultLoggerId, AddTcpListener listener) {
         setContentPane(contentPane);
         setModal(true);
         setResizable(false);
         getRootPane().setDefaultButton(buttonOK);
 
+        this.textFieldHost.setText(defaultHost);
+        this.textFieldLoggerId.setText(defaultLoggerId);
         this.labelEndpoint.setText(hostFieldName);
         this.setTitle(title);
         this.listener = listener;

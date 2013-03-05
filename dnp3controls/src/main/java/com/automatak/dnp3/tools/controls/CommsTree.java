@@ -206,6 +206,10 @@ public class CommsTree extends JTree {
         private final Outstation outstation;
         private final OutstationPlugin plugin;
 
+        public OutstationPlugin getPlugin() {
+            return plugin;
+        }
+
         public OutstationNode(String loggerId, Outstation outstation, OutstationPlugin plugin)
         {
             super(outstation);
@@ -396,7 +400,7 @@ public class CommsTree extends JTree {
             public void mousePressed(MouseEvent e) {
                 if(SwingUtilities.isLeftMouseButton(e))
                 {
-                    AddTcpDialog dialog = new AddTcpDialog("Add Tcp Client", "IP", new AddTcpListener() {
+                    AddTcpDialog dialog = new AddTcpDialog("Add Tcp Client", "IP", "127.0.0.1", "tcpClient", new AddTcpListener() {
                         @Override
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
@@ -427,7 +431,7 @@ public class CommsTree extends JTree {
             public void mousePressed(MouseEvent e) {
                 if(SwingUtilities.isLeftMouseButton(e))
                 {
-                    AddTcpDialog dialog = new AddTcpDialog("Add Tcp Server", "Endpoint", new AddTcpListener() {
+                    AddTcpDialog dialog = new AddTcpDialog("Add Tcp Server", "Endpoint", "0.0.0.0", "tcpServer", new AddTcpListener() {
                         @Override
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
@@ -521,6 +525,12 @@ public class CommsTree extends JTree {
                         {
                             MasterNode mnode = (MasterNode) node.getUserObject();
                             mnode.getForm().setVisible(true);
+                        }
+                        else if(OutstationNode.class.isInstance(node.getUserObject()) && e.getClickCount() == 2)
+                        {
+                           OutstationNode onode = (OutstationNode) node.getUserObject();
+                           OutstationPlugin plugin = onode.getPlugin();
+                           if(plugin.hasUiComponent()) plugin.showUi();
                         }
                     }
                 }
