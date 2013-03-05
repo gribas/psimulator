@@ -20,6 +20,7 @@
                     <archive>
                         <manifestEntries>
                             <outstationPluginFactoryClass>com.automatak.dnp3.tools.plugins.example.outstation.ExampleOutstationPluginFactory</outstationPluginFactoryClass>
+                            <masterPluginFactoryClass>com.automatak.dnp3.tools.plugins.example.master.ExampleMasterPluginFactory</masterPluginFactoryClass>
                         </manifestEntries>
                     </archive>
                 </configuration>

@@ -54,6 +54,7 @@ class PluginLoader {
                     Manifest mf = jarStream.getManifest();
                     Attributes a = mf.getMainAttributes();
                     String outstationFactory = a.getValue("outstationPluginFactoryClass");
+                    String masterFactory = a.getValue("masterPluginFactoryClass");
                     jarStream.close();
                     if(outstationFactory != null) {
                         URL url = new URL("jar", "","file:" + jars[i].getAbsolutePath()+"!/");
@@ -64,6 +65,16 @@ class PluginLoader {
                         Class<?> clazz = Class.forName(outstationFactory, true, loader);
                         Object factory = clazz.newInstance();
                         config.getOutstations().add((OutstationPluginFactory) factory);
+                    }
+                    if(masterFactory != null) {
+                        URL url = new URL("jar", "","file:" + jars[i].getAbsolutePath()+"!/");
+                        ClassLoader loader = URLClassLoader.newInstance(
+                                new URL[]{url},
+                                getClass().getClassLoader()
+                        );
+                        Class<?> clazz = Class.forName(masterFactory, true, loader);
+                        Object factory = clazz.newInstance();
+                        config.getMasters().add((MasterPluginFactory) factory);
                     }
                 }
                 catch(IllegalAccessException ex) {

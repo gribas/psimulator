@@ -74,8 +74,10 @@ public class TestSetForm {
                 ex.printStackTrace();
             }
         });
+        /*
         config.getOutstations().add(new ExampleOutstationPluginFactory());
         config.getMasters().add(new ExampleMasterPluginFactory());
+        */
         splash.addSplashCloseListener(new SplashScreenListener() {
             @Override
             public void onSplashClose() {
