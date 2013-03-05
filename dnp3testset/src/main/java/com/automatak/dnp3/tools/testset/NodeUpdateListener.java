@@ -16,11 +16,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset;
 
-import com.automatak.dnp3.LogLevel;
-import com.automatak.dnp3.SerialSettings;
-
-public interface AddSerial {
-    void onAdd(LogLevel level, int retryMs, SerialSettings settings);
+public interface NodeUpdateListener {
+    void onNodeUpdate();
 }

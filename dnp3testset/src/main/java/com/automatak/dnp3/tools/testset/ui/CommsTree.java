@@ -16,13 +16,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
 import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
+import com.automatak.dnp3.tools.testset.NodeUpdateListener;
+import com.automatak.dnp3.tools.testset.PluginConfiguration;
 
 import javax.swing.*;
 import javax.swing.tree.*;

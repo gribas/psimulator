@@ -16,11 +16,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
 import com.automatak.dnp3.LogLevel;
 import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.PointClass;
+import com.automatak.dnp3.tools.controls.*;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
 
 import javax.swing.*;

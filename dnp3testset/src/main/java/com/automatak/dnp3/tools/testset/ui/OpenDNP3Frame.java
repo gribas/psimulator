@@ -16,26 +16,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
-import com.automatak.dnp3.tools.pluginapi.NoCommaSpinner;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-public class BaudRateSpinner extends NoCommaSpinner {
+public class OpenDNP3Frame extends JPanel {
 
-    private SpinnerNumberModel model;
+    private BufferedImage image = null;
 
-    public BaudRateSpinner()
+    public OpenDNP3Frame()
     {
-       super();
-       model = new SpinnerNumberModel(9600, 0, 115200, 9600);
-       this.setModel(model);
-       setNoComma();
+        try {
+            image = ImageIO.read(this.getClass().getResource("/images/opendnp3.png"));
+            Dimension d = new Dimension(image.getWidth(), image.getHeight());
+            this.setMinimumSize(d);
+            this.setMaximumSize(d);
+        }
+        catch(IOException ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 
-    public int getBaudRate()
-    {
-        return (Integer) this.getValue();
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters
     }
+
 }

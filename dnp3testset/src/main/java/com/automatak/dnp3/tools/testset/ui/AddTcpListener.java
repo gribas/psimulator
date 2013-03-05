@@ -16,11 +16,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
 import com.automatak.dnp3.LogLevel;
-import com.automatak.dnp3.MasterStackConfig;
 
-public interface AddMasterListener {
-    void onAdd(String loggerID, LogLevel level, MasterStackConfig config);
+public interface AddTcpListener {
+
+    void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port);
+
 }

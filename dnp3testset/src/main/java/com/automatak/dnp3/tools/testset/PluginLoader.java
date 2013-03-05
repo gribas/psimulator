@@ -18,16 +18,12 @@
  */
 package com.automatak.dnp3.tools.testset;
 
-import com.automatak.dnp3.tools.controls.PluginConfiguration;
 import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;

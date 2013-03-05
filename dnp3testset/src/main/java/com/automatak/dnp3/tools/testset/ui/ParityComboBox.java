@@ -16,37 +16,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
-import javax.imageio.ImageIO;
+import com.automatak.dnp3.Parity;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-public class OpenDNP3Frame extends JPanel {
+public class ParityComboBox extends JComboBox {
 
-    private BufferedImage image = null;
-
-    public OpenDNP3Frame()
+    public ParityComboBox()
     {
-        try {
-            image = ImageIO.read(this.getClass().getResource("/images/opendnp3.png"));
-            Dimension d = new Dimension(image.getWidth(), image.getHeight());
-            this.setMinimumSize(d);
-            this.setMaximumSize(d);
-        }
-        catch(IOException ex)
-        {
-            throw new RuntimeException(ex);
+        for(Parity level : Parity.values()) {
+            this.addItem(level);
+            this.setSelectedItem(Parity.PAR_NONE);
         }
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters
+    public Parity getParity()
+    {
+        return (Parity) this.getSelectedItem();
     }
-
 }

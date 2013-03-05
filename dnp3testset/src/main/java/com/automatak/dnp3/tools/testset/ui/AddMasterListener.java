@@ -16,23 +16,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
-import javax.swing.*;
 import com.automatak.dnp3.LogLevel;
+import com.automatak.dnp3.MasterStackConfig;
 
-public class LogComboBox extends JComboBox {
-
-    public LogComboBox()
-    {
-        for(LogLevel level : LogLevel.values()) {
-            this.addItem(level);
-            this.setSelectedItem(LogLevel.INFO);
-        }
-    }
-
-    public LogLevel getLogLevel()
-    {
-        return (LogLevel) this.getSelectedItem();
-    }
+public interface AddMasterListener {
+    void onAdd(String loggerID, LogLevel level, MasterStackConfig config);
 }

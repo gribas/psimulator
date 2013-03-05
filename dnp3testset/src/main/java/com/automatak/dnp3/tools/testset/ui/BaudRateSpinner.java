@@ -16,12 +16,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
-import com.automatak.dnp3.LogLevel;
+import com.automatak.dnp3.tools.pluginapi.NoCommaSpinner;
 
-public interface AddTcpListener {
+import javax.swing.*;
 
-    void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port);
+public class BaudRateSpinner extends NoCommaSpinner {
 
+    private SpinnerNumberModel model;
+
+    public BaudRateSpinner()
+    {
+       super();
+       model = new SpinnerNumberModel(9600, 0, 115200, 9600);
+       this.setModel(model);
+       setNoComma();
+    }
+
+    public int getBaudRate()
+    {
+        return (Integer) this.getValue();
+    }
 }

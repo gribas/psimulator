@@ -30,7 +30,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="77c42" class="com.automatak.dnp3.tools.controls.LogTable" binding="logTable">
+              <component id="77c42" class="com.automatak.dnp3.tools.testset.ui.LogTable" binding="logTable">
                 <constraints/>
                 <properties>
                   <autoResizeMode value="1"/>
@@ -38,7 +38,7 @@
               </component>
             </children>
           </scrollpane>
-          <component id="e16fd" class="com.automatak.dnp3.tools.controls.CommsTree" binding="commsTree">
+          <component id="e16fd" class="com.automatak.dnp3.tools.testset.ui.CommsTree" binding="commsTree">
             <constraints>
               <splitpane position="left"/>
             </constraints>

@@ -22,13 +22,9 @@ import javax.swing.*;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
-import com.automatak.dnp3.tools.controls.CommsTree;
-import com.automatak.dnp3.tools.controls.LogTable;
-import com.automatak.dnp3.tools.controls.PluginConfiguration;
+import com.automatak.dnp3.tools.testset.ui.CommsTree;
+import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
-import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
-import com.automatak.dnp3.tools.plugins.example.master.ExampleMasterPluginFactory;
-import com.automatak.dnp3.tools.plugins.example.outstation.ExampleOutstationPluginFactory;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

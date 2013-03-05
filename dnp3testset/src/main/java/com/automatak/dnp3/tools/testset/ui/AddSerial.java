@@ -16,24 +16,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.controls;
+package com.automatak.dnp3.tools.testset.ui;
 
-import com.automatak.dnp3.Parity;
+import com.automatak.dnp3.LogLevel;
+import com.automatak.dnp3.SerialSettings;
 
-import javax.swing.*;
-
-public class ParityComboBox extends JComboBox {
-
-    public ParityComboBox()
-    {
-        for(Parity level : Parity.values()) {
-            this.addItem(level);
-            this.setSelectedItem(Parity.PAR_NONE);
-        }
-    }
-
-    public Parity getParity()
-    {
-        return (Parity) this.getSelectedItem();
-    }
+public interface AddSerial {
+    void onAdd(LogLevel level, int retryMs, SerialSettings settings);
 }
