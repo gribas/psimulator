@@ -31,6 +31,9 @@ public class AddOutstationDialog extends JDialog {
     private EventBinaryComboBox comboBoxEventBinary;
     private EventAnalogComboBox comboBoxEventAnalog;
     private EventCounterComboBox comboBoxEventCounter;
+    private JCheckBox checkBoxDisableUnsolicited;
+    private JCheckBox checkBoxRequestTimeSync;
+    private TimeoutSpinner spinnerUnsolTimer;
 
     private final OutstationPluginFactory factory;
     private final AddOutstationListener listener;
@@ -48,6 +51,11 @@ public class AddOutstationDialog extends JDialog {
         this.spinnerAppRspTimeout.setValue((int) config.appConfig.rspTimeoutMs);
         this.spinnerRetryCount.setValue(config.appConfig.numRetry);
         this.spinnerMaxReceiveFragSize.setValue(config.appConfig.maxFragSize);
+
+        // outstation
+        this.checkBoxDisableUnsolicited.setSelected(config.outstationConfig.disableUnsol);
+        this.checkBoxRequestTimeSync.setSelected(config.outstationConfig.allowTimeSync);
+        this.spinnerUnsolTimer.setValue((int) config.outstationConfig.unsolPackDelayMs);
     }
 
     private OutstationStackConfig getConfig()
@@ -73,6 +81,10 @@ public class AddOutstationDialog extends JDialog {
         cfg.outstationConfig.eventBinaryInput = this.comboBoxEventBinary.getResponse();
         cfg.outstationConfig.eventAnalogInput = this.comboBoxEventAnalog.getResponse();
         cfg.outstationConfig.eventCounter = this.comboBoxEventCounter.getResponse();
+
+        cfg.outstationConfig.disableUnsol = this.checkBoxDisableUnsolicited.isSelected();
+        cfg.outstationConfig.allowTimeSync = this.checkBoxRequestTimeSync.isSelected();
+        cfg.outstationConfig.unsolPackDelayMs = this.spinnerUnsolTimer.getTimeout();
 
         return cfg;
     }

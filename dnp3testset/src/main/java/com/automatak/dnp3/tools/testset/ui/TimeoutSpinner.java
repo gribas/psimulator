@@ -28,7 +28,7 @@ public class TimeoutSpinner extends NoCommaSpinner {
 
     public TimeoutSpinner()
     {
-       model = new SpinnerNumberModel(5000, 500, 60000, 500);
+       model = new SpinnerNumberModel(5000, 0, 60000, 500);
        this.setModel(model);
        setNoComma();
     }
