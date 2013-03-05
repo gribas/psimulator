@@ -41,6 +41,10 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
     private ControlTimeSpinner offTimeSpinner;
     private JSpinner spinnerInt16;
     private JTabbedPane tabbedPanelControls;
+    private MeasTable analogInputTable;
+    private MeasTable counterTable;
+    private MeasTable analogOutputStatusTable;
+    private MeasTable binaryOutputStatusTable;
 
     private CommandProcessor processor = null;
 
@@ -159,26 +163,63 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
        SwingUtilities.invokeLater(new Runnable() {
            @Override
            public void run() {
-               binaryInputTable.updateBinary(meas, index);
+               String value = Boolean.toString(meas.getValue());
+               binaryInputTable.update(value, meas, BinaryQualityConverter.getInstance(), index);
            }
        });
     }
 
     @Override
-    public void update(AnalogInput meas, long index)
-    {}
+    public void update(final AnalogInput meas, final long index)
+    {
+        final ExampleMasterUI form = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String value = Double.toString(meas.getValue());
+                analogInputTable.update(value, meas, AnalogQualityConverter.getInstance(), index);
+            }
+        });
+    }
 
     @Override
-    public void update(Counter meas, long index)
-    {}
+    public void update(final Counter meas, final long index)
+    {
+        final ExampleMasterUI form = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String value = Long.toString(meas.getValue());
+                counterTable.update(value, meas, CounterQualityConverter.getInstance(), index);
+            }
+        });
+    }
 
     @Override
-    public void update(BinaryOutputStatus bi, long index)
-    {}
+    public void update(final BinaryOutputStatus meas, final long index)
+    {
+        final ExampleMasterUI form = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String value = Boolean.toString(meas.getValue());
+                binaryOutputStatusTable.update(value, meas, BinaryOutputStatusQualityConverter.getInstance(), index);
+            }
+        });
+    }
 
     @Override
-    public void update(AnalogOutputStatus bi, long index)
-    {}
+    public void update(final AnalogOutputStatus meas, final long index)
+    {
+        final ExampleMasterUI form = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String value = Double.toString(meas.getValue());
+                analogInputTable.update(value, meas,AnalogOutputStatusQualityConverter.getInstance(), index);
+            }
+        });
+    }
 
     @Override
     public void end()

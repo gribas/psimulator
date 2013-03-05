@@ -18,7 +18,7 @@
  */
 package com.automatak.dnp3.tools.plugins.example.master;
 
-import com.automatak.dnp3.BinaryInput;
+import com.automatak.dnp3.BaseMeasurement;
 import com.automatak.dnp3.tools.pluginapi.QualityConverter;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
 
@@ -60,24 +60,27 @@ public class MeasTable extends JTable {
         return tip;
     }
 
-   public void updateBinary(BinaryInput bi, long index)
-   {
+    public void update(String value, BaseMeasurement meas, QualityConverter converter, long index)
+    {
       int idx = (int) index;
-      String qualityPneumonic = QualityConverter.getBinaryQualitySummary(bi.getQuality());
-      String timestamp = StaticResources.defaulUTCDateFormat.format(new Date(bi.getMsSinceEpoch()));
+
+      String ts = StaticResources.defaulUTCDateFormat.format(new Date(meas.getMsSinceEpoch()));
+      String qualityPneumonic = converter.getQualitySummary(meas.getQuality());
+      String qualityDesc = converter.getQualityDescription(meas.getQuality());
       String rowData = rowMap.get(index);
 
       if(rowData == null) {
-         String[] row = new String[]{ Long.toString(index), Boolean.toString(bi.getValue()), qualityPneumonic, timestamp };
+         String[] row = new String[]{ Long.toString(index), value, qualityPneumonic, ts };
          model.insertRow(idx, row);
-         rowMap.put(index, QualityConverter.getBinaryQualityDescription(bi.getQuality()));
+         rowMap.put(index, qualityDesc);
       }
       else {
-         rowMap.put(index, QualityConverter.getBinaryQualityDescription(bi.getQuality()));
+         rowMap.put(index,qualityDesc);
          model.setValueAt(Long.toString(idx), idx, 0);
-         model.setValueAt(Boolean.toString(bi.getValue()), idx, 1);
+         model.setValueAt(value, idx, 1);
          model.setValueAt(qualityPneumonic, idx, 2);
-         model.setValueAt(timestamp, idx, 3);
+         model.setValueAt(ts, idx, 3);
       }
-   }
+    }
+
 }
