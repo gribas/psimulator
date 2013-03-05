@@ -210,6 +210,12 @@ public class CommsTree extends JTree {
             return plugin;
         }
 
+        @Override
+        public void cleanup()
+        {
+            plugin.shutdown();
+        }
+
         public OutstationNode(String loggerId, Outstation outstation, OutstationPlugin plugin)
         {
             super(outstation);

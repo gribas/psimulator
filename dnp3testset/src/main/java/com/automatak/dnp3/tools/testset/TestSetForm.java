@@ -26,6 +26,7 @@ import com.automatak.dnp3.tools.controls.CommsTree;
 import com.automatak.dnp3.tools.controls.LogTable;
 import com.automatak.dnp3.tools.controls.StaticResources;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
+import com.automatak.dnp3.tools.plugins.example.ExampleOutstationPluginFactory;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -71,6 +72,7 @@ public class TestSetForm {
                ex.printStackTrace();
             }
         });
+        outstations.add(new ExampleOutstationPluginFactory());
         splash.addSplashCloseListener(new SplashScreenListener() {
             @Override
             public void onSplashClose() {

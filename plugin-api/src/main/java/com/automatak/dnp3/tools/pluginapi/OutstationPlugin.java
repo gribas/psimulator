@@ -33,6 +33,8 @@ public interface OutstationPlugin {
 
     boolean hasUiComponent();
 
+    void shutdown();
+
     void showUi();
 
 }

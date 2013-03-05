@@ -19,13 +19,12 @@
 package com.automatak.dnp3.tools.plugins.example;
 
 import com.automatak.dnp3.*;
-import com.automatak.dnp3.mock.SuccessCommandHandler;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 
 class ExampleOutstationPlugin implements OutstationPlugin {
 
+    private final DatabaseConfig database = new DatabaseConfig(2,2,0,0,0);
     private DataObserver publisher = null;
-    private final DatabaseConfig database = new DatabaseConfig(5,0,0,0,0);
     private ExampleOutstationUI ui = null;
 
     public ExampleOutstationPlugin()
@@ -34,9 +33,9 @@ class ExampleOutstationPlugin implements OutstationPlugin {
     }
 
     @Override
-    public CommandHandler getCommandHandler()
+    public void shutdown()
     {
-        return SuccessCommandHandler.getInstance();
+        ui.setVisible(false);
     }
 
     @Override
@@ -50,6 +49,7 @@ class ExampleOutstationPlugin implements OutstationPlugin {
     {
         this.publisher = publisher;
         this.ui = new ExampleOutstationUI(publisher);
+        this.ui.pack();
     }
 
     @Override
@@ -62,5 +62,150 @@ class ExampleOutstationPlugin implements OutstationPlugin {
     public void showUi()
     {
         ui.setVisible(true);
+    }
+
+    @Override
+    public CommandHandler getCommandHandler()
+    {
+        return new CommandHandler() {
+
+            private CommandStatus validateCROB(ControlRelayOutputBlock command) {
+                switch(command.function) {
+                    case LATCH_OFF:
+                        return CommandStatus.SUCCESS;
+                    case LATCH_ON:
+                        return CommandStatus.SUCCESS;
+                    default:
+                        return CommandStatus.NOT_SUPPORTED;
+                }
+            }
+
+            private CommandStatus operateAnalog(double value, long index) {
+                if(index == 0) {
+                    ui.setAnalogOutput1(value);
+                    return CommandStatus.SUCCESS;
+                }
+                else if(index == 1) {
+                    ui.setAnalogOutput2(value);
+                    return CommandStatus.SUCCESS;
+                }
+                else return CommandStatus.NOT_SUPPORTED;
+            }
+
+            private CommandStatus validateAnalog(double value, long index) {
+                if(index == 0) {
+                    return CommandStatus.SUCCESS;
+                }
+                else if(index == 1) {
+                    return CommandStatus.SUCCESS;
+                }
+                else return CommandStatus.NOT_SUPPORTED;
+            }
+
+            @Override
+            public CommandStatus select(ControlRelayOutputBlock command, long index) {
+                CommandStatus validation = validateCROB(command);
+                if(validation == CommandStatus.SUCCESS) {
+                    if(index == 0) return CommandStatus.SUCCESS;
+                    else if(index == 1) return CommandStatus.SUCCESS;
+                    else return CommandStatus.NOT_SUPPORTED;
+                }
+                else return CommandStatus.NOT_SUPPORTED;
+            }
+
+            @Override
+            public CommandStatus select(AnalogOutputInt32 command, long index) {
+                return validateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus select(AnalogOutputInt16 command, long index) {
+                return validateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus select(AnalogOutputFloat32 command, long index) {
+                return validateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus select(AnalogOutputDouble64 command, long index) {
+                return validateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus operate(ControlRelayOutputBlock command, long index) {
+                CommandStatus validation = validateCROB(command);
+                if(validation == CommandStatus.SUCCESS) {
+                    if(index == 0) {
+                        ui.setBinaryOutput1(command.function == ControlCode.LATCH_ON);
+                        return CommandStatus.SUCCESS;
+                    }
+                    else if(index == 1) {
+                        ui.setBinaryOutput2(command.function == ControlCode.LATCH_ON);
+                        return CommandStatus.SUCCESS;
+                    }
+                    else return CommandStatus.NOT_SUPPORTED;
+                }
+                else return CommandStatus.NOT_SUPPORTED;
+            }
+
+            @Override
+            public CommandStatus operate(AnalogOutputInt32 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus operate(AnalogOutputInt16 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus operate(AnalogOutputFloat32 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus operate(AnalogOutputDouble64 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus directOperate(ControlRelayOutputBlock command, long index) {
+                CommandStatus validation = validateCROB(command);
+                if(validation == CommandStatus.SUCCESS) {
+                    if(index == 0) {
+                        ui.setBinaryOutput1(command.function == ControlCode.LATCH_ON);
+                        return CommandStatus.SUCCESS;
+                    }
+                    else if(index == 1) {
+                        ui.setBinaryOutput2(command.function == ControlCode.LATCH_ON);
+                        return CommandStatus.SUCCESS;
+                    }
+                    else return CommandStatus.NOT_SUPPORTED;
+                }
+                else return CommandStatus.NOT_SUPPORTED;
+            }
+
+            @Override
+            public CommandStatus directOperate(AnalogOutputInt32 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus directOperate(AnalogOutputInt16 command, long index) {
+                return CommandStatus.NOT_SUPPORTED;
+            }
+
+            @Override
+            public CommandStatus directOperate(AnalogOutputFloat32 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+
+            @Override
+            public CommandStatus directOperate(AnalogOutputDouble64 command, long index) {
+                return operateAnalog(command.value, index);
+            }
+        };
     }
 }
