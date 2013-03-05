@@ -378,7 +378,7 @@ public class CommsTree extends JTree {
                          public void onAdd(String loggerID, LogLevel level, OutstationStackConfig config) {
                              Channel c = cnode.getChannel();
                              OutstationPlugin instance = factory.newOutstationInstance("");
-                             Outstation os = c.addOutstation(loggerID, LogLevel.INTERPRET, instance.getCommandHandler(), config);
+                             Outstation os = c.addOutstation(loggerID, level, instance.getCommandHandler(), config);
                              instance.configure(os.getDataObserver());
                              OutstationNode onode = new OutstationNode(loggerID, os, instance);
                              os.addStateListener(onode);
