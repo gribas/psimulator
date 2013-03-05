@@ -106,8 +106,8 @@ public class ExampleOutstationUI extends JFrame {
                 observer.start();
                 observer.update(new BinaryInput(input1CheckBox.isSelected(), BinaryInputQuality.ONLINE.toByte(), timestamp), 0);
                 observer.update(new BinaryInput(input2CheckBox.isSelected(), BinaryInputQuality.ONLINE.toByte(), timestamp), 1);
-                observer.update(new AnalogInput(sliderAnalog1.getValue(), AnalogInputQuality.ONLINE.toByte(), timestamp), 0);
-                observer.update(new AnalogInput(sliderAnalog2.getValue(), AnalogInputQuality.ONLINE.toByte(), timestamp), 1);
+                observer.update(new AnalogInput(sliderAnalog1.getValue()/10.0, AnalogInputQuality.ONLINE.toByte(), timestamp), 0);
+                observer.update(new AnalogInput(sliderAnalog2.getValue()/10.0, AnalogInputQuality.ONLINE.toByte(), timestamp), 1);
                 observer.end();
             }
         });
