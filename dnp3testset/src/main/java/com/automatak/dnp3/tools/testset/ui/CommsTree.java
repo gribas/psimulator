@@ -29,6 +29,8 @@ import com.automatak.dnp3.tools.testset.PluginConfiguration;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
@@ -333,31 +335,31 @@ public class CommsTree extends JTree {
         for(final MasterPluginFactory factory: plugins.getMasters())
         {
             JMenuItem addPluginItem = new JMenuItem(factory.getPluginName());
-            addPluginItem.addMouseListener(new MouseAdapter() {
+            addPluginItem.addActionListener(new ActionListener() {
                 @Override
-                public void mousePressed(MouseEvent e) {
-                   AddMasterDialog dialog = new AddMasterDialog(factory, new AddMasterListener() {
-                       @Override
-                       public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
-                           Channel c = cnode.getChannel();
-                           MasterPlugin plugin = factory.newMasterInstance("");
-                           Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
-                           plugin.configure(m.getCommandProcessor());
-                           MasterNode mnode = new MasterNode(loggerID, m, plugin);
-                           m.addStateListener(mnode);
-                           final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
-                           node.add(child);
-                           mnode.addUpdateListener(new NodeUpdateListener() {
-                               @Override
-                               public void onNodeUpdate() {
-                                   model.nodeChanged(child);
-                               }
-                           });
-                           model.reload();
-                       }
-                   });
-                   dialog.pack();
-                   dialog.setVisible(true);
+                public void actionPerformed(ActionEvent e) {
+                    AddMasterDialog dialog = new AddMasterDialog(factory, new AddMasterListener() {
+                        @Override
+                        public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
+                            Channel c = cnode.getChannel();
+                            MasterPlugin plugin = factory.newMasterInstance("");
+                            Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
+                            plugin.configure(m.getCommandProcessor());
+                            MasterNode mnode = new MasterNode(loggerID, m, plugin);
+                            m.addStateListener(mnode);
+                            final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
+                            node.add(child);
+                            mnode.addUpdateListener(new NodeUpdateListener() {
+                                @Override
+                                public void onNodeUpdate() {
+                                    model.nodeChanged(child);
+                                }
+                            });
+                            model.reload();
+                        }
+                    });
+                    dialog.pack();
+                    dialog.setVisible(true);
                 }
             });
             addMasterMenu.add(addPluginItem);
@@ -368,9 +370,9 @@ public class CommsTree extends JTree {
         for(final OutstationPluginFactory factory: plugins.getOutstations())
         {
              JMenuItem addPluginItem = new JMenuItem(factory.getPluginName());
-             addPluginItem.addMouseListener(new MouseAdapter() {
+             addPluginItem.addActionListener(new ActionListener() {
                  @Override
-                 public void mousePressed(MouseEvent e) {
+                 public void actionPerformed(ActionEvent e) {
                      Channel c = cnode.getChannel();
                      OutstationPlugin instance = factory.newOutstationInstance("");
                      OutstationStackConfig config = factory.getDefaultConfig();
