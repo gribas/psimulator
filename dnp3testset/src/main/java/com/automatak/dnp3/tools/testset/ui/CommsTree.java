@@ -373,22 +373,28 @@ public class CommsTree extends JTree {
              addPluginItem.addActionListener(new ActionListener() {
                  @Override
                  public void actionPerformed(ActionEvent e) {
-                     Channel c = cnode.getChannel();
-                     OutstationPlugin instance = factory.newOutstationInstance("");
-                     OutstationStackConfig config = factory.getDefaultConfig();
-                     Outstation os = c.addOutstation("test", LogLevel.INTERPRET, instance.getCommandHandler(), config);
-                     instance.configure(os.getDataObserver());
-                     OutstationNode onode = new OutstationNode("test", os, instance);
-                     os.addStateListener(onode);
-                     final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
-                     node.add(child);
-                     onode.addUpdateListener(new NodeUpdateListener() {
+                     AddOutstationDialog dialog = new AddOutstationDialog(factory, new AddOutstationListener() {
                          @Override
-                         public void onNodeUpdate() {
-                             model.nodeChanged(child);
+                         public void onAdd(String loggerID, LogLevel level, OutstationStackConfig config) {
+                             Channel c = cnode.getChannel();
+                             OutstationPlugin instance = factory.newOutstationInstance("");
+                             Outstation os = c.addOutstation(loggerID, LogLevel.INTERPRET, instance.getCommandHandler(), config);
+                             instance.configure(os.getDataObserver());
+                             OutstationNode onode = new OutstationNode(loggerID, os, instance);
+                             os.addStateListener(onode);
+                             final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
+                             node.add(child);
+                             onode.addUpdateListener(new NodeUpdateListener() {
+                                 @Override
+                                 public void onNodeUpdate() {
+                                     model.nodeChanged(child);
+                                 }
+                             });
+                             model.reload();
                          }
                      });
-                     model.reload();
+                     dialog.pack();
+                     dialog.setVisible(true);
                  }
              });
              addOutstationMenu.add(addPluginItem);

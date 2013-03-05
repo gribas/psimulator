@@ -125,6 +125,9 @@ public class AddMasterDialog extends JDialog {
 
         this.setResizable(false);
         this.setIconImage(StaticResources.dnpIcon);
+        this.setTitle("Add Master using plugin: " + factory.getPluginName());
+        this.setIconImage(StaticResources.dnpIcon);
+        this.textAreaLoggerId.setText(factory.getPluginName());
 
         this.listener = listener;
         this.config = factory.getDefaultConfig();
@@ -161,8 +164,6 @@ public class AddMasterDialog extends JDialog {
 
     private void onOK() {
         MasterStackConfig cfg = getConfig();
-        cfg.masterConfig.doUnsolOnStartup = true;
-        cfg.masterConfig.enableUnsol = true;
         LogLevel level = comboxBoxLogLevel.getLogLevel();
         String id = textAreaLoggerId.getText();
         this.listener.onAdd(id, level, cfg);
