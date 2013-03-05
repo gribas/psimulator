@@ -12,6 +12,7 @@ public class EventAnalogComboBox extends JComboBox<EventAnalogResponse> {
         super(eventAnalogModel);
         this.setSelectedItem(EventAnalogResponse.GROUP32_VAR1);
     }
+
     EventAnalogResponse getResponse()
     {
         return (EventAnalogResponse) getSelectedItem();

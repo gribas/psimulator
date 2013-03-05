@@ -53,6 +53,14 @@ public class AddOutstationDialog extends JDialog {
         this.spinnerMaxReceiveFragSize.setValue(config.appConfig.maxFragSize);
 
         // outstation
+        this.comboBoxStaticBinary.setSelectedItem(config.outstationConfig.staticBinaryInput);
+        this.comboBoxStaticAnalog.setSelectedItem(config.outstationConfig.staticAnalogInput);
+        this.comboBoxStaticCounter.setSelectedItem(config.outstationConfig.staticCounter);
+        this.comboBoxStaticAnalogOutputStatus.setSelectedItem(config.outstationConfig.staticAnalogOutputStatus);
+        this.comboBoxEventBinary.setSelectedItem(config.outstationConfig.eventBinaryInput);
+        this.comboBoxEventAnalog.setSelectedItem(config.outstationConfig.eventAnalogInput);
+        this.comboBoxEventCounter.setSelectedItem(config.outstationConfig.eventCounter);
+
         this.checkBoxDisableUnsolicited.setSelected(config.outstationConfig.disableUnsol);
         this.checkBoxRequestTimeSync.setSelected(config.outstationConfig.allowTimeSync);
         this.spinnerUnsolTimer.setValue((int) config.outstationConfig.unsolPackDelayMs);
