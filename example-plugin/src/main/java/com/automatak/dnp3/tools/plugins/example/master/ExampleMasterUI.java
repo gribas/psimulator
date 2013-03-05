@@ -45,6 +45,9 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
     private MeasTable counterTable;
     private MeasTable analogOutputStatusTable;
     private MeasTable binaryOutputStatusTable;
+    private JSpinner spinnerInt32;
+    private JSpinner spinnerFloat32;
+    private JSpinner spinnerDouble64;
 
     private CommandProcessor processor = null;
 
@@ -90,7 +93,10 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
         this.pack();
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-        spinnerInt16.setModel(new SpinnerNumberModel(0, 0, 65535, 1));
+        spinnerInt16.setModel(new SpinnerNumberModel(0, Short.MIN_VALUE, Short.MAX_VALUE, 1));
+        spinnerInt32.setModel(new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        //spinnerFloat32.setModel(new SpinnerNumberModel(0.0, -Float.MAX_VALUE, Float.MAX_VALUE, 0.1));
+        //spinnerDouble64.setModel(new SpinnerNumberModel(0.0, -Double.MAX_VALUE, Double.MAX_VALUE, 0.1));
 
         final ExampleMasterUI myForm = this;
 
@@ -101,8 +107,8 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
                     int index = spinnerIndex.getIndex();
                     if(myForm.tabbedPanelControls.getSelectedIndex() == 0) {
                         ControlRelayOutputBlock crob = createCROB();
-                        beginCommand("Direct operate... ");
-                       myForm.processor.directOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                        beginCommand("Direct operate Group12Var1... ");
+                        myForm.processor.directOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
                             @Override
                             public void onComplete(CommandStatus value) {
                                 myForm.endCommand(value);
@@ -110,7 +116,34 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
                         });
                     } else if(myForm.tabbedPanelControls.getSelectedIndex() == 1) {
                         AnalogOutputInt16 ao = new AnalogOutputInt16(((Integer) spinnerInt16.getValue()).shortValue(), CommandStatus.SUCCESS);
-                        beginCommand("Direct operate... ");
+                        beginCommand("Direct operate Group41Var2... ");
+                        myForm.processor.directOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myForm.endCommand(value);
+                            }
+                        });
+                    } if(myForm.tabbedPanelControls.getSelectedIndex() == 2) {
+                        AnalogOutputInt32 ao = new AnalogOutputInt32(((Integer) spinnerInt32.getValue()).intValue(), CommandStatus.SUCCESS);
+                        beginCommand("Direct operate Group41Var1... ");
+                        myForm.processor.directOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myForm.endCommand(value);
+                            }
+                        });
+                    } else if(myForm.tabbedPanelControls.getSelectedIndex() == 3) {
+                        AnalogOutputFloat32 ao = new AnalogOutputFloat32(((Double) spinnerFloat32.getValue()).floatValue(), CommandStatus.SUCCESS);
+                        beginCommand("Direct operate Group41Var3... ");
+                        myForm.processor.directOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myForm.endCommand(value);
+                            }
+                        });
+                    } else if(myForm.tabbedPanelControls.getSelectedIndex() == 4) {
+                        AnalogOutputDouble64 ao = new AnalogOutputDouble64(((Double) spinnerDouble64.getValue()), CommandStatus.SUCCESS);
+                        beginCommand("Direct operate Group41Var4... ");
                         myForm.processor.directOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
                             @Override
                             public void onComplete(CommandStatus value) {
@@ -130,7 +163,7 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
 
                     if(myForm.tabbedPanelControls.getSelectedIndex() == 0) {
                         ControlRelayOutputBlock crob = createCROB();
-                        beginCommand("Select and operate... ");
+                        beginCommand("Select and operate Group12Var1... ");
                         processor.selectAndOperate(crob, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
                             @Override
                             public void onComplete(CommandStatus value) {
@@ -139,8 +172,35 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
                         });
                     } else if(myForm.tabbedPanelControls.getSelectedIndex() == 1) {
                         AnalogOutputInt16 ao = new AnalogOutputInt16(((Integer) spinnerInt16.getValue()).shortValue(), CommandStatus.SUCCESS);
-                        beginCommand("Direct operate... ");
+                        beginCommand("Select and operate Group41Var2... ");
                         processor.selectAndOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myForm.endCommand(value);
+                            }
+                        });
+                    } if(myForm.tabbedPanelControls.getSelectedIndex() == 2) {
+                        AnalogOutputInt32 ao = new AnalogOutputInt32(((Integer) spinnerInt32.getValue()).intValue(), CommandStatus.SUCCESS);
+                        beginCommand("Select and operate Group41Var1... ");
+                        myForm.processor.selectAndOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myForm.endCommand(value);
+                            }
+                        });
+                    } else if(myForm.tabbedPanelControls.getSelectedIndex() == 3) {
+                        AnalogOutputFloat32 ao = new AnalogOutputFloat32(((Double) spinnerFloat32.getValue()).floatValue(), CommandStatus.SUCCESS);
+                        beginCommand("Select and operate Group41Var3... ");
+                        myForm.processor.selectAndOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
+                            @Override
+                            public void onComplete(CommandStatus value) {
+                                myForm.endCommand(value);
+                            }
+                        });
+                    } else if(myForm.tabbedPanelControls.getSelectedIndex() == 4) {
+                        AnalogOutputDouble64 ao = new AnalogOutputDouble64(((Double) spinnerDouble64.getValue()), CommandStatus.SUCCESS);
+                        beginCommand("Select and operate Group41Var4... ");
+                        myForm.processor.selectAndOperate(ao, index).addListener(new ListenableFuture.CompletionListener<CommandStatus>() {
                             @Override
                             public void onComplete(CommandStatus value) {
                                 myForm.endCommand(value);
