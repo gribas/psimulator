@@ -28,6 +28,7 @@ public class FlowControlComboBox extends JComboBox<FlowControl> {
 
     public FlowControlComboBox()
     {
+        super(model);
         this.setSelectedItem(FlowControl.FLOW_NONE);
     }
 

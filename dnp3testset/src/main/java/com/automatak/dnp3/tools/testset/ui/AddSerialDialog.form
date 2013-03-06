@@ -90,6 +90,7 @@
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
+            <properties/>
           </component>
           <component id="84851" class="javax.swing.JLabel">
             <constraints>
@@ -117,6 +118,7 @@
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
+            <properties/>
           </component>
           <component id="cbcf0" class="javax.swing.JLabel">
             <constraints>
@@ -130,6 +132,7 @@
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
+            <properties/>
           </component>
           <component id="5f0ca" class="javax.swing.JLabel">
             <constraints>
@@ -145,7 +148,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="f8e78" class="com.automatak.dnp3.tools.testset.ui.FlowControlComboBox" binding="comboBoxFlowControl">
+          <component id="40d1" class="com.automatak.dnp3.tools.testset.ui.FlowControlComboBox" binding="comboBoxFlowControl">
             <constraints>
               <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
