@@ -52,17 +52,6 @@ public class SplashScreen extends JDialog {
         });
     }
 
-    public void showSplash()
-    {
-        final SplashScreen myDialog = this;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                myDialog.setVisible(true);
-            }
-        });
-    }
-
     public void setProgress(final int step, final int max)
     {
         final SplashScreen myDialog = this;

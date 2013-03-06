@@ -58,9 +58,14 @@ public class TestSetForm {
         final SplashScreen splash = new SplashScreen();
         splash.pack();
         splash.configure();
-        splash.showSplash();
-        PluginLoader loader = new PluginLoader();
-        final PluginConfiguration config = loader.loadPlugins(new PluginLoaderListener() {
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                splash.setVisible(true);
+            }
+        });
+        PluginLoaderListener listener = new PluginLoaderListener() {
             @Override
             public void onProgressUpdate(int step, int max) {
                 splash.setProgress(step, max);
@@ -71,16 +76,35 @@ public class TestSetForm {
                 System.out.println(ex.getMessage());
                 ex.printStackTrace();
             }
-        });
-        config.getOutstations().add(new ExampleOutstationPluginFactory());
-        config.getMasters().add(new ExampleMasterPluginFactory());
+        };
+
+        final PluginConfiguration plugins = attemptLoad(listener);
         splash.addSplashCloseListener(new SplashScreenListener() {
             @Override
             public void onSplashClose() {
-                startApplication(config);
+                try {
+                    startApplication(plugins);
+                }
+                catch(UnsatisfiedLinkError ex)
+                {
+                    JOptionPane.showMessageDialog(splash, ex.getMessage(), "Is opendnpjava.dll on your library path?", JOptionPane.ERROR_MESSAGE);
+                }
+                catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(splash, ex.getMessage(), "Unknown exception occurred while loading application", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         splash.setComplete();
+    }
+
+    static PluginConfiguration attemptLoad(PluginLoaderListener listener)
+    {
+        PluginLoader loader = new PluginLoader();
+        PluginConfiguration config = loader.loadPlugins(listener);
+        config.getOutstations().add(new ExampleOutstationPluginFactory());
+        config.getMasters().add(new ExampleMasterPluginFactory());
+        return config;
     }
 
     public static void main(String[] args) throws InterruptedException
