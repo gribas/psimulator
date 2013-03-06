@@ -87,7 +87,7 @@ public class TestSetForm {
                 }
                 catch(UnsatisfiedLinkError ex)
                 {
-                    JOptionPane.showMessageDialog(splash, ex.getMessage(), "Is opendnpjava.dll on your library path?", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(splash, ex.getMessage(), "Did you install the Visual Stuido 2012 C++ Redistributable?", JOptionPane.ERROR_MESSAGE);
                 }
                 catch(Exception ex)
                 {
