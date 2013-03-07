@@ -330,6 +330,7 @@ public class CommsTree extends JTree {
 
     private JPopupMenu getChannelMenu(final DefaultMutableTreeNode node, final ChannelNode cnode)
     {
+        final Component parent = this.getParent();
         JPopupMenu popup = new JPopupMenu();
         JMenu addMasterMenu = new JMenu("Add Master");
         for(final MasterPluginFactory factory: plugins.getMasters())
@@ -343,19 +344,26 @@ public class CommsTree extends JTree {
                         public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
                             Channel c = cnode.getChannel();
                             MasterPlugin plugin = factory.newMasterInstance("");
-                            Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
-                            plugin.configure(m.getCommandProcessor());
-                            MasterNode mnode = new MasterNode(loggerID, m, plugin);
-                            m.addStateListener(mnode);
-                            final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
-                            node.add(child);
-                            mnode.addUpdateListener(new NodeUpdateListener() {
-                                @Override
-                                public void onNodeUpdate() {
-                                    model.nodeChanged(child);
-                                }
-                            });
-                            model.reload();
+
+                            try {
+                                Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
+                                plugin.configure(m.getCommandProcessor());
+                                MasterNode mnode = new MasterNode(loggerID, m, plugin);
+                                m.addStateListener(mnode);
+                                final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
+                                node.add(child);
+                                mnode.addUpdateListener(new NodeUpdateListener() {
+                                    @Override
+                                    public void onNodeUpdate() {
+                                        model.nodeChanged(child);
+                                    }
+                                });
+                                model.reload();
+                            } catch(DNP3ConfigException ex)
+                            {
+                                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Invalid configuration", JOptionPane.WARNING_MESSAGE);
+                            }
+
                         }
                     });
                     dialog.pack();
@@ -378,19 +386,25 @@ public class CommsTree extends JTree {
                          public void onAdd(String loggerID, LogLevel level, OutstationStackConfig config) {
                              Channel c = cnode.getChannel();
                              OutstationPlugin instance = factory.newOutstationInstance("");
-                             Outstation os = c.addOutstation(loggerID, level, instance.getCommandHandler(), config);
-                             instance.configure(os.getDataObserver());
-                             OutstationNode onode = new OutstationNode(loggerID, os, instance);
-                             os.addStateListener(onode);
-                             final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
-                             node.add(child);
-                             onode.addUpdateListener(new NodeUpdateListener() {
-                                 @Override
-                                 public void onNodeUpdate() {
-                                     model.nodeChanged(child);
-                                 }
-                             });
-                             model.reload();
+
+                             try {
+                                 Outstation os = c.addOutstation(loggerID, level, instance.getCommandHandler(), config);
+                                 instance.configure(os.getDataObserver());
+                                 OutstationNode onode = new OutstationNode(loggerID, os, instance);
+                                 os.addStateListener(onode);
+                                 final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
+                                 node.add(child);
+                                 onode.addUpdateListener(new NodeUpdateListener() {
+                                     @Override
+                                     public void onNodeUpdate() {
+                                         model.nodeChanged(child);
+                                     }
+                                 });
+                                 model.reload();
+                             } catch(DNP3ConfigException ex)
+                             {
+                                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Invalid configuration", JOptionPane.WARNING_MESSAGE);
+                             }
                          }
                      });
                      dialog.pack();

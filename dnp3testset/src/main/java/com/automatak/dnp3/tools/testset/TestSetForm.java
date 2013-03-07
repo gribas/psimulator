@@ -22,8 +22,7 @@ import javax.swing.*;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
-import com.automatak.dnp3.tools.plugins.example.master.ExampleMasterPluginFactory;
-import com.automatak.dnp3.tools.plugins.example.outstation.ExampleOutstationPluginFactory;
+import com.automatak.dnp3.mock.PrintingLogSubscriber;
 import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
@@ -102,8 +101,8 @@ public class TestSetForm {
     {
         PluginLoader loader = new PluginLoader();
         PluginConfiguration config = loader.loadPlugins(listener);
-        config.getOutstations().add(new ExampleOutstationPluginFactory());
-        config.getMasters().add(new ExampleMasterPluginFactory());
+        //config.getOutstations().add(new ExampleOutstationPluginFactory());
+        //config.getMasters().add(new ExampleMasterPluginFactory());
         return config;
     }
 
