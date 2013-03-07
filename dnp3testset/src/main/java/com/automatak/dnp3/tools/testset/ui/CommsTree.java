@@ -24,7 +24,7 @@ import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 import com.automatak.dnp3.tools.testset.PluginConfiguration;
-import com.automatak.dnp3.tools.testset.XMLConversions;
+import com.automatak.dnp3.tools.xml.XMLConversions;
 import com.automatak.dnp3.tools.xml.XChannel;
 import com.automatak.dnp3.tools.xml.XSimulatorConfig;
 import com.automatak.dnp3.tools.xml.XStack;
@@ -37,9 +37,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class CommsTree extends JTree {
+
+    private class Tuple<X, Y> {
+        public final X x;
+        public final Y y;
+        public Tuple(X x, Y y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     private final static Color darkGreen = new Color(0, 153, 51);
 
@@ -272,6 +283,7 @@ public class CommsTree extends JTree {
         private final MasterPlugin plugin;
         private final String id;
         private final LogLevel level;
+        private final String pluginName;
         private final MasterStackConfig config;
 
         @Override
@@ -280,11 +292,12 @@ public class CommsTree extends JTree {
             plugin.shutdown();
         }
 
-        public MasterNode(String loggerID, LogLevel level, MasterStackConfig config, Master master, MasterPlugin plugin)
+        public MasterNode(String loggerID, LogLevel level, String pluginName, MasterStackConfig config, Master master, MasterPlugin plugin)
         {
             super(master);
             this.id = loggerID;
             this.level = level;
+            this.pluginName = pluginName;
             this.config = config;
             this.master = master;
             this.plugin = plugin;
@@ -297,6 +310,7 @@ public class CommsTree extends JTree {
             XStack.XMasterStack master = new XStack.XMasterStack();
             master.setId(id);
             master.setLevel(XMLConversions.convert(level));
+            master.setPlugin(pluginName);
             master.setXLinkLayer(XMLConversions.convert(config.linkConfig));
             master.setXAppLayer(XMLConversions.convert(config.appConfig));
             master.setXMaster(XMLConversions.convert(config.masterConfig));
@@ -315,6 +329,7 @@ public class CommsTree extends JTree {
 
         private final String loggerId;
         private final LogLevel level;
+        private final String pluginName;
         private final OutstationStackConfig config;
         private final Outstation outstation;
         private final OutstationPlugin plugin;
@@ -329,11 +344,12 @@ public class CommsTree extends JTree {
             plugin.shutdown();
         }
 
-        public OutstationNode(String loggerId, LogLevel level, OutstationStackConfig config, Outstation outstation, OutstationPlugin plugin)
+        public OutstationNode(String loggerId, LogLevel level, String pluginName, OutstationStackConfig config, Outstation outstation, OutstationPlugin plugin)
         {
             super(outstation);
             this.loggerId = loggerId;
             this.level = level;
+            this.pluginName = pluginName;
             this.config = config;
             this.outstation = outstation;
             this.plugin = plugin;
@@ -346,6 +362,7 @@ public class CommsTree extends JTree {
             XStack.XOutstationStack os = new XStack.XOutstationStack();
             os.setId(loggerId);
             os.setLevel(XMLConversions.convert(level));
+            os.setPlugin(pluginName);
             os.setXLinkLayer(XMLConversions.convert(config.linkConfig));
             os.setXAppLayer(XMLConversions.convert(config.appConfig));
             os.setXOutstation(XMLConversions.convert(config.outstationConfig));
@@ -409,10 +426,14 @@ public class CommsTree extends JTree {
 
     private DNP3Manager manager = null;
     private PluginConfiguration plugins = null;
+    private final Map<String, MasterPluginFactory> masterPluginMap = new HashMap<String, MasterPluginFactory>();
+    private final Map<String, OutstationPluginFactory> outstationPluginMap = new HashMap<String, OutstationPluginFactory>();
 
     public void configure(DNP3Manager manager, PluginConfiguration plugins) {
         this.manager = manager;
         this.plugins = plugins;
+        for(MasterPluginFactory fac: plugins.getMasters()) masterPluginMap.put(fac.getPluginName(), fac);
+        for(OutstationPluginFactory fac: plugins.getOutstations()) outstationPluginMap.put(fac.getPluginName(), fac);
     }
 
 
@@ -456,7 +477,7 @@ public class CommsTree extends JTree {
         MasterPlugin plugin = factory.newMasterInstance("");
         Master m = c.addMaster(id, level, plugin.getDataObserver(), config);
         plugin.configure(m.getCommandProcessor());
-        MasterNode mnode = new MasterNode(id, level, config, m, plugin);
+        MasterNode mnode = new MasterNode(id, level, factory.getPluginName(), config, m, plugin);
         m.addStateListener(mnode);
         final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
         node.add(child);
@@ -475,7 +496,7 @@ public class CommsTree extends JTree {
         OutstationPlugin instance = factory.newOutstationInstance("");
         Outstation os = c.addOutstation(id, level, instance.getCommandHandler(), config);
         instance.configure(os.getDataObserver());
-        OutstationNode onode = new OutstationNode(id, level, config, os, instance);
+        OutstationNode onode = new OutstationNode(id, level, factory.getPluginName(), config, os, instance);
         os.addStateListener(onode);
         final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
         node.add(child);
@@ -559,12 +580,12 @@ public class CommsTree extends JTree {
         return popup;
     }
 
-    private void addTcpClient(String id, LogLevel level, long retryMs, String host, int port)
+    private Tuple<DefaultMutableTreeNode, ChannelNode> addTcpClient(String id, LogLevel level, long retryMs, String host, int port)
     {
         Channel c = manager.addTCPClient(id, level, retryMs, host, port);
         TcpClientChannelNode node = new TcpClientChannelNode(id, level, host, port, retryMs, c);
         c.addStateListener(node);
-        final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+        final DefaultMutableTreeNode channelNode = new DefaultMutableTreeNode(node);
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         root.add(channelNode);
         node.addUpdateListener(new NodeUpdateListener() {
@@ -574,14 +595,15 @@ public class CommsTree extends JTree {
             }
         });
         model.reload();
+        return new Tuple<DefaultMutableTreeNode, ChannelNode>(channelNode, node);
     }
 
-    private void addTcpServer(String id, LogLevel level, long retryMs, String endpoint, int port)
+    private Tuple<DefaultMutableTreeNode, ChannelNode> addTcpServer(String id, LogLevel level, long retryMs, String endpoint, int port)
     {
         Channel c = manager.addTCPServer(id, level, retryMs, endpoint, port);
         TcpServerChannelNode node = new TcpServerChannelNode(id, level, endpoint, port, retryMs, c);
         c.addStateListener(node);
-        final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+        final DefaultMutableTreeNode channelNode = new DefaultMutableTreeNode(node);
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         root.add(channelNode);
         node.addUpdateListener(new NodeUpdateListener() {
@@ -591,14 +613,15 @@ public class CommsTree extends JTree {
             }
         });
         model.reload();
+        return new Tuple<DefaultMutableTreeNode, ChannelNode>(channelNode, node);
     }
 
-    private void addSerial(String id, LogLevel level, long retryMs, SerialSettings settings)
+    private  Tuple<DefaultMutableTreeNode, ChannelNode> addSerial(String id, LogLevel level, long retryMs, SerialSettings settings)
     {
         Channel c = manager.addSerial(settings.port, level, retryMs, settings);
         SerialChannelNode node = new SerialChannelNode(level, retryMs, settings, c);
         c.addStateListener(node);
-        final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+        final DefaultMutableTreeNode channelNode = new DefaultMutableTreeNode(node);
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         root.add(channelNode);
         node.addUpdateListener(new NodeUpdateListener() {
@@ -608,6 +631,7 @@ public class CommsTree extends JTree {
             }
         });
         model.reload();
+        return new Tuple<DefaultMutableTreeNode, ChannelNode>(channelNode, node);
     }
 
     private JPopupMenu getRootMenu()
@@ -722,9 +746,80 @@ public class CommsTree extends JTree {
         });
     }
 
+    public void addStacks(java.util.List<XStack> stacks, DefaultMutableTreeNode node, ChannelNode cnode)
+    {
+        for(XStack stack: stacks)
+        {
+            if(stack.getXMasterStack() == null)
+            {
+                if(stack.getXOutstationStack() == null)
+                {
+
+                }
+                else
+                {
+                    XStack.XOutstationStack os = stack.getXOutstationStack();
+                    OutstationPluginFactory factory = outstationPluginMap.get(os.getPlugin());
+                    if(factory == null) throw new RuntimeException("OutstationPlugin not found: " + os.getPlugin());
+                    LogLevel level = XMLConversions.convert(os.getLevel());
+                    OutstationStackConfig cfg = factory.getDefaultConfig();
+                    XMLConversions.convert(cfg.appConfig, os.getXAppLayer());
+                    XMLConversions.convert(cfg.linkConfig, os.getXLinkLayer());
+                    XMLConversions.convert(cfg.outstationConfig, os.getXOutstation());
+                    this.addOutstation(factory, node, cnode, os.getId(), level, cfg);
+                }
+            }
+            else
+            {
+                XStack.XMasterStack master = stack.getXMasterStack();
+                MasterPluginFactory factory = masterPluginMap.get(master.getPlugin());
+                if(factory == null) throw new RuntimeException("MasterPlugin not found: " + master.getPlugin());
+                LogLevel level = XMLConversions.convert(master.getLevel());
+                MasterStackConfig cfg = factory.getDefaultConfig();
+                XMLConversions.convert(cfg.appConfig, master.getXAppLayer());
+                XMLConversions.convert(cfg.linkConfig, master.getXLinkLayer());
+                XMLConversions.convert(cfg.masterConfig, master.getXMaster());
+                this.addMaster(factory, node, cnode, master.getId(), level, cfg);
+            }
+        }
+    }
+
     public void loadConfig(XSimulatorConfig config)
     {
+        for(XChannel channel: config.getXChannel())
+        {
+            if(channel.getXSerialChannel() == null)
+            {
+                if(channel.getXTCPClientChannel() == null)
+                {
+                    if(channel.getXTCPServerChannel() == null)
+                    {
 
+                    }
+                    else
+                    {
+                        XChannel.XTCPServerChannel server = channel.getXTCPServerChannel();
+                        LogLevel level = XMLConversions.convert(server.getLevel());
+                        Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpServer(server.getId(), level, server.getRetry(), server.getIp(), server.getPort());
+                        this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+                    }
+                }
+                else
+                {
+                    XChannel.XTCPClientChannel client = channel.getXTCPClientChannel();
+                    LogLevel level = XMLConversions.convert(client.getLevel());
+                    Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpClient(client.getId(), level, client.getRetry(), client.getIp(), client.getPort());
+                    this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+                }
+            }
+            else {
+                XChannel.XSerialChannel sc = channel.getXSerialChannel();
+                SerialSettings s = XMLConversions.convert(sc);
+                LogLevel level = XMLConversions.convert(sc.getLevel());
+                Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addSerial(sc.getPort(), level, sc.getRetry(), s);
+                this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+            }
+        }
     }
 
     public XSimulatorConfig getConfig()

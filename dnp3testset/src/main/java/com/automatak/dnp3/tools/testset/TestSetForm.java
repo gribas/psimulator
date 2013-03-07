@@ -21,6 +21,7 @@ package com.automatak.dnp3.tools.testset;
 import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
@@ -163,6 +164,29 @@ public class TestSetForm {
             }
         });
         fileMenu.add(saveFile);
+        JMenuItem loadFile = new JMenuItem("Load");
+        loadFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                int ret = chooser.showOpenDialog(form.commsTree);
+                if(ret == JFileChooser.APPROVE_OPTION)
+                {
+                    File file = chooser.getSelectedFile();
+                    try {
+                        JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
+                        Unmarshaller m = context.createUnmarshaller();
+                        XSimulatorConfig cfg = (XSimulatorConfig) m.unmarshal(file);
+                        commsTree.loadConfig(cfg);
+                    }
+                    catch(Exception ex)
+                    {
+                        JOptionPane.showMessageDialog(commsTree, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        fileMenu.add(loadFile);
         bar.add(fileMenu);
         return bar;
     }

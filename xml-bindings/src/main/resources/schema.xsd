@@ -82,6 +82,7 @@
     <xs:element name="XLinkLayer">
         <xs:complexType>
             <xs:attribute name="useConfirms" type="xs:boolean" />
+            <xs:attribute name="isMaster" type="xs:boolean" />
             <xs:attribute name="confirmedDataRetry" type="xs:int" />
             <xs:attribute name="localAddress" type="xs:int" />
             <xs:attribute name="remoteAddress" type="xs:int" />
@@ -176,6 +177,7 @@
                         <xs:sequence minOccurs="1" maxOccurs="1">
                             <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
                             <xs:element name="level" type="XLogLevel" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="plugin" type="xs:string" minOccurs="1" maxOccurs="1"/>
                             <xs:element ref="XLinkLayer" minOccurs="1" maxOccurs="1"/>
                             <xs:element ref="XAppLayer" minOccurs="1" maxOccurs="1"/>
                             <xs:element ref="XMaster" minOccurs="1" maxOccurs="1"/>
@@ -187,6 +189,7 @@
                         <xs:sequence minOccurs="1" maxOccurs="1">
                             <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
                             <xs:element name="level" type="XLogLevel" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="plugin" type="xs:string" minOccurs="1" maxOccurs="1"/>
                             <xs:element ref="XLinkLayer" minOccurs="1" maxOccurs="1"/>
                             <xs:element ref="XAppLayer" minOccurs="1" maxOccurs="1"/>
                             <xs:element ref="XOutstation" minOccurs="1" maxOccurs="1"/>

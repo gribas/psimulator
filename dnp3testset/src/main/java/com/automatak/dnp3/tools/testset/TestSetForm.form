@@ -19,7 +19,7 @@
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <dividerLocation value="200"/>
+          <dividerLocation value="150"/>
         </properties>
         <border type="none"/>
         <children>
@@ -38,12 +38,21 @@
               </component>
             </children>
           </scrollpane>
-          <component id="e16fd" class="com.automatak.dnp3.tools.testset.ui.CommsTree" binding="commsTree">
+          <scrollpane id="8312e">
             <constraints>
               <splitpane position="left"/>
             </constraints>
-            <properties/>
-          </component>
+            <properties>
+              <verticalScrollBarPolicy value="20"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="e16fd" class="com.automatak.dnp3.tools.testset.ui.CommsTree" binding="commsTree">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </splitpane>
     </children>
