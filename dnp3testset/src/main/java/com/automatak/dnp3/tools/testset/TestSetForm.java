@@ -19,6 +19,8 @@
 package com.automatak.dnp3.tools.testset;
 
 import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
@@ -26,9 +28,13 @@ import com.automatak.dnp3.mock.PrintingLogSubscriber;
 import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
+import com.automatak.dnp3.tools.xml.XSimulatorConfig;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 public class TestSetForm {
 
@@ -38,6 +44,7 @@ public class TestSetForm {
         JFrame frame = new JFrame("Automatak Protocol Simulator");
         frame.setIconImage(StaticResources.dnpIcon);
         TestSetForm form = new TestSetForm(mgr, config);
+        frame.setJMenuBar(form.getMenuBar());
         frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -127,6 +134,39 @@ public class TestSetForm {
         }
         startSplash();
     }
+
+    private JMenuBar getMenuBar()
+    {
+        JMenuBar bar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem saveFile = new JMenuItem("Save");
+        final TestSetForm form = this;
+        saveFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                int ret = chooser.showSaveDialog(form.commsTree);
+                if(ret == JFileChooser.APPROVE_OPTION)
+                {
+                    File file = chooser.getSelectedFile();
+                    try {
+                        JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
+                        Marshaller m = context.createMarshaller();
+                        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+                        m.marshal(form.commsTree.getConfig(), file);
+                    }
+                    catch(Exception ex)
+                    {
+                        JOptionPane.showMessageDialog(commsTree, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        fileMenu.add(saveFile);
+        bar.add(fileMenu);
+        return bar;
+    }
+
 
     public TestSetForm(DNP3Manager manager, PluginConfiguration config)
     {

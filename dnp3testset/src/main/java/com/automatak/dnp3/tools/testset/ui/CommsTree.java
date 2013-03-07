@@ -23,8 +23,11 @@ import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
 import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
-import com.automatak.dnp3.tools.testset.NodeUpdateListener;
 import com.automatak.dnp3.tools.testset.PluginConfiguration;
+import com.automatak.dnp3.tools.testset.XMLConversions;
+import com.automatak.dnp3.tools.xml.XChannel;
+import com.automatak.dnp3.tools.xml.XSimulatorConfig;
+import com.automatak.dnp3.tools.xml.XStack;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -86,6 +89,8 @@ public class CommsTree extends JTree {
             this.channel = channel;
         }
 
+        public abstract XChannel getConfig();
+
         @Override
         public void onStateChange(final ChannelState state)
         {
@@ -114,6 +119,8 @@ public class CommsTree extends JTree {
 
         private StackState state = StackState.COMMS_DOWN;
 
+        public abstract XStack getConfig();
+
         public StackNode(Stack stack)
         {
             this.stack = stack;
@@ -136,15 +143,72 @@ public class CommsTree extends JTree {
     private class TcpClientChannelNode extends ChannelNode {
 
         private final String id;
+        private final LogLevel level;
         private final String host;
         private final int port;
+        private final long retryMs;
 
-        public TcpClientChannelNode(String id, String host, int port, Channel channel)
+        public TcpClientChannelNode(String id, LogLevel level, String host, int port, long retryMs, Channel channel)
         {
             super(channel);
             this.id = id;
+            this.level = level;
             this.host = host;
             this.port = port;
+            this.retryMs = retryMs;
+        }
+
+        @Override
+        public XChannel getConfig()
+        {
+            XChannel channel = new XChannel();
+            XChannel.XTCPClientChannel tcp = new XChannel.XTCPClientChannel();
+            tcp.setId(id);
+            tcp.setLevel(XMLConversions.convert(level));
+            tcp.setIp(host);
+            tcp.setPort(port);
+            tcp.setRetry(retryMs);
+            channel.setXTCPClientChannel(tcp);
+            return channel;
+        }
+
+        @Override
+        public String toString()
+        {
+            return host + ":" + port;
+        }
+    }
+
+    private class TcpServerChannelNode extends ChannelNode {
+
+        private final String id;
+        private final LogLevel level;
+        private final String host;
+        private final int port;
+        private final long retryMs;
+
+        public TcpServerChannelNode(String id, LogLevel level, String host, int port, long retryMs, Channel channel)
+        {
+            super(channel);
+            this.id = id;
+            this.level = level;
+            this.host = host;
+            this.port = port;
+            this.retryMs = retryMs;
+        }
+
+        @Override
+        public XChannel getConfig()
+        {
+            XChannel channel = new XChannel();
+            XChannel.XTCPServerChannel tcp = new XChannel.XTCPServerChannel();
+            tcp.setId(id);
+            tcp.setLevel(XMLConversions.convert(level));
+            tcp.setIp(host);
+            tcp.setPort(port);
+            tcp.setRetry(retryMs);
+            channel.setXTCPServerChannel(tcp);
+            return channel;
         }
 
         @Override
@@ -157,11 +221,32 @@ public class CommsTree extends JTree {
     private class SerialChannelNode extends ChannelNode {
 
         private final SerialSettings settings;
+        private final LogLevel level;
+        private final long retryMs;
 
-        public SerialChannelNode(SerialSettings settings, Channel channel)
+        public SerialChannelNode(LogLevel level, long retryMs, SerialSettings settings, Channel channel)
         {
             super(channel);
+            this.level = level;
+            this.retryMs = retryMs;
             this.settings = settings;
+        }
+
+        @Override
+        public XChannel getConfig()
+        {
+            XChannel channel = new XChannel();
+            XChannel.XSerialChannel serial = new XChannel.XSerialChannel();
+            serial.setPort(settings.port);
+            serial.setLevel(XMLConversions.convert(level));
+            serial.setBaud(settings.baudRate);
+            serial.setDataBits(settings.dataBits);
+            serial.setStopBits(settings.stopBits);
+            serial.setRetry(retryMs);
+            serial.setParity(XMLConversions.convert(settings.parity));
+            serial.setFlowControl(XMLConversions.convert(settings.flowControl));
+            channel.setXSerialChannel(serial);
+            return channel;
         }
 
         @Override
@@ -177,14 +262,17 @@ public class CommsTree extends JTree {
             return master;
         }
 
-        private final Master master;
+
 
         public MasterPlugin getPlugin() {
             return plugin;
         }
 
+        private final Master master;
         private final MasterPlugin plugin;
         private final String id;
+        private final LogLevel level;
+        private final MasterStackConfig config;
 
         @Override
         public void cleanup()
@@ -192,12 +280,28 @@ public class CommsTree extends JTree {
             plugin.shutdown();
         }
 
-        public MasterNode(String loggerID, Master master, MasterPlugin plugin)
+        public MasterNode(String loggerID, LogLevel level, MasterStackConfig config, Master master, MasterPlugin plugin)
         {
             super(master);
             this.id = loggerID;
+            this.level = level;
+            this.config = config;
             this.master = master;
             this.plugin = plugin;
+        }
+
+        @Override
+        public XStack getConfig()
+        {
+            XStack stack = new XStack();
+            XStack.XMasterStack master = new XStack.XMasterStack();
+            master.setId(id);
+            master.setLevel(XMLConversions.convert(level));
+            master.setXLinkLayer(XMLConversions.convert(config.linkConfig));
+            master.setXAppLayer(XMLConversions.convert(config.appConfig));
+            master.setXMaster(XMLConversions.convert(config.masterConfig));
+            stack.setXMasterStack(master);
+            return stack;
         }
 
         @Override
@@ -210,6 +314,8 @@ public class CommsTree extends JTree {
     private class OutstationNode extends StackNode {
 
         private final String loggerId;
+        private final LogLevel level;
+        private final OutstationStackConfig config;
         private final Outstation outstation;
         private final OutstationPlugin plugin;
 
@@ -223,12 +329,28 @@ public class CommsTree extends JTree {
             plugin.shutdown();
         }
 
-        public OutstationNode(String loggerId, Outstation outstation, OutstationPlugin plugin)
+        public OutstationNode(String loggerId, LogLevel level, OutstationStackConfig config, Outstation outstation, OutstationPlugin plugin)
         {
             super(outstation);
             this.loggerId = loggerId;
+            this.level = level;
+            this.config = config;
             this.outstation = outstation;
             this.plugin = plugin;
+        }
+
+        @Override
+        public XStack getConfig()
+        {
+            XStack stack = new XStack();
+            XStack.XOutstationStack os = new XStack.XOutstationStack();
+            os.setId(loggerId);
+            os.setLevel(XMLConversions.convert(level));
+            os.setXLinkLayer(XMLConversions.convert(config.linkConfig));
+            os.setXAppLayer(XMLConversions.convert(config.appConfig));
+            os.setXOutstation(XMLConversions.convert(config.outstationConfig));
+            stack.setXOutstationStack(os);
+            return stack;
         }
 
         @Override
@@ -348,7 +470,7 @@ public class CommsTree extends JTree {
                             try {
                                 Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
                                 plugin.configure(m.getCommandProcessor());
-                                MasterNode mnode = new MasterNode(loggerID, m, plugin);
+                                MasterNode mnode = new MasterNode(loggerID, level, config, m, plugin);
                                 m.addStateListener(mnode);
                                 final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
                                 node.add(child);
@@ -390,7 +512,7 @@ public class CommsTree extends JTree {
                              try {
                                  Outstation os = c.addOutstation(loggerID, level, instance.getCommandHandler(), config);
                                  instance.configure(os.getDataObserver());
-                                 OutstationNode onode = new OutstationNode(loggerID, os, instance);
+                                 OutstationNode onode = new OutstationNode(loggerID, level, config, os, instance);
                                  os.addStateListener(onode);
                                  final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
                                  node.add(child);
@@ -444,7 +566,7 @@ public class CommsTree extends JTree {
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
                             Channel c = manager.addTCPClient(loggerId, level, retryMs, host, port);
-                            TcpClientChannelNode node = new TcpClientChannelNode(loggerId, host, port, c);
+                            TcpClientChannelNode node = new TcpClientChannelNode(loggerId, level, host, port, retryMs, c);
                             c.addStateListener(node);
                             final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
                             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
@@ -475,7 +597,7 @@ public class CommsTree extends JTree {
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
                             Channel c = manager.addTCPServer(loggerId, level, retryMs, host, port);
-                            TcpClientChannelNode node = new TcpClientChannelNode(loggerId, host, port, c);
+                            TcpServerChannelNode node = new TcpServerChannelNode(loggerId, level, host, port, retryMs, c);
                             c.addStateListener(node);
                             final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
                             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
@@ -505,7 +627,7 @@ public class CommsTree extends JTree {
                         @Override
                         public void onAdd(LogLevel level, int retryMs, SerialSettings settings) {
                             Channel c = manager.addSerial(settings.port, level, retryMs, settings);
-                            SerialChannelNode node = new SerialChannelNode(settings, c);
+                            SerialChannelNode node = new SerialChannelNode(level, retryMs, settings, c);
                             c.addStateListener(node);
                             final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
                             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
@@ -576,7 +698,39 @@ public class CommsTree extends JTree {
                 }
             }
         });
+    }
 
+    public XSimulatorConfig getConfig()
+    {
+        XSimulatorConfig config = new XSimulatorConfig();
+        Enumeration e = root.children();
+        while(e.hasMoreElements())
+        {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+            if(ChannelNode.class.isInstance(node.getUserObject()))
+            {
+                ChannelNode cnode = (ChannelNode) node.getUserObject();
+                XChannel channel = cnode.getConfig();
+                addStacks(channel, node);
+                config.getXChannel().add(channel);
+            }
+        }
+        return config;
+    }
+
+    private void addStacks(XChannel channel, DefaultMutableTreeNode node)
+    {
+        Enumeration e = node.children();
+        while(e.hasMoreElements())
+        {
+            DefaultMutableTreeNode snode = (DefaultMutableTreeNode) e.nextElement();
+            if(StackNode.class.isInstance(snode.getUserObject()))
+            {
+                StackNode stack = (StackNode) snode.getUserObject();
+                XStack config = stack.getConfig();
+                channel.getXStack().add(config);
+            }
+        }
     }
 
 

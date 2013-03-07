@@ -16,7 +16,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.testset;
+package com.automatak.dnp3.tools.testset.ui;
 
 public interface NodeUpdateListener {
     void onNodeUpdate();

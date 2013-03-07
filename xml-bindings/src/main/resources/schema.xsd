@@ -39,37 +39,43 @@
         <xs:attribute name="retry" type="xs:long" />
     </xs:complexType>
 
+
+
     <!-- Channel type -->
     <xs:element name="XChannel">
        <xs:complexType>
-           <xs:choice>
-               <xs:element name="XTCPClientChannel">
-                   <xs:complexType>
-                       <xs:complexContent>
-                           <xs:extension base="XTCPChannel"/>
-                       </xs:complexContent>
-                   </xs:complexType>
-               </xs:element>
-               <xs:element name="XTCPServerChannel">
-                   <xs:complexType>
-                       <xs:complexContent>
-                           <xs:extension base="XTCPChannel"/>
-                       </xs:complexContent>
-                   </xs:complexType>
-               </xs:element>
-               <xs:element name="XSerialChannel">
-                   <xs:complexType>
-                       <xs:attribute name="port" type="xs:string"/>
-                       <xs:attribute name="level" type="XLogLevel"/>
-                       <xs:attribute name="retry" type="xs:long"/>
-                       <xs:attribute name="baud" type="xs:int" />
-                       <xs:attribute name="dataBits" type="xs:int" />
-                       <xs:attribute name="stopBits" type="xs:int" />
-                       <xs:attribute name="parity" type="XParity" />
-                       <xs:attribute name="flowControl" type="XFLowControl" />
-                   </xs:complexType>
-               </xs:element>
-           </xs:choice>
+           <xs:sequence>
+               <xs:choice>
+                   <xs:element name="XTCPClientChannel">
+                       <xs:complexType>
+                           <xs:complexContent>
+                               <xs:extension base="XTCPChannel"/>
+
+                           </xs:complexContent>
+                       </xs:complexType>
+                   </xs:element>
+                   <xs:element name="XTCPServerChannel">
+                       <xs:complexType>
+                           <xs:complexContent>
+                               <xs:extension base="XTCPChannel"/>
+                           </xs:complexContent>
+                       </xs:complexType>
+                   </xs:element>
+                   <xs:element name="XSerialChannel">
+                       <xs:complexType>
+                           <xs:attribute name="port" type="xs:string"/>
+                           <xs:attribute name="level" type="XLogLevel"/>
+                           <xs:attribute name="retry" type="xs:long"/>
+                           <xs:attribute name="baud" type="xs:int" />
+                           <xs:attribute name="dataBits" type="xs:int" />
+                           <xs:attribute name="stopBits" type="xs:int" />
+                           <xs:attribute name="parity" type="XParity" />
+                           <xs:attribute name="flowControl" type="XFLowControl" />
+                       </xs:complexType>
+                   </xs:element>
+               </xs:choice>
+               <xs:element ref="XStack" minOccurs="0" maxOccurs="unbounded"/>
+           </xs:sequence>
        </xs:complexType>
     </xs:element>
 
@@ -79,15 +85,15 @@
             <xs:attribute name="confirmedDataRetry" type="xs:int" />
             <xs:attribute name="localAddress" type="xs:int" />
             <xs:attribute name="remoteAddress" type="xs:int" />
-            <xs:attribute name="rspTimeout" type="xs:int" />
+            <xs:attribute name="rspTimeout" type="xs:long" />
         </xs:complexType>
     </xs:element>
 
     <xs:element name="XAppLayer">
         <xs:complexType>
-            <xs:attribute name="maxRcvFragSize" type="xs:boolean" />
+            <xs:attribute name="maxRcvFragSize" type="xs:int" />
             <xs:attribute name="retryCount" type="xs:int" />
-            <xs:attribute name="rspTimeout" type="xs:int" />
+            <xs:attribute name="rspTimeout" type="xs:long" />
         </xs:complexType>
     </xs:element>
 
@@ -151,15 +157,51 @@
             <xs:enumeration value="Group22Var1"/>
             <xs:enumeration value="Group22Var2"/>
             <xs:enumeration value="Group22Var5"/>
-            <xs:enumeration value="Group2Var6"/>
+            <xs:enumeration value="Group22Var6"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="XStackBase">
+        <xs:all>
+            <xs:element ref="XLinkLayer"/>
+            <xs:element ref="XAppLayer"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:element name="XStack">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="XMasterStack" minOccurs="1" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="1">
+                            <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="level" type="XLogLevel" minOccurs="1" maxOccurs="1"/>
+                            <xs:element ref="XLinkLayer" minOccurs="1" maxOccurs="1"/>
+                            <xs:element ref="XAppLayer" minOccurs="1" maxOccurs="1"/>
+                            <xs:element ref="XMaster" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="XOutstationStack">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="1">
+                            <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="level" type="XLogLevel" minOccurs="1" maxOccurs="1"/>
+                            <xs:element ref="XLinkLayer" minOccurs="1" maxOccurs="1"/>
+                            <xs:element ref="XAppLayer" minOccurs="1" maxOccurs="1"/>
+                            <xs:element ref="XOutstation" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
 
     <xs:element name="XOutstation">
         <xs:complexType>
             <xs:attribute name="disableUnsol" type="xs:boolean" />
             <xs:attribute name="requestTimeSync" type="xs:boolean" />
-            <xs:attribute name="unsolTimer" type="xs:int" />
+            <xs:attribute name="unsolTimer" type="xs:long" />
             <xs:attribute name="staticBinary" type="XStaticBinary" />
             <xs:attribute name="staticAnalog" type="XStaticAnalog" />
             <xs:attribute name="staticCounter" type="XStaticCounter" />
@@ -170,21 +212,21 @@
         </xs:complexType>
     </xs:element>
 
+
+
     <xs:element name="XMaster">
         <xs:complexType>
             <xs:attribute name="allowTimeSync" type="xs:boolean" />
             <xs:attribute name="doUnsolEnableDisable" type="xs:boolean" />
             <xs:attribute name="enableUnsol" type="xs:boolean" />
-            <xs:attribute name="unsolClass1" type="xs:boolean" />
-            <xs:attribute name="unsolClass2" type="xs:boolean" />
-            <xs:attribute name="unsolClass3" type="xs:boolean" />
-            <xs:attribute name="integrityPeriod" type="xs:int" />
-            <xs:attribute name="taskRetryPeriod" type="xs:int" />
+            <xs:attribute name="unsolClassMask" type="xs:int" />
+            <xs:attribute name="integrityPeriod" type="xs:long" />
+            <xs:attribute name="taskRetryPeriod" type="xs:long" />
         </xs:complexType>
     </xs:element>
 
     <!-- the root element -->
-    <xs:element name="SimulatorConfig">
+    <xs:element name="XSimulatorConfig">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="XChannel" minOccurs="0" maxOccurs="unbounded"/>
