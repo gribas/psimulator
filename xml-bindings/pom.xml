@@ -19,6 +19,9 @@
                 <version>${jaxb-plugin.verison}</version>
                 <executions>
                     <execution>
+                        <configuration>
+                            <generatePackage>com.automatak.dnp3.tools.xml</generatePackage>
+                        </configuration>
                         <goals>
                             <goal>generate</goal>
                         </goals>

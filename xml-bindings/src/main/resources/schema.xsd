@@ -1,20 +1,196 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema targetNamespace="http://tempuri.org/XMLSchema.xsd"
-    elementFormDefault="qualified"
-    xmlns="http://tempuri.org/XMLSchema.xsd"
-    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
->
-  <xs:simpleType name="LogLevel">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value= "debug"/>
-      <xs:enumeration value= "comms"/>
-      <xs:enumeration value= "interpret"/>
-      <xs:enumeration value= "info"/>
-      <xs:enumeration value= "warning"/>
-      <xs:enumeration value= "error"/>
-      <xs:enumeration value= "event"/>
-    </xs:restriction>
-  </xs:simpleType>
-  
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Some simple types -->
+
+    <xs:simpleType name="XLogLevel">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Debug"/>
+            <xs:enumeration value="Comm"/>
+            <xs:enumeration value="Interpret"/>
+            <xs:enumeration value="Info"/>
+            <xs:enumeration value="Warning"/>
+            <xs:enumeration value="Error"/>
+            <xs:enumeration value="Event"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XParity">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="None"/>
+            <xs:enumeration value="Even"/>
+            <xs:enumeration value="Odd"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XFLowControl">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="None"/>
+            <xs:enumeration value="Hardware"/>
+            <xs:enumeration value="XonXoff"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="XTCPChannel">
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="level" type="XLogLevel"/>
+        <xs:attribute name="ip" type="xs:string" />
+        <xs:attribute name="port" type="xs:int" />
+        <xs:attribute name="retry" type="xs:long" />
+    </xs:complexType>
+
+    <!-- Channel type -->
+    <xs:element name="XChannel">
+       <xs:complexType>
+           <xs:choice>
+               <xs:element name="XTCPClientChannel">
+                   <xs:complexType>
+                       <xs:complexContent>
+                           <xs:extension base="XTCPChannel"/>
+                       </xs:complexContent>
+                   </xs:complexType>
+               </xs:element>
+               <xs:element name="XTCPServerChannel">
+                   <xs:complexType>
+                       <xs:complexContent>
+                           <xs:extension base="XTCPChannel"/>
+                       </xs:complexContent>
+                   </xs:complexType>
+               </xs:element>
+               <xs:element name="XSerialChannel">
+                   <xs:complexType>
+                       <xs:attribute name="port" type="xs:string"/>
+                       <xs:attribute name="level" type="XLogLevel"/>
+                       <xs:attribute name="retry" type="xs:long"/>
+                       <xs:attribute name="baud" type="xs:int" />
+                       <xs:attribute name="dataBits" type="xs:int" />
+                       <xs:attribute name="stopBits" type="xs:int" />
+                       <xs:attribute name="parity" type="XParity" />
+                       <xs:attribute name="flowControl" type="XFLowControl" />
+                   </xs:complexType>
+               </xs:element>
+           </xs:choice>
+       </xs:complexType>
+    </xs:element>
+
+    <xs:element name="XLinkLayer">
+        <xs:complexType>
+            <xs:attribute name="useConfirms" type="xs:boolean" />
+            <xs:attribute name="confirmedDataRetry" type="xs:int" />
+            <xs:attribute name="localAddress" type="xs:int" />
+            <xs:attribute name="remoteAddress" type="xs:int" />
+            <xs:attribute name="rspTimeout" type="xs:int" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="XAppLayer">
+        <xs:complexType>
+            <xs:attribute name="maxRcvFragSize" type="xs:boolean" />
+            <xs:attribute name="retryCount" type="xs:int" />
+            <xs:attribute name="rspTimeout" type="xs:int" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="XStaticBinary">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group1Var2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XStaticAnalog">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group30Var1"/>
+            <xs:enumeration value="Group30Var2"/>
+            <xs:enumeration value="Group30Var3"/>
+            <xs:enumeration value="Group30Var4"/>
+            <xs:enumeration value="Group30Var5"/>
+            <xs:enumeration value="Group30Var6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XStaticCounter">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group20Var1"/>
+            <xs:enumeration value="Group20Var2"/>
+            <xs:enumeration value="Group20Var5"/>
+            <xs:enumeration value="Group20Var6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XStaticAnalogOutputStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group40Var1"/>
+            <xs:enumeration value="Group40Var2"/>
+            <xs:enumeration value="Group40Var3"/>
+            <xs:enumeration value="Group40Var4"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XEventBinary">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group2Var1"/>
+            <xs:enumeration value="Group2Var2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XEventAnalog">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group32Var1"/>
+            <xs:enumeration value="Group32Var2"/>
+            <xs:enumeration value="Group32Var3"/>
+            <xs:enumeration value="Group32Var4"/>
+            <xs:enumeration value="Group32Var5"/>
+            <xs:enumeration value="Group32Var6"/>
+            <xs:enumeration value="Group32Var7"/>
+            <xs:enumeration value="Group32Var8"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="XEventCounter">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Group22Var1"/>
+            <xs:enumeration value="Group22Var2"/>
+            <xs:enumeration value="Group22Var5"/>
+            <xs:enumeration value="Group2Var6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="XOutstation">
+        <xs:complexType>
+            <xs:attribute name="disableUnsol" type="xs:boolean" />
+            <xs:attribute name="requestTimeSync" type="xs:boolean" />
+            <xs:attribute name="unsolTimer" type="xs:int" />
+            <xs:attribute name="staticBinary" type="XStaticBinary" />
+            <xs:attribute name="staticAnalog" type="XStaticAnalog" />
+            <xs:attribute name="staticCounter" type="XStaticCounter" />
+            <xs:attribute name="staticAnalogOutputStatus" type="XStaticAnalogOutputStatus"/>
+            <xs:attribute name="eventBinary" type="XEventBinary"/>
+            <xs:attribute name="eventAnalog" type="XEventAnalog"/>
+            <xs:attribute name="eventCounter" type="XEventCounter"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="XMaster">
+        <xs:complexType>
+            <xs:attribute name="allowTimeSync" type="xs:boolean" />
+            <xs:attribute name="doUnsolEnableDisable" type="xs:boolean" />
+            <xs:attribute name="enableUnsol" type="xs:boolean" />
+            <xs:attribute name="unsolClass1" type="xs:boolean" />
+            <xs:attribute name="unsolClass2" type="xs:boolean" />
+            <xs:attribute name="unsolClass3" type="xs:boolean" />
+            <xs:attribute name="integrityPeriod" type="xs:int" />
+            <xs:attribute name="taskRetryPeriod" type="xs:int" />
+        </xs:complexType>
+    </xs:element>
+
+    <!-- the root element -->
+    <xs:element name="SimulatorConfig">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="XChannel" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
 </xs:schema>
