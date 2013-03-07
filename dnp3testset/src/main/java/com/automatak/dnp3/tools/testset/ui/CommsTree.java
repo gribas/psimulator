@@ -450,9 +450,47 @@ public class CommsTree extends JTree {
         return popup;
     }
 
+    private void addMaster(MasterPluginFactory factory, DefaultMutableTreeNode node, ChannelNode cnode, String id, LogLevel level, MasterStackConfig config)
+    {
+        Channel c = cnode.getChannel();
+        MasterPlugin plugin = factory.newMasterInstance("");
+        Master m = c.addMaster(id, level, plugin.getDataObserver(), config);
+        plugin.configure(m.getCommandProcessor());
+        MasterNode mnode = new MasterNode(id, level, config, m, plugin);
+        m.addStateListener(mnode);
+        final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
+        node.add(child);
+        mnode.addUpdateListener(new NodeUpdateListener() {
+            @Override
+            public void onNodeUpdate() {
+                model.nodeChanged(child);
+            }
+        });
+        model.reload();
+    }
+
+    private void addOutstation(OutstationPluginFactory factory, DefaultMutableTreeNode node, ChannelNode cnode, String id, LogLevel level, OutstationStackConfig config)
+    {
+        Channel c = cnode.getChannel();
+        OutstationPlugin instance = factory.newOutstationInstance("");
+        Outstation os = c.addOutstation(id, level, instance.getCommandHandler(), config);
+        instance.configure(os.getDataObserver());
+        OutstationNode onode = new OutstationNode(id, level, config, os, instance);
+        os.addStateListener(onode);
+        final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
+        node.add(child);
+        onode.addUpdateListener(new NodeUpdateListener() {
+            @Override
+            public void onNodeUpdate() {
+                model.nodeChanged(child);
+            }
+        });
+        model.reload();
+    }
+
     private JPopupMenu getChannelMenu(final DefaultMutableTreeNode node, final ChannelNode cnode)
     {
-        final Component parent = this.getParent();
+        final CommsTree tree = this;
         JPopupMenu popup = new JPopupMenu();
         JMenu addMasterMenu = new JMenu("Add Master");
         for(final MasterPluginFactory factory: plugins.getMasters())
@@ -464,28 +502,12 @@ public class CommsTree extends JTree {
                     AddMasterDialog dialog = new AddMasterDialog(factory, new AddMasterListener() {
                         @Override
                         public void onAdd(String loggerID, LogLevel level, MasterStackConfig config) {
-                            Channel c = cnode.getChannel();
-                            MasterPlugin plugin = factory.newMasterInstance("");
-
                             try {
-                                Master m = c.addMaster(loggerID, level, plugin.getDataObserver(), config);
-                                plugin.configure(m.getCommandProcessor());
-                                MasterNode mnode = new MasterNode(loggerID, level, config, m, plugin);
-                                m.addStateListener(mnode);
-                                final DefaultMutableTreeNode child = new DefaultMutableTreeNode(mnode);
-                                node.add(child);
-                                mnode.addUpdateListener(new NodeUpdateListener() {
-                                    @Override
-                                    public void onNodeUpdate() {
-                                        model.nodeChanged(child);
-                                    }
-                                });
-                                model.reload();
+                               tree.addMaster(factory, node, cnode, loggerID, level, config);
                             } catch(DNP3ConfigException ex)
                             {
-                                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Invalid configuration", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(tree, ex.getMessage(), "Invalid configuration", JOptionPane.WARNING_MESSAGE);
                             }
-
                         }
                     });
                     dialog.pack();
@@ -506,26 +528,11 @@ public class CommsTree extends JTree {
                      AddOutstationDialog dialog = new AddOutstationDialog(factory, new AddOutstationListener() {
                          @Override
                          public void onAdd(String loggerID, LogLevel level, OutstationStackConfig config) {
-                             Channel c = cnode.getChannel();
-                             OutstationPlugin instance = factory.newOutstationInstance("");
-
                              try {
-                                 Outstation os = c.addOutstation(loggerID, level, instance.getCommandHandler(), config);
-                                 instance.configure(os.getDataObserver());
-                                 OutstationNode onode = new OutstationNode(loggerID, level, config, os, instance);
-                                 os.addStateListener(onode);
-                                 final DefaultMutableTreeNode child = new DefaultMutableTreeNode(onode);
-                                 node.add(child);
-                                 onode.addUpdateListener(new NodeUpdateListener() {
-                                     @Override
-                                     public void onNodeUpdate() {
-                                         model.nodeChanged(child);
-                                     }
-                                 });
-                                 model.reload();
+                                 tree.addOutstation(factory, node, cnode, loggerID, level, config);
                              } catch(DNP3ConfigException ex)
                              {
-                                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Invalid configuration", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(tree.getParent(), ex.getMessage(), "Invalid configuration", JOptionPane.WARNING_MESSAGE);
                              }
                          }
                      });
@@ -552,6 +559,57 @@ public class CommsTree extends JTree {
         return popup;
     }
 
+    private void addTcpClient(String id, LogLevel level, long retryMs, String host, int port)
+    {
+        Channel c = manager.addTCPClient(id, level, retryMs, host, port);
+        TcpClientChannelNode node = new TcpClientChannelNode(id, level, host, port, retryMs, c);
+        c.addStateListener(node);
+        final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        root.add(channelNode);
+        node.addUpdateListener(new NodeUpdateListener() {
+            @Override
+            public void onNodeUpdate() {
+                model.nodeChanged(channelNode);
+            }
+        });
+        model.reload();
+    }
+
+    private void addTcpServer(String id, LogLevel level, long retryMs, String endpoint, int port)
+    {
+        Channel c = manager.addTCPServer(id, level, retryMs, endpoint, port);
+        TcpServerChannelNode node = new TcpServerChannelNode(id, level, endpoint, port, retryMs, c);
+        c.addStateListener(node);
+        final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        root.add(channelNode);
+        node.addUpdateListener(new NodeUpdateListener() {
+            @Override
+            public void onNodeUpdate() {
+                model.nodeChanged(channelNode);
+            }
+        });
+        model.reload();
+    }
+
+    private void addSerial(String id, LogLevel level, long retryMs, SerialSettings settings)
+    {
+        Channel c = manager.addSerial(settings.port, level, retryMs, settings);
+        SerialChannelNode node = new SerialChannelNode(level, retryMs, settings, c);
+        c.addStateListener(node);
+        final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        root.add(channelNode);
+        node.addUpdateListener(new NodeUpdateListener() {
+            @Override
+            public void onNodeUpdate() {
+                model.nodeChanged(channelNode);
+            }
+        });
+        model.reload();
+    }
+
     private JPopupMenu getRootMenu()
     {
         JPopupMenu popup = new JPopupMenu();
@@ -565,19 +623,7 @@ public class CommsTree extends JTree {
                         @Override
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
-                            Channel c = manager.addTCPClient(loggerId, level, retryMs, host, port);
-                            TcpClientChannelNode node = new TcpClientChannelNode(loggerId, level, host, port, retryMs, c);
-                            c.addStateListener(node);
-                            final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
-                            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-                            root.add(channelNode);
-                            node.addUpdateListener(new NodeUpdateListener() {
-                                @Override
-                                public void onNodeUpdate() {
-                                  model.nodeChanged(channelNode);
-                                }
-                            });
-                            model.reload();
+                           addTcpClient(loggerId, level, retryMs, host, port);
                         }
                     });
                     dialog.pack();
@@ -596,19 +642,7 @@ public class CommsTree extends JTree {
                         @Override
                         public void onAdd(String loggerId, LogLevel level, int retryMs, String host, int port)
                         {
-                            Channel c = manager.addTCPServer(loggerId, level, retryMs, host, port);
-                            TcpServerChannelNode node = new TcpServerChannelNode(loggerId, level, host, port, retryMs, c);
-                            c.addStateListener(node);
-                            final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
-                            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-                            root.add(channelNode);
-                            node.addUpdateListener(new NodeUpdateListener() {
-                                @Override
-                                public void onNodeUpdate() {
-                                    model.nodeChanged(channelNode);
-                                }
-                            });
-                            model.reload();
+                            addTcpServer(loggerId, level, retryMs, host, port);
                         }
                     });
                     dialog.pack();
@@ -626,19 +660,7 @@ public class CommsTree extends JTree {
                     AddSerialDialog dialog = new AddSerialDialog(new AddSerial() {
                         @Override
                         public void onAdd(LogLevel level, int retryMs, SerialSettings settings) {
-                            Channel c = manager.addSerial(settings.port, level, retryMs, settings);
-                            SerialChannelNode node = new SerialChannelNode(level, retryMs, settings, c);
-                            c.addStateListener(node);
-                            final MutableTreeNode channelNode = new DefaultMutableTreeNode(node);
-                            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-                            root.add(channelNode);
-                            node.addUpdateListener(new NodeUpdateListener() {
-                                @Override
-                                public void onNodeUpdate() {
-                                    model.nodeChanged(channelNode);
-                                }
-                            });
-                            model.reload();
+                           addSerial(settings.port, level, retryMs, settings);
                         }
                     });
                     dialog.pack();
@@ -698,6 +720,11 @@ public class CommsTree extends JTree {
                 }
             }
         });
+    }
+
+    public void loadConfig(XSimulatorConfig config)
+    {
+
     }
 
     public XSimulatorConfig getConfig()
