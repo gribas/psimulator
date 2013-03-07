@@ -24,6 +24,7 @@ import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 import com.automatak.dnp3.tools.testset.PluginConfiguration;
+import com.automatak.dnp3.tools.testset.XmlLoadListener;
 import com.automatak.dnp3.tools.xml.XMLConversions;
 import com.automatak.dnp3.tools.xml.XChannel;
 import com.automatak.dnp3.tools.xml.XSimulatorConfig;
@@ -569,16 +570,22 @@ public class CommsTree extends JTree {
         removeItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                recursivelyCleanup(node);
-                Channel c = cnode.getChannel();
-                c.shutdown();
-                node.removeFromParent();
-                model.reload();
+                removeChannel(node, cnode);
             }
         });
         popup.add(removeItem);
         return popup;
     }
+
+    private void removeChannel(DefaultMutableTreeNode node, ChannelNode cnode)
+    {
+        recursivelyCleanup(node);
+        Channel c = cnode.getChannel();
+        c.shutdown();
+        node.removeFromParent();
+        model.reload();
+    }
+
 
     private Tuple<DefaultMutableTreeNode, ChannelNode> addTcpClient(String id, LogLevel level, long retryMs, String host, int port)
     {
@@ -784,10 +791,11 @@ public class CommsTree extends JTree {
         }
     }
 
-    public void loadConfig(XSimulatorConfig config)
+    public void loadConfig(final XSimulatorConfig config, final XmlLoadListener listener)
     {
-        for(XChannel channel: config.getXChannel())
+        for(int i=0; i< config.getXChannel().size(); ++i)
         {
+            XChannel channel = config.getXChannel().get(i);
             if(channel.getXSerialChannel() == null)
             {
                 if(channel.getXTCPClientChannel() == null)
@@ -798,10 +806,10 @@ public class CommsTree extends JTree {
                     }
                     else
                     {
-                        XChannel.XTCPServerChannel server = channel.getXTCPServerChannel();
+                        XChannel.XTCPServerChannel server = config.getXChannel().get(i).getXTCPServerChannel();
                         LogLevel level = XMLConversions.convert(server.getLevel());
                         Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpServer(server.getId(), level, server.getRetry(), server.getIp(), server.getPort());
-                        this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+                        this.addStacks(config.getXChannel().get(i).getXStack(), tuple.x, tuple.y);
                     }
                 }
                 else
@@ -819,6 +827,7 @@ public class CommsTree extends JTree {
                 Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addSerial(sc.getPort(), level, sc.getRetry(), s);
                 this.addStacks(channel.getXStack(), tuple.x, tuple.y);
             }
+            listener.update("update", i);
         }
     }
 
@@ -855,5 +864,20 @@ public class CommsTree extends JTree {
         }
     }
 
+    public void clear()
+    {
+        Enumeration e = this.root.children();
+        while(e.hasMoreElements())
+        {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+            ChannelNode cnode = (ChannelNode) node.getUserObject();
+            this.removeChannel(node, cnode);
+        }
+    }
+
+    public boolean isActive()
+    {
+        return this.root.children().hasMoreElements();
+    }
 
 }

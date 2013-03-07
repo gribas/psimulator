@@ -49,6 +49,7 @@ public class GenerateExampleConfigs {
         XStack stack = new XStack();
         XStack.XMasterStack s = new XStack.XMasterStack();
         MasterStackConfig cfg = plugin.getDefaultConfig();
+        cfg.masterConfig.integrityRateMs = 5000;
         s.setId("master" + i);
         s.setLevel(XLogLevel.INFO);
         s.setPlugin(plugin.getPluginName());

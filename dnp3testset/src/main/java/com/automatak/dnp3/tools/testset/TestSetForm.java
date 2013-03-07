@@ -168,27 +168,46 @@ public class TestSetForm {
         loadFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                int ret = chooser.showOpenDialog(form.commsTree);
-                if(ret == JFileChooser.APPROVE_OPTION)
+                if(commsTree.isActive())
                 {
-                    File file = chooser.getSelectedFile();
-                    try {
-                        JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
-                        Unmarshaller m = context.createUnmarshaller();
-                        XSimulatorConfig cfg = (XSimulatorConfig) m.unmarshal(file);
-                        commsTree.loadConfig(cfg);
-                    }
-                    catch(Exception ex)
+                    int ret = JOptionPane.showConfirmDialog(commsTree, "Your current config will be overwritten, continue?", "Warning", JOptionPane.WARNING_MESSAGE);
+                    if(ret == JOptionPane.OK_OPTION)
                     {
-                        JOptionPane.showMessageDialog(commsTree, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        commsTree.clear();
+                        showLoadDialog();
                     }
                 }
+                else showLoadDialog();
             }
         });
         fileMenu.add(loadFile);
         bar.add(fileMenu);
         return bar;
+    }
+
+    public void showLoadDialog()
+    {
+        JFileChooser chooser = new JFileChooser();
+        int ret = chooser.showOpenDialog(this.commsTree);
+        if(ret == JFileChooser.APPROVE_OPTION)
+        {
+            File file = chooser.getSelectedFile();
+            try {
+                JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
+                Unmarshaller m = context.createUnmarshaller();
+                XSimulatorConfig cfg = (XSimulatorConfig) m.unmarshal(file);
+                commsTree.loadConfig(cfg, new XmlLoadListener() {
+                    @Override
+                    public void update(String status, int step) {
+
+                    }
+                });
+            }
+            catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(commsTree, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
 
