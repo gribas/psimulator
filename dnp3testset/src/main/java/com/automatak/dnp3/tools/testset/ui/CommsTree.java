@@ -793,6 +793,7 @@ public class CommsTree extends JTree {
 
     public void loadConfig(final XSimulatorConfig config, final XmlLoadListener listener)
     {
+        this.clear();
         for(int i=0; i< config.getXChannel().size(); ++i)
         {
             XChannel channel = config.getXChannel().get(i);

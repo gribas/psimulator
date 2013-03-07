@@ -171,11 +171,7 @@ public class TestSetForm {
                 if(commsTree.isActive())
                 {
                     int ret = JOptionPane.showConfirmDialog(commsTree, "Your current config will be overwritten, continue?", "Warning", JOptionPane.WARNING_MESSAGE);
-                    if(ret == JOptionPane.OK_OPTION)
-                    {
-                        commsTree.clear();
-                        showLoadDialog();
-                    }
+                    showLoadDialog();
                 }
                 else showLoadDialog();
             }
