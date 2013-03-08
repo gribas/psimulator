@@ -16,39 +16,52 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example.master;
+package com.automatak.dnp3.tools.plugins.example.outstationgui;
 
-import com.automatak.dnp3.MasterStackConfig;
-import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
-import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
+import com.automatak.dnp3.DatabaseConfig;
+import com.automatak.dnp3.EventBinaryResponse;
+import com.automatak.dnp3.OutstationStackConfig;
+import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
+import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 
+public class ExampleGuiOutstationPluginFactory implements OutstationPluginFactory {
 
-public class ExampleMasterPluginFactory implements MasterPluginFactory {
+    private final static DatabaseConfig database = new DatabaseConfig(2,2,0,0,0);
 
     @Override
     public String getPluginName()
     {
-        return "Example Master";
+        return "Example GUI Outstation";
     }
 
     @Override
-    public MasterStackConfig getDefaultConfig()
+    public boolean hasUi()
     {
-        MasterStackConfig config = new MasterStackConfig();
-        config.masterConfig.enableUnsol = true;
-        config.masterConfig.doUnsolOnStartup = true;
+        return false;
+    }
+
+    @Override
+    public void showUi()
+    {}
+
+    @Override
+    public OutstationStackConfig getDefaultConfig()
+    {
+        OutstationStackConfig config = new OutstationStackConfig(database);
+        config.outstationConfig.eventBinaryInput = EventBinaryResponse.GROUP2_VAR2;
         return config;
     }
 
     @Override
     public boolean requiresConfigurationString()
     {
-       return false;
+        return false;
     }
 
     @Override
-    public MasterPlugin newMasterInstance(String configuration)
+    public OutstationPlugin newOutstationInstance(String configuration)
     {
-        return new ExampleMasterPlugin();
+        return new ExampleGuiOutstationPlugin();
     }
+
 }

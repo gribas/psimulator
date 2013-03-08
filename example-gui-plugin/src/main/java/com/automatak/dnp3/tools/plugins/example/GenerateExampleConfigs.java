@@ -23,8 +23,8 @@ import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.OutstationStackConfig;
 import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
-import com.automatak.dnp3.tools.plugins.example.master.ExampleMasterPluginFactory;
-import com.automatak.dnp3.tools.plugins.example.outstation.ExampleOutstationPluginFactory;
+import com.automatak.dnp3.tools.plugins.example.mastergui.ExampleGuiMasterPluginFactory;
+import com.automatak.dnp3.tools.plugins.example.outstationgui.ExampleGuiOutstationPluginFactory;
 import com.automatak.dnp3.tools.xml.*;
 
 import javax.xml.bind.JAXBContext;
@@ -36,7 +36,7 @@ public class GenerateExampleConfigs {
 
     public static void main(String[] args) throws JAXBException
     {
-       XSimulatorConfig cfg = getPairedConfig(500);
+       XSimulatorConfig cfg = getPairedConfig(100);
        SimulatorOptions options = new SimulatorOptions();
        cfg.setXSimulatorOptions(options.getOptions());
        JAXBContext ctx = JAXBContext.newInstance(XSimulatorConfig.class);
@@ -47,8 +47,8 @@ public class GenerateExampleConfigs {
 
     static XSimulatorConfig getPairedConfig(int pairs)
     {
-        MasterPluginFactory mfac = new ExampleMasterPluginFactory();
-        OutstationPluginFactory ofac = new ExampleOutstationPluginFactory();
+        MasterPluginFactory mfac = new ExampleGuiMasterPluginFactory();
+        OutstationPluginFactory ofac = new ExampleGuiOutstationPluginFactory();
 
         XSimulatorConfig config = new XSimulatorConfig();
         for(int i=0; i<pairs; ++i)

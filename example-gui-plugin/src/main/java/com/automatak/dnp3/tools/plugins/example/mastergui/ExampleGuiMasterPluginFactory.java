@@ -16,42 +16,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example.outstation;
+package com.automatak.dnp3.tools.plugins.example.mastergui;
 
-import com.automatak.dnp3.DatabaseConfig;
-import com.automatak.dnp3.EventBinaryResponse;
-import com.automatak.dnp3.OutstationStackConfig;
-import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
-import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
+import com.automatak.dnp3.MasterStackConfig;
+import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
+import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 
-public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
 
-    private final static DatabaseConfig database = new DatabaseConfig(2,2,0,0,0);
+public class ExampleGuiMasterPluginFactory implements MasterPluginFactory {
 
     @Override
     public String getPluginName()
     {
-        return "Example Outstation";
+        return "Example GUI Master";
     }
 
     @Override
-    public OutstationStackConfig getDefaultConfig()
+    public MasterStackConfig getDefaultConfig()
     {
-        OutstationStackConfig config = new OutstationStackConfig(database);
-        config.outstationConfig.eventBinaryInput = EventBinaryResponse.GROUP2_VAR2;
+        MasterStackConfig config = new MasterStackConfig();
+        config.masterConfig.enableUnsol = true;
+        config.masterConfig.doUnsolOnStartup = true;
         return config;
     }
 
     @Override
     public boolean requiresConfigurationString()
     {
-        return false;
+       return false;
     }
 
     @Override
-    public OutstationPlugin newOutstationInstance(String configuration)
+    public MasterPlugin newMasterInstance(String configuration)
     {
-        return new ExampleOutstationPlugin();
+        return new ExampleGuiMasterPlugin();
     }
-
 }

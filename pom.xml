@@ -14,8 +14,9 @@
     <modules>
        <module>dnp3testset</module>
        <module>plugin-api</module>
-       <module>example-plugin</module>
+       <module>example-gui-plugin</module>
        <module>xml-bindings</module>
+       <module>example-benchmark-plugin</module>
     </modules>
 
     <properties>

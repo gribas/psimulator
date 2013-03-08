@@ -26,6 +26,10 @@ public interface OutstationPluginFactory {
 
     boolean requiresConfigurationString();
 
+    boolean hasUi();
+
+    void showUi();
+
     OutstationStackConfig getDefaultConfig();
 
     OutstationPlugin newOutstationInstance(String configuration);

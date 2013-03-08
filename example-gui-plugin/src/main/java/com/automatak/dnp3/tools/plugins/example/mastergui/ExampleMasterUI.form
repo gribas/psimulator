@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.automatak.dnp3.tools.plugins.example.master.ExampleMasterUI">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.automatak.dnp3.tools.plugins.example.mastergui.ExampleMasterUI">
   <grid id="27dc6" binding="panelMain" layout-manager="FormLayout">
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -126,7 +126,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="9b8bf" class="com.automatak.dnp3.tools.plugins.example.master.MeasTable" binding="binaryInputTable">
+                  <component id="9b8bf" class="com.automatak.dnp3.tools.plugins.example.mastergui.MeasTable" binding="binaryInputTable">
                     <constraints/>
                     <properties/>
                   </component>
@@ -151,7 +151,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="56c77" class="com.automatak.dnp3.tools.plugins.example.master.MeasTable" binding="analogInputTable">
+                  <component id="56c77" class="com.automatak.dnp3.tools.plugins.example.mastergui.MeasTable" binding="analogInputTable">
                     <constraints/>
                     <properties/>
                   </component>
@@ -176,7 +176,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="f7b63" class="com.automatak.dnp3.tools.plugins.example.master.MeasTable" binding="counterTable">
+                  <component id="f7b63" class="com.automatak.dnp3.tools.plugins.example.mastergui.MeasTable" binding="counterTable">
                     <constraints/>
                     <properties/>
                   </component>
@@ -201,7 +201,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="a7946" class="com.automatak.dnp3.tools.plugins.example.master.MeasTable" binding="binaryOutputStatusTable">
+                  <component id="a7946" class="com.automatak.dnp3.tools.plugins.example.mastergui.MeasTable" binding="binaryOutputStatusTable">
                     <constraints/>
                     <properties/>
                   </component>
@@ -226,7 +226,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="6cb78" class="com.automatak.dnp3.tools.plugins.example.master.MeasTable" binding="analogOutputStatusTable">
+                  <component id="6cb78" class="com.automatak.dnp3.tools.plugins.example.mastergui.MeasTable" binding="analogOutputStatusTable">
                     <constraints/>
                     <properties/>
                   </component>

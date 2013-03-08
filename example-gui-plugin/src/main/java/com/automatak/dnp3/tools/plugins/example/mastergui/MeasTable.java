@@ -16,7 +16,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example.master;
+package com.automatak.dnp3.tools.plugins.example.mastergui;
 
 import com.automatak.dnp3.BaseMeasurement;
 import com.automatak.dnp3.tools.pluginapi.ui.QualityConverter;

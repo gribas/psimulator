@@ -16,7 +16,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example.outstation;
+package com.automatak.dnp3.tools.plugins.example.outstationgui;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;

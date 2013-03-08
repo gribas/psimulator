@@ -16,14 +16,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example.master;
+package com.automatak.dnp3.tools.plugins.example.mastergui;
 
 import com.automatak.dnp3.CommandProcessor;
 import com.automatak.dnp3.DataObserver;
-import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
 
-public class ExampleMasterPlugin implements MasterPlugin {
+public class ExampleGuiMasterPlugin implements MasterPlugin {
 
     private final ExampleMasterUI form = new ExampleMasterUI("Example Master");
 

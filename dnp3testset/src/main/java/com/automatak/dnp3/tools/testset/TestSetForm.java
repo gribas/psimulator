@@ -25,6 +25,7 @@ import javax.xml.bind.Unmarshaller;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
+import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
@@ -46,7 +47,7 @@ public class TestSetForm {
         JFrame frame = new JFrame("Automatak Protocol Simulator");
         frame.setIconImage(StaticResources.dnpIcon);
         final TestSetForm form = new TestSetForm(mgr, config);
-        frame.setJMenuBar(form.getMenuBar());
+        frame.setJMenuBar(form.getMenuBar(config));
         frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -136,7 +137,7 @@ public class TestSetForm {
         startSplash();
     }
 
-    private JMenuBar getMenuBar()
+    private JMenuBar getMenuBar(PluginConfiguration config)
     {
         JMenuBar bar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
@@ -196,6 +197,22 @@ public class TestSetForm {
         });
         optionsMenu.add(editItem);
         bar.add(optionsMenu);
+        JMenu pluginsMenu = new JMenu("Plugin UI");
+        for(final OutstationPluginFactory fac: config.getOutstations())
+        {
+            if(fac.hasUi())
+            {
+                JMenuItem item = new JMenuItem(fac.getPluginName());
+                item.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        fac.showUi();
+                    }
+                });
+                pluginsMenu.add(item);
+            }
+        }
+        bar.add(pluginsMenu);
         return bar;
     }
 
