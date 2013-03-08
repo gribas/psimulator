@@ -192,10 +192,26 @@ public class TestSetForm {
                 JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
                 Unmarshaller m = context.createUnmarshaller();
                 XSimulatorConfig cfg = (XSimulatorConfig) m.unmarshal(file);
+                progressBarStatus.setMinimum(0);
+                progressBarStatus.setMaximum(cfg.getXChannel().size());
+                this.mainPanel.setEnabled(false);
+                final TestSetForm form = this;
                 commsTree.loadConfig(cfg, new XmlLoadListener() {
                     @Override
                     public void update(String status, int step) {
-
+                       textFieldStatus.setText(status);
+                       progressBarStatus.setValue(step + 1);
+                    }
+                    @Override
+                    public void complete()
+                    {
+                       SwingUtilities.invokeLater(new Runnable() {
+                           @Override
+                           public void run() {
+                               textFieldStatus.setText("complete");
+                               form.mainPanel.setEnabled(true);
+                           }
+                       });
                     }
                 });
             }
@@ -217,6 +233,8 @@ public class TestSetForm {
     private LogTable logTable;
     private JSplitPane splitPane;
     private CommsTree commsTree;
+    private JProgressBar progressBarStatus;
+    private JTextField textFieldStatus;
 
 
 }

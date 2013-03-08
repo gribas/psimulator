@@ -794,41 +794,69 @@ public class CommsTree extends JTree {
     public void loadConfig(final XSimulatorConfig config, final XmlLoadListener listener)
     {
         this.clear();
-        for(int i=0; i< config.getXChannel().size(); ++i)
-        {
-            XChannel channel = config.getXChannel().get(i);
-            if(channel.getXSerialChannel() == null)
-            {
-                if(channel.getXTCPClientChannel() == null)
-                {
-                    if(channel.getXTCPServerChannel() == null)
-                    {
+        SwingWorker<Void, Object> worker = new SwingWorker<Void, Object>() {
+            @Override
+            protected Void doInBackground() throws Exception {
 
+                for(int i=0; i< config.getXChannel().size(); ++i)
+                {
+                    final int iter = i;
+                    final XChannel channel = config.getXChannel().get(i);
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
+                        public void run() {
+                            String name = loadXChannel(channel);
+                            listener.update("Loaded configuration for channel: " + name, iter);
+                        }
+                    });
+                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.complete();
                     }
-                    else
-                    {
-                        XChannel.XTCPServerChannel server = config.getXChannel().get(i).getXTCPServerChannel();
-                        LogLevel level = XMLConversions.convert(server.getLevel());
-                        Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpServer(server.getId(), level, server.getRetry(), server.getIp(), server.getPort());
-                        this.addStacks(config.getXChannel().get(i).getXStack(), tuple.x, tuple.y);
-                    }
+                });
+                return null;
+            }
+        };
+        worker.execute();
+    }
+
+    private String loadXChannel(XChannel channel)
+    {
+        if(channel.getXSerialChannel() == null)
+        {
+            if(channel.getXTCPClientChannel() == null)
+            {
+                if(channel.getXTCPServerChannel() == null)
+                {
+                    return "";
                 }
                 else
                 {
-                    XChannel.XTCPClientChannel client = channel.getXTCPClientChannel();
-                    LogLevel level = XMLConversions.convert(client.getLevel());
-                    Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpClient(client.getId(), level, client.getRetry(), client.getIp(), client.getPort());
+                    XChannel.XTCPServerChannel server = channel.getXTCPServerChannel();
+                    LogLevel level = XMLConversions.convert(server.getLevel());
+                    Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpServer(server.getId(), level, server.getRetry(), server.getIp(), server.getPort());
                     this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+                    return server.getId();
                 }
             }
-            else {
-                XChannel.XSerialChannel sc = channel.getXSerialChannel();
-                SerialSettings s = XMLConversions.convert(sc);
-                LogLevel level = XMLConversions.convert(sc.getLevel());
-                Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addSerial(sc.getPort(), level, sc.getRetry(), s);
+            else
+            {
+                XChannel.XTCPClientChannel client = channel.getXTCPClientChannel();
+                LogLevel level = XMLConversions.convert(client.getLevel());
+                Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addTcpClient(client.getId(), level, client.getRetry(), client.getIp(), client.getPort());
                 this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+                return client.getId();
             }
-            listener.update("update", i);
+        }
+        else {
+            XChannel.XSerialChannel sc = channel.getXSerialChannel();
+            SerialSettings s = XMLConversions.convert(sc);
+            LogLevel level = XMLConversions.convert(sc.getLevel());
+            Tuple<DefaultMutableTreeNode, ChannelNode> tuple = this.addSerial(sc.getPort(), level, sc.getRetry(), s);
+            this.addStacks(channel.getXStack(), tuple.x, tuple.y);
+            return s.port;
         }
     }
 
