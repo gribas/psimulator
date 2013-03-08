@@ -70,6 +70,16 @@ public class SimulatorOptions {
         this.logFile = logFile;
     }
 
+    XSimulatorOptions getOptions()
+    {
+        XSimulatorOptions options = new XSimulatorOptions();
+        options.setLogFile(logFile.toString());
+        options.setLogToFile(logToFile);
+        options.setLogToTable(logToTable);
+        options.setMaxLogTableSize(maxLogTableSize);
+        return options;
+    }
+
     public void configure(XSimulatorOptions options)
     {
         this.maxLogTableSize = options.getMaxLogTableSize();

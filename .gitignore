@@ -2,3 +2,4 @@
 .idea
 /plugins
 **/target
+simulator.log

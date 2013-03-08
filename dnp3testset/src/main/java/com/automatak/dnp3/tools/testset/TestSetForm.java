@@ -152,7 +152,9 @@ public class TestSetForm {
                         JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
                         Marshaller m = context.createMarshaller();
                         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                        m.marshal(form.commsTree.getConfig(), file);
+                        XSimulatorConfig cfg = form.commsTree.getConfig();
+                        cfg.setXSimulatorOptions(options.getOptions());
+                        m.marshal(cfg, file);
                     }
                     catch(Exception ex)
                     {
