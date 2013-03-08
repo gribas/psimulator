@@ -16,22 +16,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.pluginapi;
+package com.automatak.dnp3.tools.pluginapi.ui;
 
-import com.automatak.dnp3.BinaryOutputStatusQuality;
+import com.automatak.dnp3.AnalogOutputStatusQuality;
 
-public class BinaryOutputStatusQualityConverter implements QualityConverter {
+public class AnalogOutputStatusQualityConverter implements QualityConverter {
 
-    public static BinaryOutputStatusQualityConverter getInstance() {
+    public static AnalogOutputStatusQualityConverter getInstance() {
         return instance;
     }
 
-    private static final BinaryOutputStatusQualityConverter instance = new BinaryOutputStatusQualityConverter();
+    private static final AnalogOutputStatusQualityConverter instance = new AnalogOutputStatusQualityConverter();
 
-    private BinaryOutputStatusQualityConverter()
+    private AnalogOutputStatusQualityConverter()
     {}
 
-    private static String getQualityPneumonic(BinaryOutputStatusQuality quality)
+    private static String getAnalogQualityPneumonic(AnalogOutputStatusQuality quality)
     {
         switch(quality)
         {
@@ -43,14 +43,14 @@ public class BinaryOutputStatusQualityConverter implements QualityConverter {
                 return "Cl";
             case REMOTE_FORCED_DATA:
                 return "Rf";
-            case LOCAL_FORCED_DATA:
-                return "Lf";
-            case STATE:
-                return "S";
             case RESERVED_1:
-                return "V1";
+               return "V1";
             case RESERVED_2:
                 return "V2";
+            case RESERVED_3:
+                return "V3";
+            case RESERVED_4:
+                return "V4";
             default:
                 return "INVALID";
         }
@@ -59,9 +59,9 @@ public class BinaryOutputStatusQualityConverter implements QualityConverter {
     public String getQualitySummary(byte quality)
     {
         StringBuilder sb = new StringBuilder();
-        for(BinaryOutputStatusQuality q: BinaryOutputStatusQuality.getValuesInBitField(quality))
+        for(AnalogOutputStatusQuality q: AnalogOutputStatusQuality.getValuesInBitField(quality))
         {
-            sb.append(getQualityPneumonic(q));
+            sb.append(getAnalogQualityPneumonic(q));
         }
         return sb.toString();
     }
@@ -69,7 +69,7 @@ public class BinaryOutputStatusQualityConverter implements QualityConverter {
     public String getQualityDescription(byte quality)
     {
         StringBuilder sb = new StringBuilder();
-        for(BinaryOutputStatusQuality q: BinaryOutputStatusQuality.getValuesInBitField(quality))
+        for(AnalogOutputStatusQuality q: AnalogOutputStatusQuality.getValuesInBitField(quality))
         {
             sb.append(q.toString());
             sb.append("\n");

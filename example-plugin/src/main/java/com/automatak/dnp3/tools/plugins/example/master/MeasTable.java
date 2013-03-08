@@ -19,7 +19,7 @@
 package com.automatak.dnp3.tools.plugins.example.master;
 
 import com.automatak.dnp3.BaseMeasurement;
-import com.automatak.dnp3.tools.pluginapi.QualityConverter;
+import com.automatak.dnp3.tools.pluginapi.ui.QualityConverter;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
 
 import javax.swing.*;

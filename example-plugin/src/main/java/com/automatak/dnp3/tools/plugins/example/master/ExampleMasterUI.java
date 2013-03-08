@@ -20,6 +20,7 @@ package com.automatak.dnp3.tools.plugins.example.master;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.tools.pluginapi.*;
+import com.automatak.dnp3.tools.pluginapi.ui.*;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -276,7 +277,7 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
             @Override
             public void run() {
                 String value = Double.toString(meas.getValue());
-                analogInputTable.update(value, meas,AnalogOutputStatusQualityConverter.getInstance(), index);
+                analogInputTable.update(value, meas, AnalogOutputStatusQualityConverter.getInstance(), index);
             }
         });
     }
