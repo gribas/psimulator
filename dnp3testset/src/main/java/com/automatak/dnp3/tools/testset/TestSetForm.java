@@ -28,6 +28,7 @@ import com.automatak.dnp3.impl.DNP3ManagerFactory;
 import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
+import com.automatak.dnp3.tools.testset.ui.OptionsDialog;
 import com.automatak.dnp3.tools.xml.XSimulatorConfig;
 
 import java.awt.event.ActionEvent;
@@ -178,6 +179,22 @@ public class TestSetForm {
         });
         fileMenu.add(loadFile);
         bar.add(fileMenu);
+        JMenu optionsMenu = new JMenu("Options");
+        JMenuItem editItem = new JMenuItem("Edit");
+        editItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OptionsDialog dialog = new OptionsDialog(options);
+                dialog.pack();
+                dialog.setVisible(true);
+                if(dialog.isApproved())
+                {
+                    form.setOptions(dialog.getOptions());
+                }
+            }
+        });
+        optionsMenu.add(editItem);
+        bar.add(optionsMenu);
         return bar;
     }
 
