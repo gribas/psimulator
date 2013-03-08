@@ -215,8 +215,6 @@
         </xs:complexType>
     </xs:element>
 
-
-
     <xs:element name="XMaster">
         <xs:complexType>
             <xs:attribute name="allowTimeSync" type="xs:boolean" />
@@ -228,11 +226,23 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="XSimulatorOptions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="maxLogTableSize" type="xs:int" default="500" />
+                <xs:element name="logToTable" type="xs:boolean" default="true" />
+                <xs:element name="logToFile" type="xs:boolean" default="false" />
+                <xs:element name="logFile" type="xs:string" default="./Simulator.log"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <!-- the root element -->
     <xs:element name="XSimulatorConfig">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="XChannel" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="XSimulatorOptions" minOccurs="1" maxOccurs="1" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>

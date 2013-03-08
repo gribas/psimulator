@@ -29,6 +29,7 @@ public class LogTable extends JTable implements LogSubscriber {
 
     private final static String[] tableColumns = new String[]{"timestamp", "severity", "logger", "message"};
     private final DefaultTableModel model = new MyTableModel();
+    private int maxTableSize = 500;
 
     private class MyTableModel extends DefaultTableModel {
 
@@ -40,6 +41,26 @@ public class LogTable extends JTable implements LogSubscriber {
         public boolean isCellEditable(int row, int column)
         {
             return false;
+        }
+    }
+
+    public void setMaxTableSize(int maxTableSize)
+    {
+        assert(maxTableSize > 0);
+        this.maxTableSize = maxTableSize;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                checkTableSize();
+            }
+        });
+    }
+
+    private void checkTableSize()
+    {
+        while(model.getRowCount() > maxTableSize)
+        {
+            model.removeRow(0); //delete oldest log entries
         }
     }
 

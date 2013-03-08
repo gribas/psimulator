@@ -25,7 +25,6 @@ import javax.xml.bind.Unmarshaller;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
-import com.automatak.dnp3.mock.PrintingLogSubscriber;
 import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
@@ -44,7 +43,7 @@ public class TestSetForm {
         final DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
         JFrame frame = new JFrame("Automatak Protocol Simulator");
         frame.setIconImage(StaticResources.dnpIcon);
-        TestSetForm form = new TestSetForm(mgr, config);
+        final TestSetForm form = new TestSetForm(mgr, config);
         frame.setJMenuBar(form.getMenuBar());
         frame.setContentPane(form.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,6 +55,7 @@ public class TestSetForm {
             @Override
             public void windowClosing(WindowEvent e) {
                 mgr.shutdown();
+                form.cleanup();
             }
         });
     }
@@ -109,8 +109,6 @@ public class TestSetForm {
     {
         PluginLoader loader = new PluginLoader();
         PluginConfiguration config = loader.loadPlugins(listener);
-        //config.getOutstations().add(new ExampleOutstationPluginFactory());
-        //config.getMasters().add(new ExampleMasterPluginFactory());
         return config;
     }
 
@@ -181,6 +179,12 @@ public class TestSetForm {
         return bar;
     }
 
+    private void setOptions(SimulatorOptions options)
+    {
+        logToFile.setEnabled(options.isLogToFile());
+        logToFile.changeFiles(options.getLogFile());
+    }
+
     public void showLoadDialog()
     {
         JFileChooser chooser = new JFileChooser();
@@ -192,9 +196,10 @@ public class TestSetForm {
                 JAXBContext context = JAXBContext.newInstance(XSimulatorConfig.class);
                 Unmarshaller m = context.createUnmarshaller();
                 XSimulatorConfig cfg = (XSimulatorConfig) m.unmarshal(file);
+                this.options.configure(cfg.getXSimulatorOptions());
+                this.setOptions(options);
                 progressBarStatus.setMinimum(0);
                 progressBarStatus.setMaximum(cfg.getXChannel().size());
-                this.mainPanel.setEnabled(false);
                 final TestSetForm form = this;
                 commsTree.loadConfig(cfg, new XmlLoadListener() {
                     @Override
@@ -209,7 +214,6 @@ public class TestSetForm {
                            @Override
                            public void run() {
                                textFieldStatus.setText("complete");
-                               form.mainPanel.setEnabled(true);
                            }
                        });
                     }
@@ -225,8 +229,16 @@ public class TestSetForm {
 
     public TestSetForm(DNP3Manager manager, PluginConfiguration config)
     {
+        options.setLogToFile(true);
         manager.addLogSubscriber(logTable);
+        manager.addLogSubscriber(logToFile);
         this.commsTree.configure(manager, config);
+        setOptions(options);
+    }
+
+    public void cleanup()
+    {
+        logToFile.stop();
     }
 
     private JPanel mainPanel;
@@ -235,6 +247,8 @@ public class TestSetForm {
     private CommsTree commsTree;
     private JProgressBar progressBarStatus;
     private JTextField textFieldStatus;
+    private SimulatorOptions options = new SimulatorOptions();
+    private final LogToFile logToFile = new LogToFile();
 
 
 }
