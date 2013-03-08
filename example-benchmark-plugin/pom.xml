@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>example-simple-plugin</artifactId>
+    <artifactId>example-benchmark-plugin</artifactId>
 
     <build>
         <plugins>
@@ -21,13 +21,27 @@
                     <archive>
                         <manifestEntries>
                             <outstationPluginFactoryClass>
-                                com.automatak.dnp3.tools.plugins.example.outstationgui.ExampleSimpleOutstationPluginFactory
+                                com.automatak.dnp3.tools.plugins.example.outstation.BenchmarkOutstationPluginFactory
                             </outstationPluginFactoryClass>
-                            <masterPluginFactoryClass>
-                                com.automatak.dnp3.tools.plugins.example.mastergui.ExampleSimpleMasterPluginFactory
-                            </masterPluginFactoryClass>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>ideauidesigner-maven-plugin</artifactId>
+                <version>${maven-ideaui-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>javac2</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <fork>true</fork>
+                    <debug>true</debug>
+                    <failOnError>true</failOnError>
                 </configuration>
             </plugin>
         </plugins>

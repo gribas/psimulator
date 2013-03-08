@@ -18,7 +18,6 @@
  */
 package com.automatak.dnp3.tools.plugins.example.outstation;
 
-import com.automatak.dnp3.DataObserver;
 import com.automatak.dnp3.DatabaseConfig;
 import com.automatak.dnp3.EventBinaryResponse;
 import com.automatak.dnp3.OutstationStackConfig;
@@ -32,7 +31,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
+public class BenchmarkOutstationPluginFactory implements OutstationPluginFactory {
 
     private interface Message {}
     public class ShutdownMessage implements Message {}
@@ -47,14 +46,15 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
     }
 
     private final static DatabaseConfig database = new DatabaseConfig(10,10,0,0,0);
-    private final List<ExampleOutstationPlugin> plugins = new LinkedList<ExampleOutstationPlugin>();
+    private final List<BenchmarkOutstationPlugin> plugins = new LinkedList<BenchmarkOutstationPlugin>();
     private final BlockingQueue<Message> queue = new LinkedBlockingQueue<Message>();
     private final Random rand = new Random();
-    private final ExampleOutstationFactoryUI form = new ExampleOutstationFactoryUI(this);
+    private final BenchmarkOutstationFactoryUI form = new BenchmarkOutstationFactoryUI(this);
     private long sleepMs = 1000;
+    private boolean isEnabled = false;
     private Thread thread = null;
 
-    public ExampleOutstationPluginFactory()
+    public BenchmarkOutstationPluginFactory()
     {
         form.pack();
     }
@@ -73,17 +73,21 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
 
     public void setUpdateRate(int updatesPerSec)
     {
-        if(updatesPerSec != 0) {
+        if(updatesPerSec == 0) {
+            this.sendMsg(new ChangeUpdateRate(-1));
+        }
+        else {
             int sleepms = 1000/updatesPerSec;
             this.sendMsg(new ChangeUpdateRate(sleepms));
         }
     }
 
-    public void register(ExampleOutstationPlugin plugin)
+    public void register(BenchmarkOutstationPlugin plugin)
     {
         synchronized(plugins)
         {
             plugins.add(plugin);
+            this.form.setNumOutstations(plugins.size());
             if(thread == null) {
                 thread = new Thread(new Runnable() {
                     @Override
@@ -96,11 +100,12 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
         }
     }
 
-    public void unregister(ExampleOutstationPlugin plugin)
+    public void unregister(BenchmarkOutstationPlugin plugin)
     {
         synchronized(plugins)
         {
             plugins.remove(plugin);
+            this.form.setNumOutstations(plugins.size());
             if(thread != null && plugins.isEmpty())
             {
                 sendMsg(new ShutdownMessage());
@@ -119,13 +124,15 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
     private void updateValues()
     {
        long timestamp = System.currentTimeMillis();
+       int count = 0;
        synchronized(plugins)
        {
-            for(ExampleOutstationPlugin plugin: plugins)
+            for(BenchmarkOutstationPlugin plugin: plugins)
             {
-               plugin.updateData(rand, timestamp);
+               count += plugin.updateData(rand, timestamp);
             }
        }
+       form.addUpdates(count);
     }
 
     private void sendMsg(Message m)
@@ -146,13 +153,21 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
             try {
                Message msg = queue.poll(sleepMs, TimeUnit.MILLISECONDS);
                if(msg == null) {
-                   updateValues();
+                   if(sleepMs >= 0) updateValues();
                } else {
                    if(ShutdownMessage.class.isInstance(msg))
                    {
                        return;
                    } else if(ChangeUpdateRate.class.isInstance(msg)) {
-                       sleepMs = ((ChangeUpdateRate) msg).sleepMs;
+                       long sleep = ((ChangeUpdateRate) msg).sleepMs;
+                       if(sleep < 0) {
+                           isEnabled = false;
+                           sleepMs = 60000;
+                       }
+                       else {
+                         sleepMs = sleep;
+                           isEnabled = true;
+                       }
                    } else {
                        // bad msg type
                    }
@@ -171,7 +186,7 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
     @Override
     public String getPluginName()
     {
-        return "Example Outstation";
+        return "Benchmark Outstation";
     }
 
     @Override
@@ -191,7 +206,7 @@ public class ExampleOutstationPluginFactory implements OutstationPluginFactory {
     @Override
     public OutstationPlugin newOutstationInstance(String configuration)
     {
-        return new ExampleOutstationPlugin(this, database);
+        return new BenchmarkOutstationPlugin(this, database);
     }
 
 }

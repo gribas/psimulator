@@ -22,33 +22,35 @@ import com.automatak.dnp3.*;
 import com.automatak.dnp3.mock.SuccessCommandHandler;
 import com.automatak.dnp3.tools.pluginapi.OutstationPlugin;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
-class ExampleOutstationPlugin implements OutstationPlugin {
+class BenchmarkOutstationPlugin implements OutstationPlugin {
 
     private DataObserver publisher = null;
-    private final ExampleOutstationPluginFactory factory;
+    private final BenchmarkOutstationPluginFactory factory;
     private final DatabaseConfig db;
 
-    public ExampleOutstationPlugin(ExampleOutstationPluginFactory factory, DatabaseConfig db)
+    public BenchmarkOutstationPlugin(BenchmarkOutstationPluginFactory factory, DatabaseConfig db)
     {
         this.factory = factory;
         this.db = db;
     }
 
-    public void updateData(Random rand, long timestamp)
+    public int updateData(Random rand, long timestamp)
     {
+        int count = 0;
         publisher.start();
         for(int i=0; i<db.binaryInputs.size(); ++ i)
         {
             publisher.update(new BinaryInput(rand.nextBoolean(), BinaryInputQuality.ONLINE.toByte(), timestamp), i);
+            ++count;
         }
         for(int i=0; i<db.analogInputs.size(); ++i) {
             publisher.update(new AnalogInput(rand.nextInt(1000), AnalogInputQuality.ONLINE.toByte(), timestamp), i);
+            ++count;
         }
         publisher.end();
+        return count;
     }
 
     @Override
