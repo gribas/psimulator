@@ -36,7 +36,9 @@ public class GenerateExampleConfigs {
 
     public static void main(String[] args) throws JAXBException
     {
-       XSimulatorConfig cfg = getPairedConfig(3000);
+       XSimulatorConfig cfg = getPairedConfig(500);
+       SimulatorOptions options = new SimulatorOptions();
+       cfg.setXSimulatorOptions(options.getOptions());
        JAXBContext ctx = JAXBContext.newInstance(XSimulatorConfig.class);
        Marshaller m = ctx.createMarshaller();
        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

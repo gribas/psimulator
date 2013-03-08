@@ -29,6 +29,7 @@ import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
 import com.automatak.dnp3.tools.pluginapi.StaticResources;
 import com.automatak.dnp3.tools.testset.ui.OptionsDialog;
+import com.automatak.dnp3.tools.xml.SimulatorOptions;
 import com.automatak.dnp3.tools.xml.XSimulatorConfig;
 
 import java.awt.event.ActionEvent;
@@ -208,7 +209,7 @@ public class TestSetForm {
 
     public void showLoadDialog()
     {
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser("./config");
         int ret = chooser.showOpenDialog(this.commsTree);
         if(ret == JFileChooser.APPROVE_OPTION)
         {

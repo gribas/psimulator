@@ -16,7 +16,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.testset;
+package com.automatak.dnp3.tools.xml;
 
 import com.automatak.dnp3.tools.xml.XSimulatorOptions;
 
@@ -40,7 +40,7 @@ public class SimulatorOptions {
         return maxLogTableSize;
     }
 
-    private int maxLogTableSize = 500;
+    private int maxLogTableSize = 5000;
     private boolean logToTable = true;
     private boolean logToFile = false;
 
@@ -70,7 +70,7 @@ public class SimulatorOptions {
         this.logFile = logFile;
     }
 
-    XSimulatorOptions getOptions()
+    public XSimulatorOptions getOptions()
     {
         XSimulatorOptions options = new XSimulatorOptions();
         options.setLogFile(logFile.toString());
