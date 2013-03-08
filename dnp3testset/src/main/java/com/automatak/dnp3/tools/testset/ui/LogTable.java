@@ -31,6 +31,12 @@ public class LogTable extends JTable implements LogSubscriber {
     private final DefaultTableModel model = new MyTableModel();
     private int maxTableSize = 500;
 
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    private boolean isEnabled = true;
+
     private class MyTableModel extends DefaultTableModel {
 
         public MyTableModel() {
@@ -72,14 +78,16 @@ public class LogTable extends JTable implements LogSubscriber {
     @Override
     public void onLogEntry(final LogEntry entry)
     {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                String timestamp = StaticResources.defaulUTCDateFormat.format(entry.getTimestamp());
-                String[] row = new String[]{timestamp, entry.getLogLevel().toString(), entry.getLoggerName(), entry.getMessage()};
-                model.addRow(row);
-            }
-        });
-
+        if(isEnabled) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    String timestamp = StaticResources.defaulUTCDateFormat.format(entry.getTimestamp());
+                    String[] row = new String[]{timestamp, entry.getLogLevel().toString(), entry.getLoggerName(), entry.getMessage()};
+                    model.addRow(row);
+                    checkTableSize();
+                }
+            });
+        }
     }
 }

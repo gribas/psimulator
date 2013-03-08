@@ -185,6 +185,8 @@ public class TestSetForm {
     {
         logToFile.setEnabled(options.isLogToFile());
         logToFile.changeFiles(options.getLogFile());
+        logTable.setMaxTableSize(options.getMaxLogTableSize());
+        logTable.setEnabled(options.isLogToTable());
     }
 
     public void showLoadDialog()
