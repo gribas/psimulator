@@ -29,6 +29,12 @@ public class ExampleGuiOutstationPluginFactory implements OutstationPluginFactor
     private final static DatabaseConfig database = new DatabaseConfig(2,2,0,0,0);
 
     @Override
+    public void shutdown()
+    {
+
+    }
+
+    @Override
     public String getPluginName()
     {
         return "Example GUI Outstation";

@@ -100,6 +100,19 @@ public class BenchmarkOutstationPluginFactory implements OutstationPluginFactory
         }
     }
 
+    @Override
+    public void shutdown()
+    {
+        synchronized (plugins)
+        {
+            if(thread != null)
+            {
+               doThreadShutdown();
+            }
+            this.form.setVisible(false);
+        }
+    }
+
     public void unregister(BenchmarkOutstationPlugin plugin)
     {
         synchronized(plugins)
@@ -108,16 +121,21 @@ public class BenchmarkOutstationPluginFactory implements OutstationPluginFactory
             this.form.setNumOutstations(plugins.size());
             if(thread != null && plugins.isEmpty())
             {
-                sendMsg(new ShutdownMessage());
-                try {
-                    thread.join();
-                    thread = null;
-                }
-                catch(InterruptedException ex)
-                {
-                    System.err.println("Interrupted while joining");
-                }
+                doThreadShutdown();
             }
+        }
+    }
+
+    private void doThreadShutdown()
+    {
+        sendMsg(new ShutdownMessage());
+        try {
+            thread.join();
+            thread = null;
+        }
+        catch(InterruptedException ex)
+        {
+            System.err.println("Interrupted while joining");
         }
     }
 
@@ -153,7 +171,7 @@ public class BenchmarkOutstationPluginFactory implements OutstationPluginFactory
             try {
                Message msg = queue.poll(sleepMs, TimeUnit.MILLISECONDS);
                if(msg == null) {
-                   if(sleepMs >= 0) updateValues();
+                   if(isEnabled) updateValues();
                } else {
                    if(ShutdownMessage.class.isInstance(msg))
                    {

@@ -41,7 +41,7 @@ import java.io.File;
 
 public class TestSetForm {
 
-    private static void startApplication(PluginConfiguration config)
+    private static void startApplication(final PluginConfiguration config)
     {
         final DNP3Manager mgr = DNP3ManagerFactory.createDNP3ManagerWithDefaultConcurrency();
         JFrame frame = new JFrame("Automatak Protocol Simulator");
@@ -57,6 +57,7 @@ public class TestSetForm {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                for(OutstationPluginFactory fac: config.getOutstations()) fac.shutdown();
                 mgr.shutdown();
                 form.cleanup();
             }

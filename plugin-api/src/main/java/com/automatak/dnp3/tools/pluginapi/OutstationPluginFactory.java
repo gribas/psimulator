@@ -26,6 +26,8 @@ public interface OutstationPluginFactory {
 
     boolean requiresConfigurationString();
 
+    void shutdown();
+
     boolean hasUi();
 
     void showUi();
