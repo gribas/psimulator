@@ -277,7 +277,7 @@ public class ExampleMasterUI extends JFrame implements DataObserver {
             @Override
             public void run() {
                 String value = Double.toString(meas.getValue());
-                analogInputTable.update(value, meas, AnalogOutputStatusQualityConverter.getInstance(), index);
+                analogOutputStatusTable.update(value, meas, AnalogOutputStatusQualityConverter.getInstance(), index);
             }
         });
     }
