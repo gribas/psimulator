@@ -45,7 +45,7 @@ public class BenchmarkOutstationPluginFactory implements OutstationPluginFactory
         }
     }
 
-    private final static DatabaseConfig database = new DatabaseConfig(10,10,0,0,0);
+    private final static DatabaseConfig database = new DatabaseConfig(500,500,500,0,0);
     private final List<BenchmarkOutstationPlugin> plugins = new LinkedList<BenchmarkOutstationPlugin>();
     private final BlockingQueue<Message> queue = new LinkedBlockingQueue<Message>();
     private final Random rand = new Random();

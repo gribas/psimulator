@@ -25,6 +25,7 @@ import javax.xml.bind.Unmarshaller;
 
 import com.automatak.dnp3.*;
 import com.automatak.dnp3.impl.DNP3ManagerFactory;
+import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 import com.automatak.dnp3.tools.pluginapi.OutstationPluginFactory;
 import com.automatak.dnp3.tools.testset.ui.CommsTree;
 import com.automatak.dnp3.tools.testset.ui.LogTable;
@@ -58,6 +59,7 @@ public class TestSetForm {
             @Override
             public void windowClosing(WindowEvent e) {
                 for(OutstationPluginFactory fac: config.getOutstations()) fac.shutdown();
+                for(MasterPluginFactory fac: config.getMasters()) fac.shutdown();
                 mgr.shutdown();
                 form.cleanup();
             }
@@ -200,6 +202,20 @@ public class TestSetForm {
         bar.add(optionsMenu);
         JMenu pluginsMenu = new JMenu("Plugin UI");
         for(final OutstationPluginFactory fac: config.getOutstations())
+        {
+            if(fac.hasUi())
+            {
+                JMenuItem item = new JMenuItem(fac.getPluginName());
+                item.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        fac.showUi();
+                    }
+                });
+                pluginsMenu.add(item);
+            }
+        }
+        for(final MasterPluginFactory fac: config.getMasters())
         {
             if(fac.hasUi())
             {

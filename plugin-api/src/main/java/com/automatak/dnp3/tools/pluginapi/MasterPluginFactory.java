@@ -24,10 +24,16 @@ public interface MasterPluginFactory {
 
     String getPluginName();
 
+    void shutdown();
+
     boolean requiresConfigurationString();
 
     MasterStackConfig getDefaultConfig();
 
     MasterPlugin newMasterInstance(String configuration);
+
+    boolean hasUi();
+
+    void showUi();
 
 }

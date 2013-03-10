@@ -23,6 +23,9 @@
                             <outstationPluginFactoryClass>
                                 com.automatak.dnp3.tools.plugins.example.outstation.BenchmarkOutstationPluginFactory
                             </outstationPluginFactoryClass>
+                            <masterPLuginFactoryClass>
+                                com.automatak.dnp3.tools.plugins.example.master.BenchmarkMasterPluginFactory
+                            </masterPLuginFactoryClass>
                         </manifestEntries>
                     </archive>
                 </configuration>

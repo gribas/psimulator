@@ -16,57 +16,80 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.automatak.dnp3.tools.plugins.example.mastergui;
+package com.automatak.dnp3.tools.plugins.example.master;
 
 import com.automatak.dnp3.MasterStackConfig;
 import com.automatak.dnp3.tools.pluginapi.MasterPlugin;
 import com.automatak.dnp3.tools.pluginapi.MasterPluginFactory;
 
+public class BenchmarkMasterPluginFactory implements MasterPluginFactory {
 
-public class ExampleGuiMasterPluginFactory implements MasterPluginFactory {
+    private final BenchmarkMasterFactoryUI form = new BenchmarkMasterFactoryUI();
 
-    @Override
-    public boolean hasUi()
+    public void register(BenchmarkMasterPlugin plugin)
     {
-        return false;
+        form.addOutstations();
     }
 
-    @Override
-    public void showUi()
+    public void unregister(BenchmarkMasterPlugin plugin)
     {
+        form.removeOutstations();
+    }
 
+    public void onTransaction(int count)
+    {
+        form.doTx(count);
+    }
+
+    public BenchmarkMasterPluginFactory()
+    {
+        form.pack();
     }
 
     @Override
     public void shutdown()
     {
-
+        form.setVisible(false);
     }
 
     @Override
     public String getPluginName()
     {
-        return "Example GUI Master";
-    }
-
-    @Override
-    public MasterStackConfig getDefaultConfig()
-    {
-        MasterStackConfig config = new MasterStackConfig();
-        config.masterConfig.enableUnsol = true;
-        config.masterConfig.doUnsolOnStartup = true;
-        return config;
+        return "Benchmark Master";
     }
 
     @Override
     public boolean requiresConfigurationString()
     {
-       return false;
+        return false;
+    }
+
+    @Override
+    public MasterStackConfig getDefaultConfig()
+    {
+        MasterStackConfig config =  new MasterStackConfig();
+        config.masterConfig.enableUnsol = true;
+        config.masterConfig.doUnsolOnStartup = true;
+        config.masterConfig.integrityRateMs = -1;
+        return config;
+
     }
 
     @Override
     public MasterPlugin newMasterInstance(String configuration)
     {
-        return new ExampleGuiMasterPlugin();
+        return new BenchmarkMasterPlugin(this);
+    }
+
+    @Override
+    public boolean hasUi()
+    {
+        return true;
+    }
+
+    @Override
+    public void showUi()
+    {
+         form.setVisible(true);
     }
 }
