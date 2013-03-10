@@ -44,9 +44,9 @@
         </constraints>
         <properties>
           <majorTickSpacing value="25"/>
-          <maximum value="100"/>
+          <maximum value="10"/>
           <minimum value="0"/>
-          <minorTickSpacing value="5"/>
+          <minorTickSpacing value="1"/>
           <paintLabels value="true"/>
           <paintTicks value="true"/>
           <paintTrack value="true"/>

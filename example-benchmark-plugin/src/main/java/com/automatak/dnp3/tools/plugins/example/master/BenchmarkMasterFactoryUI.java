@@ -34,6 +34,9 @@ public class BenchmarkMasterFactoryUI extends JFrame {
     private int numMeasurements = 0;
     private int numTx = 0;
 
+    private long lastSample = 0;
+    private int lastCount = 0;
+
     public void addOutstations()
     {
         SwingUtilities.invokeLater(new Runnable() {
@@ -63,8 +66,19 @@ public class BenchmarkMasterFactoryUI extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                long ms = System.currentTimeMillis();
                 numTx += 1;
                 numMeasurements += updates;
+                long deltaT = ms - lastSample;
+                if(deltaT > 1000)
+                {
+                    lastSample = ms;
+                    int deltaM = numMeasurements - lastCount;
+                    lastCount = numMeasurements;
+                    long rate = (deltaM / deltaT) * 1000;
+                    textFieldMeasPerSec.setText(Long.toString(rate));
+                }
+
                 updateTextFields();
             }
         });
@@ -73,7 +87,6 @@ public class BenchmarkMasterFactoryUI extends JFrame {
     private void updateTextFields()
     {
         textFieldNumMeasurements.setText(Integer.toString(numMeasurements));
-        textFieldMeasPerSec.setText(Integer.toString(0));
         textFieldNumOutstations.setText(Integer.toString(numOutstations));
         textFieldNumTx.setText(Integer.toString(numTx));
     }

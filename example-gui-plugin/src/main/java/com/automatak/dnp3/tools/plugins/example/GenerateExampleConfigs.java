@@ -54,72 +54,16 @@ public class GenerateExampleConfigs {
         for(int i=0; i<pairs; ++i)
         {
            int port = 20000 + i;
-           XChannel client = getTcpClient(port);
-           XChannel server = getTcpServer(port);
-           client.getXStack().add(getMasterStack(i, mfac));
-           server.getXStack().add(getOutstationStack(i, ofac));
+           XChannel client = ConfigGenerator.getTcpClient(port);
+           XChannel server = ConfigGenerator.getTcpServer(port);
+           client.getXStack().add(ConfigGenerator.getMasterStack(i, mfac.getPluginName(), mfac.getDefaultConfig()));
+           server.getXStack().add(ConfigGenerator.getOutstationStack(i, ofac.getPluginName(), ofac.getDefaultConfig()));
            config.getXChannel().add(client);
            config.getXChannel().add(server);
         }
         return config;
     }
 
-    static XStack getMasterStack(int i, MasterPluginFactory plugin)
-    {
-        XStack stack = new XStack();
-        XStack.XMasterStack s = new XStack.XMasterStack();
-        MasterStackConfig cfg = plugin.getDefaultConfig();
-        cfg.masterConfig.integrityRateMs = 5000;
-        s.setId("master" + i);
-        s.setLevel(XLogLevel.INFO);
-        s.setPlugin(plugin.getPluginName());
-        s.setXLinkLayer(XMLConversions.convert(cfg.linkConfig));
-        s.setXAppLayer(XMLConversions.convert(cfg.appConfig));
-        s.setXMaster(XMLConversions.convert(cfg.masterConfig));
-        stack.setXMasterStack(s);
-        return stack;
-    }
-
-    static XStack getOutstationStack(int i, OutstationPluginFactory plugin)
-    {
-        XStack stack = new XStack();
-        XStack.XOutstationStack s = new XStack.XOutstationStack();
-        OutstationStackConfig cfg = plugin.getDefaultConfig();
-        s.setId("outstation" + i);
-        s.setLevel(XLogLevel.INFO);
-        s.setPlugin(plugin.getPluginName());
-        s.setXLinkLayer(XMLConversions.convert(cfg.linkConfig));
-        s.setXAppLayer(XMLConversions.convert(cfg.appConfig));
-        s.setXOutstation(XMLConversions.convert(cfg.outstationConfig));
-        stack.setXOutstationStack(s);
-        return stack;
-    }
-
-    static XChannel getTcpClient(int port)
-    {
-        XChannel channel = new XChannel();
-        XChannel.XTCPClientChannel client = new XChannel.XTCPClientChannel();
-        client.setId("port: " + port);
-        client.setIp("127.0.0.1");
-        client.setLevel(XLogLevel.INFO);
-        client.setPort(port);
-        client.setRetry(5000L);
-        channel.setXTCPClientChannel(client);
-        return channel;
-    }
-
-    static XChannel getTcpServer(int port)
-    {
-        XChannel channel = new XChannel();
-        XChannel.XTCPServerChannel server = new XChannel.XTCPServerChannel();
-        server.setId("port: " + port);
-        server.setIp("0.0.0.0");
-        server.setLevel(XLogLevel.INFO);
-        server.setPort(port);
-        server.setRetry(5000L);
-        channel.setXTCPServerChannel(server);
-        return channel;
-    }
 
 
 
