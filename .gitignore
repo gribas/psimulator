@@ -3,3 +3,8 @@
 /plugins
 **/target
 simulator.log
+winstallerx64-SetupFiles/
+winstallerx64-cache/
+winstallerx86-SetupFiles/
+winstallerx86-cache/
+
