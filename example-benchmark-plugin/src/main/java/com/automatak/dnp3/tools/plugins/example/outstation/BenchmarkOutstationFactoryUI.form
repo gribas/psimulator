@@ -43,7 +43,8 @@
           <forms defaultalign-horz="false"/>
         </constraints>
         <properties>
-          <majorTickSpacing value="25"/>
+          <inverted value="false"/>
+          <majorTickSpacing value="10"/>
           <maximum value="10"/>
           <minimum value="0"/>
           <minorTickSpacing value="1"/>

@@ -96,6 +96,7 @@ public class BenchmarkMasterFactoryUI extends JFrame {
         setResizable(false);
         setIconImage(StaticResources.dnpIcon);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.setTitle("Benchmark MasterFactory UI");
 
         updateTextFields();
     }
