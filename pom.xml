@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
 
     <name>opendnp3 testset</name>
-    <url>http://www.github.com/automatakllc/dnp3tools</url>
+    <url>http://www.github.com/automatakllc/psimulator</url>
     <description>A UI testset for opendnp3</description>
 
     <modules>
