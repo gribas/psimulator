@@ -36,7 +36,7 @@ public class GenerateConfig {
 
     public static void main(String[] args) throws JAXBException
     {
-        XSimulatorConfig cfg = getPairedConfig(50);
+        XSimulatorConfig cfg = getPairedConfig(250);
         SimulatorOptions options = new SimulatorOptions();
         cfg.setXSimulatorOptions(options.getOptions());
         JAXBContext ctx = JAXBContext.newInstance(XSimulatorConfig.class);
