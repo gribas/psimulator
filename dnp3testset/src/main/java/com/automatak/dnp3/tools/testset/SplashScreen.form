@@ -67,7 +67,7 @@
               <enabled value="true"/>
               <font size="14" style="1"/>
               <foreground color="-1"/>
-              <text value="Copyright Automatak, LLC 2013 (http://dnp3.github.com)&#10;&#10;Automatak, LLC licenses this software to you under the GNU &#10;Affero General Public License Version 3.0; you may not use this &#10;file except in compliance with the License.&#10;&#10;Unless required by applicable law or agreed to in writing, software &#10;distributed under the License is distributed on an &quot;AS IS&quot; BASIS, &#10;WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or &#10;implied. See the License for the specific language governing &#10;permissions and limitations under the License."/>
+              <text value="Copyright Automatak, LLC 2013 (http://dnp3.github.com)&#10;&#10;Automatak, LLC licenses this software to you under the GNU &#10;Affero General Public License Version 3.0; you may not use this &#10;software except in compliance with the License.&#10;&#10;Unless required by applicable law or agreed to in writing, software &#10;distributed under the License is distributed on an &quot;AS IS&quot; BASIS, &#10;WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or &#10;implied. See the License for the specific language governing &#10;permissions and limitations under the License."/>
             </properties>
           </component>
         </children>
