@@ -51,6 +51,7 @@ public class AddMasterDialog extends JDialog {
     private TimeoutSpinner spinnerTaskRetryRate;
     private JTextArea textAreaLoggerId;
     private LogComboBox comboxBoxLogLevel;
+    private IntCountSpinner spinnerLinkRetry;
 
     //used to set defaults
     private final MasterStackConfig config;
@@ -63,6 +64,7 @@ public class AddMasterDialog extends JDialog {
         this.spinnerLocalAddr.setValue(config.linkConfig.localAddr);
         this.spinnerRemoteAddr.setValue(config.linkConfig.remoteAddr);
         this.spinnerRspTimeout.setValue((int) config.linkConfig.timeoutMs);
+        this.spinnerLinkRetry.setValue(config.linkConfig.numRetry);
 
         // app
         this.spinnerAppRspTimeout.setValue((int) config.appConfig.rspTimeoutMs);
@@ -95,6 +97,7 @@ public class AddMasterDialog extends JDialog {
         cfg.linkConfig.localAddr = this.spinnerLocalAddr.getUInt16();
         cfg.linkConfig.remoteAddr = this.spinnerRemoteAddr.getUInt16();
         cfg.linkConfig.timeoutMs = this.spinnerRspTimeout.getCount();
+        cfg.linkConfig.numRetry = this.spinnerLinkRetry.getCount();
 
         // app
         cfg.appConfig.rspTimeoutMs = this.spinnerAppRspTimeout.getTimeout();

@@ -52,12 +52,12 @@ public class ConfigGenerator {
         return stack;
     }
 
-    public static XChannel getTcpClient(int port)
+    public static XChannel getTcpClient(String ip, int port)
     {
         XChannel channel = new XChannel();
         XChannel.XTCPClientChannel client = new XChannel.XTCPClientChannel();
         client.setId("port: " + port);
-        client.setIp("127.0.0.1");
+        client.setIp(ip);
         client.setLevel(XLogLevel.INFO);
         client.setPort(port);
         client.setRetry(5000L);

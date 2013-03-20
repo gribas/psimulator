@@ -36,16 +36,16 @@ public class GenerateConfig {
 
     public static void main(String[] args) throws JAXBException
     {
-        XSimulatorConfig cfg = getPairedConfig(5000);
+        XSimulatorConfig cfg = getPairedConfig(250, false, true);
         SimulatorOptions options = new SimulatorOptions();
         cfg.setXSimulatorOptions(options.getOptions());
         JAXBContext ctx = JAXBContext.newInstance(XSimulatorConfig.class);
         Marshaller m = ctx.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        m.marshal(cfg, new File("./benchmarkConfig.xml"));
+        m.marshal(cfg, new File("./benchmarkOutstations.xml"));
     }
 
-    static XSimulatorConfig getPairedConfig(int pairs)
+    static XSimulatorConfig getPairedConfig(int pairs, boolean doMaster, boolean doOutstation)
     {
         MasterPluginFactory mfac = new BenchmarkMasterPluginFactory();
         OutstationPluginFactory ofac = new BenchmarkOutstationPluginFactory();
@@ -54,12 +54,16 @@ public class GenerateConfig {
         for(int i=0; i<pairs; ++i)
         {
             int port = 20000 + i;
-            XChannel client = ConfigGenerator.getTcpClient(port);
-            XChannel server = ConfigGenerator.getTcpServer(port);
-            client.getXStack().add(ConfigGenerator.getMasterStack(i, mfac.getPluginName(), mfac.getDefaultConfig()));
-            server.getXStack().add(ConfigGenerator.getOutstationStack(i, ofac.getPluginName(), ofac.getDefaultConfig()));
-            config.getXChannel().add(client);
-            config.getXChannel().add(server);
+            if(doMaster) {
+                XChannel client = ConfigGenerator.getTcpClient("192.168.1.127", port);
+                client.getXStack().add(ConfigGenerator.getMasterStack(i, mfac.getPluginName(), mfac.getDefaultConfig()));
+                config.getXChannel().add(client);
+            }
+            if(doOutstation) {
+                XChannel server = ConfigGenerator.getTcpServer(port);
+                server.getXStack().add(ConfigGenerator.getOutstationStack(i, ofac.getPluginName(), ofac.getDefaultConfig()));
+                config.getXChannel().add(server);
+            }
         }
         return config;
     }

@@ -125,7 +125,7 @@
                       <forms defaultalign-vert="false"/>
                     </constraints>
                   </vspacer>
-                  <component id="f579d" class="com.automatak.dnp3.tools.testset.ui.IntCountSpinner">
+                  <component id="f579d" class="com.automatak.dnp3.tools.testset.ui.IntCountSpinner" binding="spinnerLinkRetry">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <forms defaultalign-horz="false"/>

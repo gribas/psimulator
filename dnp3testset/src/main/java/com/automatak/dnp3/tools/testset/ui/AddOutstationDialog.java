@@ -52,6 +52,7 @@ public class AddOutstationDialog extends JDialog {
     private JCheckBox checkBoxDisableUnsolicited;
     private JCheckBox checkBoxRequestTimeSync;
     private TimeoutSpinner spinnerUnsolTimer;
+    private IntCountSpinner spinnerLinkRetry;
 
     private final OutstationPluginFactory factory;
     private final AddOutstationListener listener;
@@ -64,6 +65,7 @@ public class AddOutstationDialog extends JDialog {
         this.spinnerLocalAddr.setValue(config.linkConfig.localAddr);
         this.spinnerRemoteAddr.setValue(config.linkConfig.remoteAddr);
         this.spinnerRspTimeout.setValue((int) config.linkConfig.timeoutMs);
+        this.spinnerLinkRetry.setValue(config.linkConfig.numRetry);
 
         // app
         this.spinnerAppRspTimeout.setValue((int) config.appConfig.rspTimeoutMs);
@@ -93,6 +95,7 @@ public class AddOutstationDialog extends JDialog {
         cfg.linkConfig.localAddr = this.spinnerLocalAddr.getUInt16();
         cfg.linkConfig.remoteAddr = this.spinnerRemoteAddr.getUInt16();
         cfg.linkConfig.timeoutMs = this.spinnerRspTimeout.getCount();
+        cfg.linkConfig.numRetry = this.spinnerLinkRetry.getCount();
 
         // app
         cfg.appConfig.rspTimeoutMs = this.spinnerAppRspTimeout.getTimeout();

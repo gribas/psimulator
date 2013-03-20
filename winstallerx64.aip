@@ -37,7 +37,7 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="ProductInformation" ComponentId="{48817404-C950-41C4-97F8-4321EA2E1204}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
     <ROW Component="ProtocolSimulatoe" ComponentId="{39E167A0-173C-47CD-BB58-D9219ABA0A57}" Directory_="ProtocolSimulatoe_Dir" Attributes="0"/>
-    <ROW Component="asm3.0.jar" ComponentId="{1D25B559-DCA7-4BA8-A12B-B9BA0112AB89}" Directory_="lib_Dir" Attributes="0" KeyPath="asm3.0.jar" Type="0"/>
+    <ROW Component="asm3.0.jar" ComponentId="{2FB4CDC6-640A-4AFB-8686-73959C56E81B}" Directory_="lib_Dir" Attributes="0" KeyPath="asm3.0.jar" Type="0"/>
     <ROW Component="dnp3testset1.0.0SNAPSHOT.jar" ComponentId="{71B92CE9-F166-4CC4-B5A4-B938FA59328B}" Directory_="APPDIR" Attributes="0" KeyPath="dnp3testset1.0.0SNAPSHOT.jar" Type="0"/>
     <ROW Component="examplebenchmarkplugin1.0.0SNAPSHOT.jar" ComponentId="{81D4BA1C-6692-4D68-90A6-CACA148A4068}" Directory_="plugins_Dir" Attributes="0" KeyPath="examplebenchmarkplugin1.0.0SNAPSHOT.jar" Type="0"/>
     <ROW Component="opendnp3java.dll" ComponentId="{C8038867-E4C9-491E-B5EA-06FC9F826F67}" Directory_="APPDIR" Attributes="256" KeyPath="opendnp3java.dll"/>
@@ -49,24 +49,24 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="asm3.0.jar" Component_="asm3.0.jar" FileName="asm-30~1.jar|asm-3.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\asm-3.0.jar" SelfReg="false" NextFile="asmcommons3.0.jar"/>
     <ROW File="asmcommons3.0.jar" Component_="asm3.0.jar" FileName="asm-co~1.jar|asm-commons-3.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\asm-commons-3.0.jar" SelfReg="false" NextFile="asmtree3.0.jar"/>
-    <ROW File="asmtree3.0.jar" Component_="asm3.0.jar" FileName="asm-tr~1.jar|asm-tree-3.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\asm-tree-3.0.jar" SelfReg="false" NextFile="forms_rt7.0.3.jar"/>
+    <ROW File="asmtree3.0.jar" Component_="asm3.0.jar" FileName="asm-tr~1.jar|asm-tree-3.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\asm-tree-3.0.jar" SelfReg="false" NextFile="forms1.1preview.jar"/>
     <ROW File="benchmarkConfig.xml" Component_="dnp3testset1.0.0SNAPSHOT.jar" FileName="benchm~1.xml|benchmarkConfig.xml" Attributes="0" SourcePath="sample-configs\benchmarkConfig.xml" SelfReg="false" NextFile="simpleConfig.xml"/>
     <ROW File="dnp3testset1.0.0SNAPSHOT.jar" Component_="dnp3testset1.0.0SNAPSHOT.jar" FileName="dnp3te~1.jar|dnp3testset-1.0.0-SNAPSHOT.jar" Attributes="0" SourcePath="dnp3testset\target\dnp3testset-1.0.0-SNAPSHOT.jar" SelfReg="false" NextFile="examplebenchmarkplugin1.0.0SNAPSHOT.jar"/>
     <ROW File="examplebenchmarkplugin1.0.0SNAPSHOT.jar" Component_="examplebenchmarkplugin1.0.0SNAPSHOT.jar" FileName="exampl~1.jar|example-benchmark-plugin-1.0.0-SNAPSHOT.jar" Attributes="0" SourcePath="example-benchmark-plugin\target\example-benchmark-plugin-1.0.0-SNAPSHOT.jar" SelfReg="false" NextFile="exampleguiplugin1.0.0SNAPSHOT.jar"/>
     <ROW File="exampleguiplugin1.0.0SNAPSHOT.jar" Component_="examplebenchmarkplugin1.0.0SNAPSHOT.jar" FileName="exampl~2.jar|example-gui-plugin-1.0.0-SNAPSHOT.jar" Attributes="0" SourcePath="example-gui-plugin\target\example-gui-plugin-1.0.0-SNAPSHOT.jar" SelfReg="false" NextFile="opendnp3java.dll"/>
-    <ROW File="forms1.1preview.jar" Component_="asm3.0.jar" FileName="forms-~1.jar|forms-1.1-preview.jar" Attributes="0" SourcePath="dnp3testset\target\lib\forms-1.1-preview.jar" SelfReg="false" NextFile="hamcrestcore1.1.jar"/>
-    <ROW File="forms_rt7.0.3.jar" Component_="asm3.0.jar" FileName="forms_~1.jar|forms_rt-7.0.3.jar" Attributes="0" SourcePath="dnp3testset\target\lib\forms_rt-7.0.3.jar" SelfReg="false" NextFile="forms1.1preview.jar"/>
+    <ROW File="forms1.1preview.jar" Component_="asm3.0.jar" FileName="forms-~1.jar|forms-1.1-preview.jar" Attributes="0" SourcePath="dnp3testset\target\lib\forms-1.1-preview.jar" SelfReg="false" NextFile="forms_rt7.0.3.jar"/>
+    <ROW File="forms_rt7.0.3.jar" Component_="asm3.0.jar" FileName="forms_~1.jar|forms_rt-7.0.3.jar" Attributes="0" SourcePath="dnp3testset\target\lib\forms_rt-7.0.3.jar" SelfReg="false" NextFile="hamcrestcore1.1.jar"/>
     <ROW File="hamcrestcore1.1.jar" Component_="asm3.0.jar" FileName="hamcre~1.jar|hamcrest-core-1.1.jar" Attributes="0" SourcePath="dnp3testset\target\lib\hamcrest-core-1.1.jar" SelfReg="false" NextFile="jdom1.0.jar"/>
     <ROW File="jdom1.0.jar" Component_="asm3.0.jar" FileName="jdom-1~1.jar|jdom-1.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\jdom-1.0.jar" SelfReg="false" NextFile="jgoodiescommon1.4.0.jar"/>
     <ROW File="jgoodiescommon1.4.0.jar" Component_="asm3.0.jar" FileName="jgoodi~1.jar|jgoodies-common-1.4.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\jgoodies-common-1.4.0.jar" SelfReg="false" NextFile="jgoodiesforms1.6.0.jar"/>
     <ROW File="jgoodiesforms1.6.0.jar" Component_="asm3.0.jar" FileName="jgoodi~2.jar|jgoodies-forms-1.6.0.jar" Attributes="0" SourcePath="dnp3testset\target\lib\jgoodies-forms-1.6.0.jar" SelfReg="false" NextFile="junit4.10.jar"/>
-    <ROW File="junit4.10.jar" Component_="asm3.0.jar" FileName="junit-~1.jar|junit-4.10.jar" Attributes="0" SourcePath="dnp3testset\target\lib\junit-4.10.jar" SelfReg="false" NextFile="opendnp3api1.1.0SNAPSHOT.jar"/>
-    <ROW File="opendnp3api1.1.0SNAPSHOT.jar" Component_="asm3.0.jar" FileName="opendn~1.jar|opendnp3-api-1.1.0-SNAPSHOT.jar" Attributes="0" SourcePath="dnp3testset\target\lib\opendnp3-api-1.1.0-SNAPSHOT.jar" SelfReg="false" NextFile="opendnp3bindings1.1.0SNAPSHOT.jar"/>
-    <ROW File="opendnp3bindings1.1.0SNAPSHOT.jar" Component_="asm3.0.jar" FileName="opendn~2.jar|opendnp3-bindings-1.1.0-SNAPSHOT.jar" Attributes="0" SourcePath="dnp3testset\target\lib\opendnp3-bindings-1.1.0-SNAPSHOT.jar" SelfReg="false" NextFile="pluginapi1.0.0SNAPSHOT.jar"/>
+    <ROW File="junit4.10.jar" Component_="asm3.0.jar" FileName="junit-~1.jar|junit-4.10.jar" Attributes="0" SourcePath="dnp3testset\target\lib\junit-4.10.jar" SelfReg="false" NextFile="opendnp3api1.1.0RC1.jar"/>
+    <ROW File="opendnp3api1.1.0RC1.jar" Component_="asm3.0.jar" FileName="opendn~1.jar|opendnp3-api-1.1.0-RC1.jar" Attributes="0" SourcePath="dnp3testset\target\lib\opendnp3-api-1.1.0-RC1.jar" SelfReg="false" NextFile="opendnp3bindings1.1.0RC1.jar"/>
+    <ROW File="opendnp3bindings1.1.0RC1.jar" Component_="asm3.0.jar" FileName="opendn~2.jar|opendnp3-bindings-1.1.0-RC1.jar" Attributes="0" SourcePath="dnp3testset\target\lib\opendnp3-bindings-1.1.0-RC1.jar" SelfReg="false" NextFile="pluginapi1.0.0SNAPSHOT.jar"/>
     <ROW File="opendnp3java.dll" Component_="opendnp3java.dll" FileName="opendn~1.dll|opendnp3java.dll" Attributes="0" SourcePath="..\dnp3\java\Release\opendnp3java.dll" SelfReg="false" NextFile="benchmarkConfig.xml"/>
     <ROW File="pluginapi1.0.0SNAPSHOT.jar" Component_="asm3.0.jar" FileName="plugin~1.jar|plugin-api-1.0.0-SNAPSHOT.jar" Attributes="0" SourcePath="dnp3testset\target\lib\plugin-api-1.0.0-SNAPSHOT.jar" SelfReg="false" NextFile="xmlbindings1.0.0SNAPSHOT.jar"/>
-    <ROW File="simpleConfig.xml" Component_="dnp3testset1.0.0SNAPSHOT.jar" FileName="simple~1.xml|simpleConfig.xml" Attributes="0" SourcePath="sample-configs\simpleConfig.xml" SelfReg="false"/>
-    <ROW File="xmlbindings1.0.0SNAPSHOT.jar" Component_="asm3.0.jar" FileName="xml-bi~1.jar|xml-bindings-1.0.0-SNAPSHOT.jar" Attributes="0" SourcePath="dnp3testset\target\lib\xml-bindings-1.0.0-SNAPSHOT.jar" SelfReg="false" NextFile="dnp3testset1.0.0SNAPSHOT.jar"/>
+    <ROW File="simpleConfig.xml" Component_="dnp3testset1.0.0SNAPSHOT.jar" FileName="simple~1.xml|simpleConfig.xml" Attributes="0" SourcePath="sample-configs\simpleConfig.xml" SelfReg="false" NextFile="asm3.0.jar"/>
+    <ROW File="xmlbindings1.0.0SNAPSHOT.jar" Component_="asm3.0.jar" FileName="xml-bi~1.jar|xml-bindings-1.0.0-SNAPSHOT.jar" Attributes="0" SourcePath="dnp3testset\target\lib\xml-bindings-1.0.0-SNAPSHOT.jar" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en" InstallationType="4" UseLargeSchema="true" MsiPackageType="x64"/>

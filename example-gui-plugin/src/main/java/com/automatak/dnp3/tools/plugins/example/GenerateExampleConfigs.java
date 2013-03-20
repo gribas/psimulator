@@ -42,7 +42,7 @@ public class GenerateExampleConfigs {
        JAXBContext ctx = JAXBContext.newInstance(XSimulatorConfig.class);
        Marshaller m = ctx.createMarshaller();
        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-       m.marshal(cfg, new File("./output.xml"));
+       m.marshal(cfg, new File("./outstationBench.xml"));
     }
 
     static XSimulatorConfig getPairedConfig(int pairs)
@@ -54,11 +54,11 @@ public class GenerateExampleConfigs {
         for(int i=0; i<pairs; ++i)
         {
            int port = 20000 + i;
-           XChannel client = ConfigGenerator.getTcpClient(port);
+           //XChannel client = ConfigGenerator.getTcpClient("127.0.0.1", port);
            XChannel server = ConfigGenerator.getTcpServer(port);
-           client.getXStack().add(ConfigGenerator.getMasterStack(i, mfac.getPluginName(), mfac.getDefaultConfig()));
+           //client.getXStack().add(ConfigGenerator.getMasterStack(i, mfac.getPluginName(), mfac.getDefaultConfig()));
            server.getXStack().add(ConfigGenerator.getOutstationStack(i, ofac.getPluginName(), ofac.getDefaultConfig()));
-           config.getXChannel().add(client);
+           //config.getXChannel().add(client);
            config.getXChannel().add(server);
         }
         return config;
